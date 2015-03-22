@@ -24,11 +24,17 @@ namespace bcvk_Client
         private ConvertToFromByteArray toFromByteArray;
         private List<byte[]> buffer;
 
+        #region Thrift classes
         //Thrift classes
         private TTransport transportSignal;
         private TProtocol protocolSignal;
         private TTransport transportStream;
         private TProtocol protocolStream;
+        private Signal.Client signalClient;
+        private Stream.Client streamClient;
+        private int signalPort = 9090;
+        private int streamPort = 8080; 
+        #endregion
 
         //constructor
         public bcvk()
@@ -40,15 +46,31 @@ namespace bcvk_Client
             webcam.frameReady += new Action<Bitmap>(FrameReadyHandler);
             buffer = new List<byte[]>();
 
-            //Signal settings
-            transportSignal = new TSocket("localhost", 9090);
-            protocolSignal = new TBinaryProtocol(transportSignal);
-            //Stream settings
-            transportStream = new TSocket("localhost", 8080);
-            protocolStream = new TBinaryProtocol(transportStream);
+            #region Declaration Thrift classes and tries to open transport
+            try
+            {
+                //Signal settings: port 9090
+                transportSignal = new TSocket("localhost", signalPort);
+                protocolSignal = new TBinaryProtocol(transportSignal);
+                //Stream settings: port 8080
+                transportStream = new TSocket("localhost", streamPort);
+                protocolStream = new TBinaryProtocol(transportStream);
 
-            Signal.Client signalClient = new Signal.Client(protocolSignal);
-            Stream.Client streamClient = new Stream.Client(protocolStream);
+                signalClient = new Signal.Client(protocolSignal);
+                streamClient = new Stream.Client(protocolStream);
+
+                transportSignal.Open();
+                transportStream.Open();
+            }
+            catch (System.Net.Sockets.SocketException exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            catch (Exception exc)
+            {
+                MessageBox.Show(exc.Message);
+            }
+            #endregion
         }
 
         private void FrameReadyHandler(Bitmap bmp)
@@ -57,7 +79,10 @@ namespace bcvk_Client
 
             //TODO: Zet frames in een buffer
             //TODO: Verstuur hier eerste byte array in de buffer naar de server
- 
+            
+            //TODO: VOORBEELD
+            //streamClient.send_SendStream("", "", buffer[0]);
+            
             pictureBoxVideoSend.BackgroundImage = bmp;
         }
 
