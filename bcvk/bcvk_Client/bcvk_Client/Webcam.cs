@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using AForge.Video;
 using AForge.Video.DirectShow;
 using System.Drawing;
-using System.Windows.Forms;
 
 #endregion
 
@@ -17,17 +16,16 @@ namespace bcvk_Client
     public class Webcam
     {
         private VideoCaptureDevice videoSource = new VideoCaptureDevice();
-        private PictureBox pictureBoxVideoSend;
+        public event Action<Bitmap> frameReady;
 
-        public Webcam(PictureBox p)
-        {
-            pictureBoxVideoSend = p;
-        }
+        public Webcam()
+        { }
 
         public string On_Load()
         {
             //List all available video sources. (That can be webcams as well as tv cards, etc)
             FilterInfoCollection videosources = new FilterInfoCollection(FilterCategory.VideoInputDevice);
+            
             //Check if atleast one video source is available
             if (videosources != null)
             {
@@ -58,17 +56,19 @@ namespace bcvk_Client
 
                 //Create NewFrame event handler
                 //(This one triggers every time a new frame/image is captured)
-                videoSource.NewFrame += new AForge.Video.NewFrameEventHandler(videoSource_NewFrame);  
+                videoSource.NewFrame += new NewFrameEventHandler(videoSource_NewFrame);  
             }
             return "";
         }
 
+        /// <summary>
+        /// triggers the event to tell the form that a new fram (bitmap) is ready
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
         private void videoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-            //Cast the frame as Bitmap object and don't forget to use ".Clone()" otherwise
-            //you'll probably get access violation exceptions
-            pictureBoxVideoSend.BackgroundImage = (Bitmap)eventArgs.Frame.Clone();
-            
+            frameReady((Bitmap)eventArgs.Frame.Clone());
         } 
 
         public void btnStartCamera()

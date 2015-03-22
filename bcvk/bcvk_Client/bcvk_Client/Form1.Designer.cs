@@ -78,9 +78,9 @@
             this.cbShowYourVideo.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbShowYourVideo.Location = new System.Drawing.Point(12, 442);
             this.cbShowYourVideo.Name = "cbShowYourVideo";
-            this.cbShowYourVideo.Size = new System.Drawing.Size(109, 17);
+            this.cbShowYourVideo.Size = new System.Drawing.Size(120, 17);
             this.cbShowYourVideo.TabIndex = 3;
-            this.cbShowYourVideo.Text = "Toon eigen beeld";
+            this.cbShowYourVideo.Text = "Toon je eigen beeld";
             this.cbShowYourVideo.UseVisualStyleBackColor = true;
             this.cbShowYourVideo.CheckedChanged += new System.EventHandler(this.cbShowYourVideo_CheckedChanged);
             // 
