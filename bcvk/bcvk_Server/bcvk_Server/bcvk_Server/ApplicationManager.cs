@@ -13,6 +13,7 @@ namespace bcvk_Server
 {
     public class ApplicationManager: Signal.Iface, Stream.Iface
     {
+    #region account
         public void CreateMainAccount(string username, string password1, string password2, string email, string name)
         {
             //throw new NotImplementedException();
@@ -38,6 +39,13 @@ namespace bcvk_Server
         {
             throw new NotImplementedException();
         }
+        public bool ToggleBlock(string sender, string recipient)
+        {
+            throw new NotImplementedException();
+        }
+    #endregion
+
+    #region callsignaling
 
         public int DoCall(string sender, string recipient)
         {
@@ -58,12 +66,9 @@ namespace bcvk_Server
         {
             throw new NotImplementedException();
         }
+        #endregion
 
-        public bool ToggleBlock(string sender, string recipient)
-        {
-            throw new NotImplementedException();
-        }
-
+    #region stream
         public void SendStream(string sender, string recipient, byte[] stream)
         {
             throw new NotImplementedException();
@@ -83,5 +88,6 @@ namespace bcvk_Server
         {
             throw new NotImplementedException();
         }
+        #endregion 
     }
 }

@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Cc
 {
-    class CommunicationHandler
+    public class CommunicationHandler
     {
+
     }
 }
