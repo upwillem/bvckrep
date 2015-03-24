@@ -8,7 +8,6 @@ using bcvkSignal;
 using bcvkStream;
 using Cc;
 
-
 namespace bcvk_Server
 {
     public class ApplicationManager: Signal.Iface, Stream.Iface
@@ -49,7 +48,7 @@ namespace bcvk_Server
 
         public int DoCall(string sender, string recipient)
         {
-            throw new NotImplementedException();
+            return CommunicationHandler.DoCall(sender, recipient);
         }
 
         public void AnswerCall(string sender, string recipient, int callId, string answer)
@@ -60,6 +59,8 @@ namespace bcvk_Server
         public string GetCallStatus(int callId)
         {
             throw new NotImplementedException();
+            string id = "-1"; //TODO: get the id as a parameter from the methode;
+            return CommunicationHandler.GetCallStatus(callId, id);
         }
 
         public void EndCall(string sender, string recipient, int callId)
