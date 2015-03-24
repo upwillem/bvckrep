@@ -13,7 +13,7 @@ namespace Bu
     /// </summary>
     public class Connection
     {
-        /*Connection status:
+        /*Connection state
          * -connected       able to send and receive data
          * -disconnected    unable to send and receive date client disconnected or refused to join a connection
          * -connection      invited to join a connection                
@@ -21,6 +21,9 @@ namespace Bu
 
         //initial maker of the connection;
         private string owner;
+
+        public string ConnectionState { get; private set; }
+
         public int id { get; private set; }
         /// <summary>
         /// All participants in the connection
@@ -40,6 +43,7 @@ namespace Bu
                 owner = sender;
                 //TODO: Connection toevoegen aan het account
                 addConnectionToAccount(sender);
+                ConnectionState = "establishing";
             }       
         }             
         /// <summary>

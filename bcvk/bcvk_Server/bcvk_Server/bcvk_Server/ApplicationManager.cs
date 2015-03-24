@@ -48,6 +48,7 @@ namespace bcvk_Server
 
         public int DoCall(string sender, string recipient)
         {
+            throw new NotImplementedException(); // TODO:remove this
             return CommunicationHandler.DoCall(sender, recipient);
         }
 
@@ -56,11 +57,12 @@ namespace bcvk_Server
             throw new NotImplementedException();
         }
 
+        ///
         public string GetCallStatus(int callId)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException();// TODO:remove this
             string id = "-1"; //TODO: get the id as a parameter from the methode;
-            return CommunicationHandler.GetCallStatus(callId, id);
+            return CommunicationHandler.GetConnetionState(callId);
         }
 
         public void EndCall(string sender, string recipient, int callId)
