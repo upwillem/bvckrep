@@ -13,38 +13,55 @@ using Thrift.Protocol;
 using Thrift.Transport;
 using bcvkSignal;
 using bcvkStream;
+
+using AForge.Video;
+using AForge.Video.DirectShow;
+using System.IO;
 #endregion
 
 namespace bcvk_Client
 {
+    /// <summary>
+    /// fhghfhghfghg
+    /// </summary>
+    enum CallState
+    {
+        /// <summary>There is no current call. Calling is possible.</summary>
+        CALL,
+        /// <summary>User is calling someone. NOT YET RESPONDED BY RECIPIENT(S).</summary>
+        IS_CALLING,
+        /// <summary> User is calling with someone.</summary>
+        IN_CALL
+    }
+
     public partial class bcvk : Form
     {
-        //create webcam class
-        private Webcam webcam;
-        private ConvertToFromByteArray toFromByteArray;
-        private List<byte[]> buffer;
-
         #region Thrift classes
-        //Thrift classes
-        private TTransport transportSignal;
-        private TProtocol protocolSignal;
-        private TTransport transportStream;
-        private TProtocol protocolStream;
-        private Signal.Client signalClient;
-        private Stream.Client streamClient;
-        private int signalPort = 9090;
-        private int streamPort = 8080; 
+            //Thrift classes
+            private TTransport transportSignal;
+            private TProtocol protocolSignal;
+            private TTransport transportStream;
+            private TProtocol protocolStream;
+            private Signal.Client signalClient;
+            private bcvkStream.Stream.Client streamClient;
+            private int signalPort = 9090;
+            private int streamPort = 8080; 
         #endregion
 
-        //constructor
+        private CallState callState;
+        private Webcam webcam;
+        private Converter converter;
+        private Buffer buffer;
+
+        private string USERNAME;
+        private List<byte[]> videoStreamBuffer;
+
+        /// <summary>
+        /// constructor
+        /// </summary>
         public bcvk()
         {
             InitializeComponent();
-
-            webcam = new Webcam();
-            toFromByteArray = new ConvertToFromByteArray();
-            webcam.frameReady += new Action<Bitmap>(FrameReadyHandler);
-            buffer = new List<byte[]>();
 
             #region Declaration Thrift classes and tries to open transport
             try
@@ -57,7 +74,7 @@ namespace bcvk_Client
                 protocolStream = new TBinaryProtocol(transportStream);
 
                 signalClient = new Signal.Client(protocolSignal);
-                streamClient = new Stream.Client(protocolStream);
+                streamClient = new bcvkStream.Stream.Client(protocolStream);
 
                 transportSignal.Open();
                 transportStream.Open();
@@ -71,49 +88,21 @@ namespace bcvk_Client
                 MessageBox.Show(exc.Message);
             }
             #endregion
-        }
 
-        private void FrameReadyHandler(Bitmap bmp)
-        {
-            buffer.Add(toFromByteArray.BitmapToByteArray(bmp));
+            //TODO: Verkrijg contacten na inloggen
+            //var accountData = signalClient.GetAccountData(USERNAME);
 
-            //TODO: Zet frames in een buffer
-            //TODO: Verstuur hier eerste byte array in de buffer naar de server
-            
-            //TODO: VOORBEELD
-            //streamClient.send_SendStream("", "", buffer[0]);
-            
-            pictureBoxVideoSend.BackgroundImage = bmp;
-        }
+            webcam = new Webcam();
+            webcam.frameReady += new Action<Bitmap>(FrameReadyHandler);
 
-        /// <summary>
-        /// this event is triggered when the form is loaded
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            string message = webcam.On_Load();
-            if (message != "")
-                MessageBox.Show(message);
-        }
-
-        private void btnStartCamera_Click(object sender, EventArgs e)
-        {
-            webcam.btnStartCamera();
-        }
-
-        private void btnStopCamera_Click(object sender, EventArgs e)
-        {
-            webcam.btnStopCamera();
-        }
-
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            webcam.On_FormClosed();
+            converter = new Converter();
+            buffer = new Buffer();
+            buffer.bufferReady += buffer_bufferReady;
+            SettingsCallState(CallState.CALL);
         }
 
         /// <summary>
+        /// Luc Schnabel 12077776,
         /// makes the video of the own camera (in)visible on the users own screen
         /// </summary>
         /// <param name="sender"></param>
@@ -126,5 +115,107 @@ namespace bcvk_Client
                 pictureBoxVideoSend.Visible = false;
         }
 
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// call the selected contact
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCallContact_Click(object sender, EventArgs e)
+        {
+            SettingsCallState(CallState.IS_CALLING);
+            webcam.StartCamera();
+
+            /*
+             * TODO: connect to recipient
+             * if(ontvanger positief beantwoord)
+             * {
+             *      CallState = CallState.IN_CALL;
+             *      Alle andere dingen hier regelen!
+             * }
+             */
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776
+        /// End the extising call
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnEndCall_Click(object sender, EventArgs e)
+        {
+            SettingsCallState(CallState.CALL);
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// sets the correct settings to the enum
+        /// </summary>
+        /// <param name="callState">CallState enum</param>
+        private void SettingsCallState(CallState callState)
+        {
+            this.callState = callState;
+            //TODO: Enable this when users can be called!!!
+            //if (callState == CallState.CALL)
+            //{
+            //    btnCallContact.Visible = true; 
+            //    btnEndCall.Visible = false;
+            //}
+            //if (callState == CallState.IS_CALLING)
+            //{ 
+            //    btnCallContact.Visible = false; 
+            //    btnEndCall.Visible = false;
+            //}
+            //if (callState == CallState.IN_CALL)
+            //{
+            //    btnCallContact.Visible = false; 
+            //    btnEndCall.Visible = true;
+            //}
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// stops and free objects if application is closing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bcvk_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            webcam.On_FormClosed();
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// enable webcam
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bcvk_Load(object sender, EventArgs e)
+        {
+            string message = webcam.On_Load();
+            if (message != "")
+                MessageBox.Show(message);
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// event will be triggered with each new available frame
+        /// </summary>
+        /// <param name="bmp">Bitmap of the frame</param>
+        private void FrameReadyHandler(Bitmap bmp)
+        {
+            buffer.Buffer_VideoStream(converter.ToByteArray(bmp));
+            pictureBoxVideoSend.BackgroundImage = bmp;
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// this event is triggered when the bufferc  is ready
+        /// </summary>
+        /// <param name="videoStreamBuffer"></param>
+        void buffer_bufferReady(List<byte[]> videoStreamBuffer)
+        {
+            //streamClient.send_SendStream();
+        }
     }
 }
