@@ -8,11 +8,11 @@ using bcvkSignal;
 using bcvkStream;
 using Cc;
 
-
 namespace bcvk_Server
 {
     public class ApplicationManager: Signal.Iface, Stream.Iface
     {
+    #region account
         public void CreateMainAccount(string username, string password1, string password2, string email, string name)
         {
             //throw new NotImplementedException();
@@ -38,10 +38,18 @@ namespace bcvk_Server
         {
             throw new NotImplementedException();
         }
+        public bool ToggleBlock(string sender, string recipient)
+        {
+            throw new NotImplementedException();
+        }
+    #endregion
+
+    #region callsignaling
 
         public int DoCall(string sender, string recipient)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(); // TODO:remove this
+            return CommunicationHandler.DoCall(sender, recipient);
         }
 
         public void AnswerCall(string sender, string recipient, int callId, string answer)
@@ -49,21 +57,21 @@ namespace bcvk_Server
             throw new NotImplementedException();
         }
 
+        ///
         public string GetCallStatus(int callId)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException();// TODO:remove this
+            string id = "-1"; //TODO: get the id as a parameter from the methode;
+            return CommunicationHandler.GetConnetionState(callId);
         }
 
         public void EndCall(string sender, string recipient, int callId)
         {
             throw new NotImplementedException();
         }
+        #endregion
 
-        public bool ToggleBlock(string sender, string recipient)
-        {
-            throw new NotImplementedException();
-        }
-
+    #region stream
         public void SendStream(string sender, string recipient, byte[] stream)
         {
             throw new NotImplementedException();
@@ -83,5 +91,6 @@ namespace bcvk_Server
         {
             throw new NotImplementedException();
         }
+        #endregion 
     }
 }
