@@ -18,15 +18,27 @@ namespace BusinessLogic
         /// </summary>
         private Mysql mysql;
 
+        /// <summary>
+        /// Creating the MySQL connection.
+        /// </summary>
         public Account()
         {
             mysql = new Mysql();
         }
 
-        public void AddAccount(string username, string password, string email, string name)
+        /// <summary>
+        /// Adds a new main account to the database.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="email"></param>
+        /// <param name="name"></param>
+        public void AddMainAccount(string username, string password, string email, string name)
         {
-            string query = "INSERT INTO accounts (username, password, email, name) VALUES('" + username + "', '" + password1 + "', '" + email + "', '" + name + "')";
+            // Prepare the SQL statement.
+            string query = "INSERT INTO accounts (parent_id, username, password, email, name) VALUES('0', '" + username + "', '" + password + "', '" + email + "', '" + name + "')";
 
+            // Execute the query.
             mysql.Query(query);
         }
     }
