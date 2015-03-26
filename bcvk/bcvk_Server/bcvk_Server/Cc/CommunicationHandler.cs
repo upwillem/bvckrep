@@ -10,7 +10,7 @@ namespace Cc
 {
     public class CommunicationHandler
     {
-        public static ConcurrentBag<Connection> Connections = new ConcurrentBag<Connection>();
+        public static List<Connection> Connections = new List<Connection>();
 
         /// <summary>
         /// During this method a call is set ready to be established.
@@ -35,6 +35,21 @@ namespace Cc
         {
             var con = Connections.Single(x => x.id == callId);
             return con.ConnectionState;
+        }
+
+
+        /// <summary>
+        /// this method gives the connectionstate of a specific user in a connection
+        /// </summary>
+        /// <param name="callId">connection identificationcode</param>
+        /// <param name="who">indentification token to get the state of</param>
+        /// <returns>connection state of a specific user </returns>
+        public static string GetConnetionState(int callId,string who)
+        {
+            var con = Connections.Single(x => x.id == callId);
+            string result;
+            con.Participants.TryGetValue(who, out result);
+            return result;
         }
         /// <summary>
         /// Set the stream availble in a connection
@@ -62,19 +77,28 @@ namespace Cc
             return returnstream;
         }
         
+        /// <summary>
+        /// anwser the call with a anwser
+        /// </summary>
+        /// <param name="sender">sender id</param>
+        /// <param name="callId">connection identification token</param>
+        /// <param name="answer">anwser</param>
         public static void AnwserCall(string sender, int callId, string answer)
         {
-            var con = Connections.Select(x => x.id == callId);
-            Connection connection = (Connection)con;
+            Connection connection = Connections.Single(x => x.id == callId);
             connection.ChangeConnectionState(sender, answer);            
         }
 
+        /// <summary>
+        /// end a specific call
+        /// </summary>
+        /// <param name="callId">call to end</param>
         public static void EndCall(int callId)
         {
             Connection connection = FindConnectionById(callId);
             if (connection.EndConnection())
             {
-                Connections.TryTake(out connection);                
+                Connections.Remove(connection);           
             }
 
         }

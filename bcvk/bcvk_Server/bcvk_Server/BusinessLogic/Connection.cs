@@ -86,7 +86,9 @@ namespace Bu
 
         public void ChangeConnectionState(string sender, string answer)
         {
-            Participants.AddOrUpdate(sender, answer,null);
+            string oldValue;
+            Participants.TryGetValue(sender,out oldValue);
+            Participants.TryUpdate(sender, answer, oldValue);
                                     
             //check connectionstate 
             int connected = 0;
@@ -113,10 +115,10 @@ namespace Bu
         /// <returns></returns>
         private static int Hash()
         {
-            DateTime datetime = System.DateTime.Now;            
-            int hash = (int)datetime.Ticks;
-            hash = hash * hash.GetHashCode();
-            return hash;
+            DateTime datetime = System.DateTime.Now;
+            int hash = (int)datetime.Ticks + new Random().Next(1, 1000000);
+            hash = hash.GetHashCode();
+            return Math.Abs(hash);
         }
         /// <summary>
         /// Add an instance of this connection to an instance of an account
@@ -124,16 +126,16 @@ namespace Bu
         /// <param name="accountId"></param>
         private void addConnectionToAccount(string accountId)
         {
-            throw new NotImplementedException();
-            try
-            {
-                //TODO:
-                //Account.AddConnection(accountId, this.id) 
-            }
-            catch(NullReferenceException nullex)
-            {
-                //nullreference exception
-            }      
+            //TODO:
+            //try
+            //{
+            //    
+            //    //Account.AddConnection(accountId, this.id) 
+            //}
+            //catch(NullReferenceException nullex)
+            //{
+            //    //nullreference exception
+            //}      
                       
         }
         public bool EndConnection()

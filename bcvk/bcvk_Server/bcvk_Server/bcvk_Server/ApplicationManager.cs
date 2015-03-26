@@ -58,10 +58,11 @@ namespace bcvk_Server
 
         ///
         public string GetCallStatus(int callId)
-        {            
-            string id = "-1"; //TODO: get the id as a parameter from the methode;
-            return CommunicationHandler.GetConnetionState(callId);
+        {   
+           return CommunicationHandler.GetConnetionState(callId);
         }
+
+        //TODO: overload GetCallStatus from specific Id
 
         public void EndCall(string sender, string recipient, int callId)
         {
