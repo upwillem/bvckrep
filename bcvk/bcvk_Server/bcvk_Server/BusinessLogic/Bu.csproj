@@ -7,8 +7,8 @@
     <ProjectGuid>{7BBE90F6-9F3B-42D5-8275-C42B1B5F2589}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BusinessLogic</RootNamespace>
-    <AssemblyName>BusinessLogic</AssemblyName>
+    <RootNamespace>Bu</RootNamespace>
+    <AssemblyName>Bu</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
