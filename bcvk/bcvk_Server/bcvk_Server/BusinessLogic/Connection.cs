@@ -13,6 +13,9 @@ namespace Bu
     /// </summary>
     public class Connection
     {
+
+        //TODO MUTEX IMPLEMENTEREN
+
         /*Connection state
          * -connected       in current connection
          * -disconnected    left or refused to join a connection
@@ -21,7 +24,6 @@ namespace Bu
          * -established     able to send and receive data
          * -connectionended connection ended
          */ 
-
         //initial maker of the connection;
         private string owner;
         /// <summary>
@@ -46,7 +48,7 @@ namespace Bu
         /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="sender">Sender reference to identify the connection's owner</param>
+        /// <param name="sender">Sender reference to identify the connection's owner</param>        
         
         public Connection(string sender)
         {
@@ -84,6 +86,11 @@ namespace Bu
             Streams.AddOrUpdate(steamowner, stream, null);
         }
 
+        /// <summary>
+        /// Change the current connection state
+        /// </summary>
+        /// <param name="sender">senderId</param>
+        /// <param name="answer">anwser to the connection</param>
         public void ChangeConnectionState(string sender, string answer)
         {
             string oldValue;
@@ -92,9 +99,9 @@ namespace Bu
                                     
             //check connectionstate 
             int connected = 0;
-            foreach (var con in Participants)
+            foreach (var participant in Participants)
             {
-                if (con.Value == "connected")
+                if (participant.Value == "connected")
                     connected++;
                 if (connected >= 2)                {
                     ConnectionState = "established";
@@ -104,8 +111,7 @@ namespace Bu
             if (connected < 2)
             {
                 ConnectionState = "connectionended";
-            }
-            
+            }          
             
         }
 
@@ -138,13 +144,18 @@ namespace Bu
             //}      
                       
         }
+        /// <summary>
+        /// set every participant to a disconnected state
+        /// </summary>
+        /// <returns>return true when correctly done</returns>
         public bool EndConnection()
         {
+            bool passed = false;
             foreach (var item in Participants)
             {
-                Participants.TryUpdate(item.Key, "disconnected", null);                
+                passed =Participants.TryUpdate(item.Key, "disconnected", null);                
             }
-            return true;
+            return passed;
         }
     }
 }

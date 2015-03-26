@@ -48,25 +48,25 @@ namespace bcvk_Server
 
         public int DoCall(string sender, string recipient)
         {
-            return CommunicationHandler.DoCall(sender, recipient);
+            return CommunicationHandler.DoConnect(sender, recipient);
         }
 
-        public void AnswerCall(string sender, string recipient, int callId, string answer)
+        public void AnswerCall(string sender, string recipient, int connectionId, string answer)
         {
-            CommunicationHandler.AnwserCall(sender, callId, answer);          
+            CommunicationHandler.AnwserConnection(sender, connectionId, answer);          
         }
 
         ///
-        public string GetCallStatus(int callId)
-        {   
-           return CommunicationHandler.GetConnetionState(callId);
+        public string GetCallStatus(int connectionId)
+        {
+            return CommunicationHandler.GetConnetionState(connectionId);
         }
 
         //TODO: overload GetCallStatus from specific Id
 
-        public void EndCall(string sender, string recipient, int callId)
+        public void EndCall(string sender, string recipient, int connectionId)
         {
-            CommunicationHandler.EndCall(callId);
+            CommunicationHandler.EndConnection(connectionId);
         }
         #endregion
 

@@ -10,7 +10,7 @@ namespace ConnectionTest
         [TestMethod]
         public void TestReceiveIdDoCall()
         {
-            int callid = CommunicationHandler.DoCall("1", "2");
+            int callid = CommunicationHandler.DoConnect("1", "2");
             bool biggerThen0 =false;
             if (callid>0){
                 biggerThen0=true;
@@ -21,7 +21,7 @@ namespace ConnectionTest
         [TestMethod]
         public void TestGetConnectionState()
         {
-            int callid = CommunicationHandler.DoCall("1", "2");
+            int callid = CommunicationHandler.DoConnect("1", "2");
             string status = CommunicationHandler.GetConnetionState(callid);
             Assert.AreEqual(status,"establishing");
         }
@@ -29,8 +29,8 @@ namespace ConnectionTest
         [TestMethod]
         public void TestAnwserCall1()
         {
-            int callid = CommunicationHandler.DoCall("1", "2");
-            CommunicationHandler.AnwserCall("2", callid, "connected");
+            int callid = CommunicationHandler.DoConnect("1", "2");
+            CommunicationHandler.AnwserConnection("2", callid, "connected");
             string status = CommunicationHandler.GetConnetionState(callid);
             Assert.AreEqual(status, "established");
         }
@@ -38,8 +38,8 @@ namespace ConnectionTest
         [TestMethod]
         public void TestAnwserCall2()
         {
-            int callid = CommunicationHandler.DoCall("1", "2");
-            CommunicationHandler.AnwserCall("2", callid, "connected");
+            int callid = CommunicationHandler.DoConnect("1", "2");
+            CommunicationHandler.AnwserConnection("2", callid, "connected");
             string status = CommunicationHandler.GetConnetionState(callid,"2");
             Assert.AreEqual(status, "connected");
         }
