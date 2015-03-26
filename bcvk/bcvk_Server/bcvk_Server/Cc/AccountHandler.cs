@@ -14,7 +14,7 @@ namespace Cc
             Account ac = new Account();
             if (password1 == password2)
             {
-                ac.AddAccount(username, password1, email, name);
+                ac.AddMainAccount(username, password1, email, name);
             }
         }
     }

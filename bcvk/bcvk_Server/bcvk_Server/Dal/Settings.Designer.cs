@@ -25,7 +25,7 @@ namespace Dal {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("datasource=37.252.121.71;port=3306;username=mit3user;password=admin123")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Server=37.252.121.71;Database=mit3;Uid=mit3user;Pwd=admin123;")]
         public string connectionString {
             get {
                 return ((string)(this["connectionString"]));

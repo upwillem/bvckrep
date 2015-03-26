@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogic
+namespace Bu
 {
     /// <summary>
     /// OWNER: Roel Larik 1236830

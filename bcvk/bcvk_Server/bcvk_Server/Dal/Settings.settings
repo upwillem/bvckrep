@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="connectionString" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">datasource=37.252.121.71;port=3306;username=mit3user;password=admin123</Value>
+      <Value Profile="(Default)">Server=37.252.121.71;Database=mit3;Uid=mit3user;Pwd=admin123;</Value>
     </Setting>
   </Settings>
 </SettingsFile>
