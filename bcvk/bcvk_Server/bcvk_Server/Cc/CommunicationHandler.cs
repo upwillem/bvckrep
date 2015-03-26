@@ -98,6 +98,12 @@ namespace Cc
             var con = Connections.Select(x => x.id == connectionId);
             Connection connection = (Connection)con;
             connection.SetStream(streamowner, stream);
-        }        
+        }
+
+        private static Connection FindConnectionById(int connectionId)
+        {
+            Connection connection = Connections.Find(x => x.id == connectionId);
+            return connection;
+        }
     }
 }
