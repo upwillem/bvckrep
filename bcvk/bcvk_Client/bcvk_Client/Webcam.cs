@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using AForge.Video;
 using AForge.Video.DirectShow;
 using System.Drawing;
-
 #endregion
 
 namespace bcvk_Client
@@ -18,9 +17,17 @@ namespace bcvk_Client
         private VideoCaptureDevice videoSource = new VideoCaptureDevice();
         public event Action<Bitmap> frameReady;
 
-        public Webcam()
-        { }
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        public Webcam(){ }
 
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// looks for a videosource with a resolution of 160 by 120
+        /// and connects the frame event
+        /// </summary>
+        /// <returns>string error</returns>
         public string On_Load()
         {
             //List all available video sources. (That can be webcams as well as tv cards, etc)
@@ -41,7 +48,7 @@ namespace bcvk_Client
                         //Search for the highest resolution
                         for (int i = 0; i < videoSource.VideoCapabilities.Length; i++)
                         {
-                            if (videoSource.VideoCapabilities[i].FrameSize.Width <= 160)
+                            if (videoSource.VideoCapabilities[i].FrameSize.Width <= highestSolution[0])
                                 highestSolution = videoSource.VideoCapabilities[i].FrameSize.Width.ToString() + ";" + i.ToString();
                         }
 
@@ -62,6 +69,7 @@ namespace bcvk_Client
         }
 
         /// <summary>
+        /// Luc Schnabel 1207776, 
         /// triggers the event to tell the form that a new fram (bitmap) is ready
         /// </summary>
         /// <param name="sender"></param>
@@ -71,18 +79,30 @@ namespace bcvk_Client
             frameReady((Bitmap)eventArgs.Frame.Clone());
         } 
 
-        public void btnStartCamera()
+        /// <summary>
+        /// Luc Schnabel 1207776, 
+        /// start the camera
+        /// </summary>
+        public void StartCamera()
         { 
             // start the video source
             videoSource.Start( );
         }
 
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// stop the camera
+        /// </summary>
         public void btnStopCamera()
         {
             // signal to stop when you no longer need capturing
             videoSource.SignalToStop();
         }
 
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// stops and free the webcam object if application is closing
+        /// </summary>
         public void On_FormClosed()
         {
             //Stop and free the webcam object if application is closing

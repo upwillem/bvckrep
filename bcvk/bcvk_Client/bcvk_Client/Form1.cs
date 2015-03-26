@@ -13,51 +13,64 @@ using Thrift.Protocol;
 using Thrift.Transport;
 using bcvkSignal;
 using bcvkStream;
+
+using AForge.Video;
+using AForge.Video.DirectShow;
+using System.IO;
 #endregion
 
 namespace bcvk_Client
 {
+    enum CallState
+    {
+        /// <summary>There is no current call. Calling is possible.</summary>
+        CALL,
+        /// <summary>User is calling someone. NOT YET RESPONDED BY RECIPIENT(S).</summary>
+        IS_CALLING,
+        /// <summary> User is calling with someone.</summary>
+        IN_CALL
+    }
+
     public partial class bcvk : Form
     {
-        //create webcam class
-        private Webcam webcam;
-        private ConvertToFromByteArray toFromByteArray;
-        private List<byte[]> buffer;
-
         #region Thrift classes
-        //Thrift classes
-        private TTransport transportSignal;
-        private TProtocol protocolSignal;
-        private TTransport transportStream;
-        private TProtocol protocolStream;
-        private Signal.Client signalClient;
-        private Stream.Client streamClient;
-        private int signalPort = 9090;
-        private int streamPort = 8080; 
+            //Thrift classes
+            private TTransport transportSignal;
+            private TProtocol protocolSignal;
+            private TTransport transportStream;
+            private TProtocol protocolStream;
+            private Signal.Client signalClient;
+            private bcvkStream.Stream.Client streamClient;
+            private int signalPort = 9090;
+            private int streamPort = 8080; 
         #endregion
 
-        //constructor
+        private CallState callState;
+        private Webcam webcam;
+        private Converter converter;
+        private Buffer buffer;
+
+        private string USERNAME;
+
+        /// <summary>
+        /// constructor
+        /// </summary>
         public bcvk()
         {
             InitializeComponent();
 
-            webcam = new Webcam();
-            toFromByteArray = new ConvertToFromByteArray();
-            webcam.frameReady += new Action<Bitmap>(FrameReadyHandler);
-            buffer = new List<byte[]>();
-
-            #region Declaration Thrift classes and tries to open transport
+            #region Declaration Thrift classes and open transport
             try
             {
-                //Signal settings: port 9090
+                //Signal settings
                 transportSignal = new TSocket("localhost", signalPort);
                 protocolSignal = new TBinaryProtocol(transportSignal);
-                //Stream settings: port 8080
+                //Stream settings
                 transportStream = new TSocket("localhost", streamPort);
                 protocolStream = new TBinaryProtocol(transportStream);
 
                 signalClient = new Signal.Client(protocolSignal);
-                streamClient = new Stream.Client(protocolStream);
+                streamClient = new bcvkStream.Stream.Client(protocolStream);
 
                 transportSignal.Open();
                 transportStream.Open();
@@ -70,50 +83,29 @@ namespace bcvk_Client
             {
                 MessageBox.Show(exc.Message);
             }
+            finally 
+            {
+                if(transportSignal.IsOpen)
+                    transportSignal.Close();
+                if(transportStream.IsOpen)
+                    transportStream.Close();
+            }
             #endregion
-        }
 
-        private void FrameReadyHandler(Bitmap bmp)
-        {
-            buffer.Add(toFromByteArray.BitmapToByteArray(bmp));
+            //TODO: Retrieve account data
+            //var accountData = signalClient.GetAccountData(USERNAME);
 
-            //TODO: Zet frames in een buffer
-            //TODO: Verstuur hier eerste byte array in de buffer naar de server
-            
-            //TODO: VOORBEELD
-            //streamClient.send_SendStream("", "", buffer[0]);
-            
-            pictureBoxVideoSend.BackgroundImage = bmp;
-        }
+            webcam = new Webcam();
+            webcam.frameReady += new Action<Bitmap>(FrameReadyHandler);
 
-        /// <summary>
-        /// this event is triggered when the form is loaded
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void Form1_Load(object sender, EventArgs e)
-        {
-            string message = webcam.On_Load();
-            if (message != "")
-                MessageBox.Show(message);
-        }
-
-        private void btnStartCamera_Click(object sender, EventArgs e)
-        {
-            webcam.btnStartCamera();
-        }
-
-        private void btnStopCamera_Click(object sender, EventArgs e)
-        {
-            webcam.btnStopCamera();
-        }
-
-        private void Form1_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            webcam.On_FormClosed();
+            converter = new Converter();
+            buffer = new Buffer();
+            buffer.bufferReady += buffer_bufferReady;
+            SettingsCallState(CallState.CALL);
         }
 
         /// <summary>
+        /// Luc Schnabel 12077776,
         /// makes the video of the own camera (in)visible on the users own screen
         /// </summary>
         /// <param name="sender"></param>
@@ -126,5 +118,145 @@ namespace bcvk_Client
                 pictureBoxVideoSend.Visible = false;
         }
 
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// call the selected contact
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnCallContact_Click(object sender, EventArgs e)
+        {
+            SettingsCallState(CallState.IS_CALLING);
+            webcam.StartCamera();
+
+            /*
+             * TODO: connect to recipient
+             * if(ontvanger positief beantwoord)
+             * {
+             *      CallState = CallState.IN_CALL;
+             *      Alle andere dingen hier regelen!
+             * }
+             */
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776
+        /// End the extising call
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnEndCall_Click(object sender, EventArgs e)
+        {
+            SettingsCallState(CallState.CALL);
+            webcam.btnStopCamera();
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// sets the correct settings to the enum
+        /// </summary>
+        /// <param name="callState">CallState enum</param>
+        private void SettingsCallState(CallState callState)
+        {
+            this.callState = callState;
+            ////TODO: Enable this when users can be called!!!
+            //if (callState == CallState.CALL)
+            //{
+            //    btnCallContact.Visible = true; 
+            //    btnEndCall.Visible = false;
+            //}
+            //if (callState == CallState.IS_CALLING)
+            //{ 
+            //    btnCallContact.Visible = false; 
+            //    btnEndCall.Visible = false;
+            //}
+            //if (callState == CallState.IN_CALL)
+            //{
+            //    btnCallContact.Visible = false; 
+            //    btnEndCall.Visible = true;
+            //}
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// stops and free objects if application is closing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bcvk_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            webcam.On_FormClosed();
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// enable webcam
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bcvk_Load(object sender, EventArgs e)
+        {
+            string message = webcam.On_Load();
+            if (message != "")
+                MessageBox.Show(message);
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// event will be triggered with each new available frame
+        /// </summary>
+        /// <param name="bmp">Bitmap of the frame</param>
+        private void FrameReadyHandler(Bitmap frame)
+        {
+            buffer.Buffer_VideoStream(converter.ToByteArray(frame));
+            Bitmap bmp = new Bitmap(frame, pictureBoxVideoSend.Width, pictureBoxVideoSend.Height);
+            pictureBoxVideoSend.BackgroundImage = bmp;
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// this event is triggered when the buffer is ready
+        /// </summary>
+        /// <param name="videoStreamBuffer"></param>
+        void buffer_bufferReady(List<byte[]> videoStreamBuffer)
+        {
+            for (int i = 0; i < videoStreamBuffer.Count; i++)
+            {
+                pictureBoxVideoReceived.BackgroundImage = converter.ToBitmap(videoStreamBuffer[i], 
+                    pictureBoxVideoReceived.Width, pictureBoxVideoReceived.Height);
+                //System.Threading.Thread.Sleep(50);
+                //TODO: Sleep thread... It's going too fast!
+            }
+            //streamClient.send_SendStream();
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// resize event to resize the form aspect ratio 701:461
+        /// These numbers take care that the picturebox will be around aspect ratio 4:3
+        /// This aspect ratio makes the image look good
+        /// </summary>
+        private void bcvk_Resize(object sender, EventArgs e)
+        {
+            int currentHeight, currentWidth, correctedHeight, correctedWith;
+            currentHeight = this.Height;
+            currentWidth = this.Width;
+            
+            correctedHeight = (currentWidth * 461) / 701;
+            if (correctedHeight > currentHeight)
+            {
+                correctedWith = (currentHeight * 701) / 461;
+
+                this.Height = currentHeight;
+                this.Width = correctedWith;
+            }
+            else
+            {
+                this.Height = correctedHeight;
+                this.Width = currentWidth;
+            }
+            double ratio = Convert.ToDouble(pictureBoxVideoReceived.Width) / Convert.ToDouble(pictureBoxVideoReceived.Height);
+            double formRatio = Convert.ToDouble(this.Width) / Convert.ToDouble(this.Height);
+        }
     }
 }
