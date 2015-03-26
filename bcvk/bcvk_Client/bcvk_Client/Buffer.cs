@@ -20,7 +20,10 @@ namespace bcvk_Client
             //TODO: Create thread for non blocking code
             videoStreamBuffer.Add(bA);
             if (videoStreamBuffer.Count == 10)
+            {
                 bufferReady(videoStreamBuffer);
+                videoStreamBuffer.Clear();
+            }
         }
 
         //Constructor

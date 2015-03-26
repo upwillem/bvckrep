@@ -21,9 +21,6 @@ using System.IO;
 
 namespace bcvk_Client
 {
-    /// <summary>
-    /// fhghfhghfghg
-    /// </summary>
     enum CallState
     {
         /// <summary>There is no current call. Calling is possible.</summary>
@@ -54,7 +51,6 @@ namespace bcvk_Client
         private Buffer buffer;
 
         private string USERNAME;
-        private List<byte[]> videoStreamBuffer;
 
         /// <summary>
         /// constructor
@@ -63,13 +59,13 @@ namespace bcvk_Client
         {
             InitializeComponent();
 
-            #region Declaration Thrift classes and tries to open transport
+            #region Declaration Thrift classes and open transport
             try
             {
-                //Signal settings: port 9090
+                //Signal settings
                 transportSignal = new TSocket("localhost", signalPort);
                 protocolSignal = new TBinaryProtocol(transportSignal);
-                //Stream settings: port 8080
+                //Stream settings
                 transportStream = new TSocket("localhost", streamPort);
                 protocolStream = new TBinaryProtocol(transportStream);
 
@@ -87,9 +83,16 @@ namespace bcvk_Client
             {
                 MessageBox.Show(exc.Message);
             }
+            finally 
+            {
+                if(transportSignal.IsOpen)
+                    transportSignal.Close();
+                if(transportStream.IsOpen)
+                    transportStream.Close();
+            }
             #endregion
 
-            //TODO: Verkrijg contacten na inloggen
+            //TODO: Retrieve account data
             //var accountData = signalClient.GetAccountData(USERNAME);
 
             webcam = new Webcam();
@@ -145,6 +148,7 @@ namespace bcvk_Client
         private void btnEndCall_Click(object sender, EventArgs e)
         {
             SettingsCallState(CallState.CALL);
+            webcam.btnStopCamera();
         }
 
         /// <summary>
@@ -155,7 +159,7 @@ namespace bcvk_Client
         private void SettingsCallState(CallState callState)
         {
             this.callState = callState;
-            //TODO: Enable this when users can be called!!!
+            ////TODO: Enable this when users can be called!!!
             //if (callState == CallState.CALL)
             //{
             //    btnCallContact.Visible = true; 
@@ -202,20 +206,57 @@ namespace bcvk_Client
         /// event will be triggered with each new available frame
         /// </summary>
         /// <param name="bmp">Bitmap of the frame</param>
-        private void FrameReadyHandler(Bitmap bmp)
+        private void FrameReadyHandler(Bitmap frame)
         {
-            buffer.Buffer_VideoStream(converter.ToByteArray(bmp));
+            buffer.Buffer_VideoStream(converter.ToByteArray(frame));
+            Bitmap bmp = new Bitmap(frame, pictureBoxVideoSend.Width, pictureBoxVideoSend.Height);
             pictureBoxVideoSend.BackgroundImage = bmp;
         }
 
         /// <summary>
         /// Luc Schnabel 1207776,
-        /// this event is triggered when the bufferc  is ready
+        /// this event is triggered when the buffer is ready
         /// </summary>
         /// <param name="videoStreamBuffer"></param>
         void buffer_bufferReady(List<byte[]> videoStreamBuffer)
         {
+            for (int i = 0; i < videoStreamBuffer.Count; i++)
+            {
+                pictureBoxVideoReceived.BackgroundImage = converter.ToBitmap(videoStreamBuffer[i], 
+                    pictureBoxVideoReceived.Width, pictureBoxVideoReceived.Height);
+                //System.Threading.Thread.Sleep(50);
+                //TODO: Sleep thread... It's going too fast!
+            }
             //streamClient.send_SendStream();
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// resize event to resize the form aspect ratio 701:461
+        /// These numbers take care that the picturebox will be around aspect ratio 4:3
+        /// This aspect ratio makes the image look good
+        /// </summary>
+        private void bcvk_Resize(object sender, EventArgs e)
+        {
+            int currentHeight, currentWidth, correctedHeight, correctedWith;
+            currentHeight = this.Height;
+            currentWidth = this.Width;
+            
+            correctedHeight = (currentWidth * 461) / 701;
+            if (correctedHeight > currentHeight)
+            {
+                correctedWith = (currentHeight * 701) / 461;
+
+                this.Height = currentHeight;
+                this.Width = correctedWith;
+            }
+            else
+            {
+                this.Height = correctedHeight;
+                this.Width = currentWidth;
+            }
+            double ratio = Convert.ToDouble(pictureBoxVideoReceived.Width) / Convert.ToDouble(pictureBoxVideoReceived.Height);
+            double formRatio = Convert.ToDouble(this.Width) / Convert.ToDouble(this.Height);
         }
     }
 }

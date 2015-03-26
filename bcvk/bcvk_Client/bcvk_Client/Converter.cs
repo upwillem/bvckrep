@@ -32,10 +32,10 @@ namespace bcvk_Client
         /// Luc Schnabel 1207776,
         /// converts byte[] to bitmap
         /// </summary>
-        /// <param name="bA">byte[] to convert</param>
-        public Bitmap ToBitmap(byte[] bA)
+        /// <param name="bA">byte array to convert</param>
+        public Bitmap ToBitmap(byte[] bA, int width, int height)
         {
-            Bitmap bmp = (Bitmap)converter.ConvertFrom(bA);
+            Bitmap bmp = new Bitmap((Bitmap)converter.ConvertFrom(bA), width, height);
             return bmp;
         }
     }

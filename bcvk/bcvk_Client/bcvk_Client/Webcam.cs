@@ -48,7 +48,7 @@ namespace bcvk_Client
                         //Search for the highest resolution
                         for (int i = 0; i < videoSource.VideoCapabilities.Length; i++)
                         {
-                            if (videoSource.VideoCapabilities[i].FrameSize.Width <= 160)
+                            if (videoSource.VideoCapabilities[i].FrameSize.Width <= highestSolution[0])
                                 highestSolution = videoSource.VideoCapabilities[i].FrameSize.Width.ToString() + ";" + i.ToString();
                         }
 
