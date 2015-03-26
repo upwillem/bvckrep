@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +27,21 @@ namespace Bu
             mysql = new Mysql();
         }
 
+        private static byte[] GetHash(string inputString)
+        {
+            HashAlgorithm algorithm = SHA512.Create();
+            return algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString));
+        }
+
+        private static string GetHashString(string inputString)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in GetHash(inputString))
+                sb.Append(b.ToString("X2"));
+
+            return sb.ToString();
+        }
+
         /// <summary>
         /// Adds a new main account to the database.
         /// </summary>
@@ -35,8 +51,10 @@ namespace Bu
         /// <param name="name"></param>
         public void AddMainAccount(string username, string password, string email, string name)
         {
+            string passwordHash = GetHashString(password);
+
             // Prepare the SQL statement.
-            string query = "INSERT INTO accounts (parent_id, username, password, email, name) VALUES('0', '" + username + "', '" + password + "', '" + email + "', '" + name + "')";
+            string query = "INSERT INTO accounts (parent_id, username, password, email, name) VALUES('0', '" + username + "', '" + passwordHash + "', '" + email + "', '" + name + "')";
 
             // Execute the query.
             mysql.Query(query);
