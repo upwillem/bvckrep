@@ -10,7 +10,7 @@ namespace Cc
     {
         public static void CreateMainAccount(string username, string password1, string password2, string email, string name)
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

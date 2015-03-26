@@ -27,11 +27,10 @@ namespace Dal
         /// <summary>
         /// Constructor of the class receiving the connection string.
         /// </summary>
-        /// <param name="connectionString"></param>
-        public Mysql(string connectionString)
+        public Mysql()
         {
             // Establish the connection
-            connection = new MySqlConnection(connectionString);
+            connection = new MySqlConnection(Settings.Default.connectionString);
         }
 
         /// <summary>
