@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessLogic
+namespace Bu
 {
     /// <summary>
     /// OWNER: Roel Larik 1236830
@@ -25,7 +25,7 @@ namespace BusinessLogic
 
         public void AddAccount(string username, string password, string email, string name)
         {
-            string query = "INSERT INTO accounts (username, password, email, name) VALUES('" + username + "', '" + password1 + "', '" + email + "', '" + name + "')";
+            string query = "INSERT INTO accounts (username, password, email, name) VALUES('" + username + "', '" + password + "', '" + email + "', '" + name + "')";
 
             mysql.Query(query);
         }
