@@ -146,7 +146,7 @@ namespace Dal
         /// <returns></returns>
         public bool Exists(string table, string field, string value)
         {
-            string test = String.Format("SELECT {1} FROM {0} WHERE {1}={2}", MySQLEscape(table), MySQLEscape(field), MySQLEscape(value));
+            string test = String.Format("SELECT {1} FROM {0} WHERE {1} = '{2}'", MySQLEscape(table), MySQLEscape(field), MySQLEscape(value));
             List<string[]> list = Select(test);
             return (list.Count > 0);
         }
@@ -156,7 +156,7 @@ namespace Dal
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
-        private static string MySQLEscape(string str)
+        public static string MySQLEscape(string str)
         {
             return Regex.Replace(str, @"[\x00'""\b\n\r\t\cZ\\%_]",
                 delegate(Match match)
