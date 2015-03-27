@@ -44,24 +44,24 @@ namespace bcvkSignal
       IAsyncResult Begin_GetAccountData(AsyncCallback callback, object state, string username);
       List<string> End_GetAccountData(IAsyncResult asyncResult);
       #endif
-      int DoCall(string sender, string recipient);
+      string DoCall(string sender, string recipient);
       #if SILVERLIGHT
       IAsyncResult Begin_DoCall(AsyncCallback callback, object state, string sender, string recipient);
-      int End_DoCall(IAsyncResult asyncResult);
+      string End_DoCall(IAsyncResult asyncResult);
       #endif
-      void AnswerCall(string sender, string recipient, int callId, string answer);
+      void AnswerCall(string sender, string recipient, string connectionId, string answer);
       #if SILVERLIGHT
-      IAsyncResult Begin_AnswerCall(AsyncCallback callback, object state, string sender, string recipient, int callId, string answer);
+      IAsyncResult Begin_AnswerCall(AsyncCallback callback, object state, string sender, string recipient, string connectionId, string answer);
       void End_AnswerCall(IAsyncResult asyncResult);
       #endif
-      string GetCallStatus(int callId);
+      string GetCallStatus(string connectionId);
       #if SILVERLIGHT
-      IAsyncResult Begin_GetCallStatus(AsyncCallback callback, object state, int callId);
+      IAsyncResult Begin_GetCallStatus(AsyncCallback callback, object state, string connectionId);
       string End_GetCallStatus(IAsyncResult asyncResult);
       #endif
-      void EndCall(string sender, string recipient, int callId);
+      void EndCall(string sender, string recipient, string connectionId);
       #if SILVERLIGHT
-      IAsyncResult Begin_EndCall(AsyncCallback callback, object state, string sender, string recipient, int callId);
+      IAsyncResult Begin_EndCall(AsyncCallback callback, object state, string sender, string recipient, string connectionId);
       void End_EndCall(IAsyncResult asyncResult);
       #endif
       bool ToggleBlock(string sender, string recipient);
@@ -444,7 +444,7 @@ namespace bcvkSignal
         return send_DoCall(callback, state, sender, recipient);
       }
 
-      public int End_DoCall(IAsyncResult asyncResult)
+      public string End_DoCall(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
         return recv_DoCall();
@@ -452,7 +452,7 @@ namespace bcvkSignal
 
       #endif
 
-      public int DoCall(string sender, string recipient)
+      public string DoCall(string sender, string recipient)
       {
         #if !SILVERLIGHT
         send_DoCall(sender, recipient);
@@ -483,7 +483,7 @@ namespace bcvkSignal
         #endif
       }
 
-      public int recv_DoCall()
+      public string recv_DoCall()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -502,9 +502,9 @@ namespace bcvkSignal
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_AnswerCall(AsyncCallback callback, object state, string sender, string recipient, int callId, string answer)
+      public IAsyncResult Begin_AnswerCall(AsyncCallback callback, object state, string sender, string recipient, string connectionId, string answer)
       {
-        return send_AnswerCall(callback, state, sender, recipient, callId, answer);
+        return send_AnswerCall(callback, state, sender, recipient, connectionId, answer);
       }
 
       public void End_AnswerCall(IAsyncResult asyncResult)
@@ -515,29 +515,29 @@ namespace bcvkSignal
 
       #endif
 
-      public void AnswerCall(string sender, string recipient, int callId, string answer)
+      public void AnswerCall(string sender, string recipient, string connectionId, string answer)
       {
         #if !SILVERLIGHT
-        send_AnswerCall(sender, recipient, callId, answer);
+        send_AnswerCall(sender, recipient, connectionId, answer);
         recv_AnswerCall();
 
         #else
-        var asyncResult = Begin_AnswerCall(null, null, sender, recipient, callId, answer);
+        var asyncResult = Begin_AnswerCall(null, null, sender, recipient, connectionId, answer);
         End_AnswerCall(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_AnswerCall(AsyncCallback callback, object state, string sender, string recipient, int callId, string answer)
+      public IAsyncResult send_AnswerCall(AsyncCallback callback, object state, string sender, string recipient, string connectionId, string answer)
       #else
-      public void send_AnswerCall(string sender, string recipient, int callId, string answer)
+      public void send_AnswerCall(string sender, string recipient, string connectionId, string answer)
       #endif
       {
         oprot_.WriteMessageBegin(new TMessage("AnswerCall", TMessageType.Call, seqid_));
         AnswerCall_args args = new AnswerCall_args();
         args.Sender = sender;
         args.Recipient = recipient;
-        args.CallId = callId;
+        args.ConnectionId = connectionId;
         args.Answer = answer;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
@@ -564,9 +564,9 @@ namespace bcvkSignal
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_GetCallStatus(AsyncCallback callback, object state, int callId)
+      public IAsyncResult Begin_GetCallStatus(AsyncCallback callback, object state, string connectionId)
       {
-        return send_GetCallStatus(callback, state, callId);
+        return send_GetCallStatus(callback, state, connectionId);
       }
 
       public string End_GetCallStatus(IAsyncResult asyncResult)
@@ -577,27 +577,27 @@ namespace bcvkSignal
 
       #endif
 
-      public string GetCallStatus(int callId)
+      public string GetCallStatus(string connectionId)
       {
         #if !SILVERLIGHT
-        send_GetCallStatus(callId);
+        send_GetCallStatus(connectionId);
         return recv_GetCallStatus();
 
         #else
-        var asyncResult = Begin_GetCallStatus(null, null, callId);
+        var asyncResult = Begin_GetCallStatus(null, null, connectionId);
         return End_GetCallStatus(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_GetCallStatus(AsyncCallback callback, object state, int callId)
+      public IAsyncResult send_GetCallStatus(AsyncCallback callback, object state, string connectionId)
       #else
-      public void send_GetCallStatus(int callId)
+      public void send_GetCallStatus(string connectionId)
       #endif
       {
         oprot_.WriteMessageBegin(new TMessage("GetCallStatus", TMessageType.Call, seqid_));
         GetCallStatus_args args = new GetCallStatus_args();
-        args.CallId = callId;
+        args.ConnectionId = connectionId;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
         #if SILVERLIGHT
@@ -626,9 +626,9 @@ namespace bcvkSignal
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_EndCall(AsyncCallback callback, object state, string sender, string recipient, int callId)
+      public IAsyncResult Begin_EndCall(AsyncCallback callback, object state, string sender, string recipient, string connectionId)
       {
-        return send_EndCall(callback, state, sender, recipient, callId);
+        return send_EndCall(callback, state, sender, recipient, connectionId);
       }
 
       public void End_EndCall(IAsyncResult asyncResult)
@@ -639,29 +639,29 @@ namespace bcvkSignal
 
       #endif
 
-      public void EndCall(string sender, string recipient, int callId)
+      public void EndCall(string sender, string recipient, string connectionId)
       {
         #if !SILVERLIGHT
-        send_EndCall(sender, recipient, callId);
+        send_EndCall(sender, recipient, connectionId);
         recv_EndCall();
 
         #else
-        var asyncResult = Begin_EndCall(null, null, sender, recipient, callId);
+        var asyncResult = Begin_EndCall(null, null, sender, recipient, connectionId);
         End_EndCall(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_EndCall(AsyncCallback callback, object state, string sender, string recipient, int callId)
+      public IAsyncResult send_EndCall(AsyncCallback callback, object state, string sender, string recipient, string connectionId)
       #else
-      public void send_EndCall(string sender, string recipient, int callId)
+      public void send_EndCall(string sender, string recipient, string connectionId)
       #endif
       {
         oprot_.WriteMessageBegin(new TMessage("EndCall", TMessageType.Call, seqid_));
         EndCall_args args = new EndCall_args();
         args.Sender = sender;
         args.Recipient = recipient;
-        args.CallId = callId;
+        args.ConnectionId = connectionId;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
         #if SILVERLIGHT
@@ -879,7 +879,7 @@ namespace bcvkSignal
         args.Read(iprot);
         iprot.ReadMessageEnd();
         AnswerCall_result result = new AnswerCall_result();
-        iface_.AnswerCall(args.Sender, args.Recipient, args.CallId, args.Answer);
+        iface_.AnswerCall(args.Sender, args.Recipient, args.ConnectionId, args.Answer);
         oprot.WriteMessageBegin(new TMessage("AnswerCall", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
@@ -892,7 +892,7 @@ namespace bcvkSignal
         args.Read(iprot);
         iprot.ReadMessageEnd();
         GetCallStatus_result result = new GetCallStatus_result();
-        result.Success = iface_.GetCallStatus(args.CallId);
+        result.Success = iface_.GetCallStatus(args.ConnectionId);
         oprot.WriteMessageBegin(new TMessage("GetCallStatus", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
@@ -905,7 +905,7 @@ namespace bcvkSignal
         args.Read(iprot);
         iprot.ReadMessageEnd();
         EndCall_result result = new EndCall_result();
-        iface_.EndCall(args.Sender, args.Recipient, args.CallId);
+        iface_.EndCall(args.Sender, args.Recipient, args.ConnectionId);
         oprot.WriteMessageBegin(new TMessage("EndCall", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
@@ -2210,9 +2210,9 @@ namespace bcvkSignal
     #endif
     public partial class DoCall_result : TBase
     {
-      private int _success;
+      private string _success;
 
-      public int Success
+      public string Success
       {
         get
         {
@@ -2250,8 +2250,8 @@ namespace bcvkSignal
           switch (field.ID)
           {
             case 0:
-              if (field.Type == TType.I32) {
-                Success = iprot.ReadI32();
+              if (field.Type == TType.String) {
+                Success = iprot.ReadString();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -2271,12 +2271,14 @@ namespace bcvkSignal
         TField field = new TField();
 
         if (this.__isset.success) {
-          field.Name = "Success";
-          field.Type = TType.I32;
-          field.ID = 0;
-          oprot.WriteFieldBegin(field);
-          oprot.WriteI32(Success);
-          oprot.WriteFieldEnd();
+          if (Success != null) {
+            field.Name = "Success";
+            field.Type = TType.String;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteString(Success);
+            oprot.WriteFieldEnd();
+          }
         }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
@@ -2285,7 +2287,7 @@ namespace bcvkSignal
       public override string ToString() {
         StringBuilder __sb = new StringBuilder("DoCall_result(");
         bool __first = true;
-        if (__isset.success) {
+        if (Success != null && __isset.success) {
           if(!__first) { __sb.Append(", "); }
           __first = false;
           __sb.Append("Success: ");
@@ -2305,7 +2307,7 @@ namespace bcvkSignal
     {
       private string _sender;
       private string _recipient;
-      private int _callId;
+      private string _connectionId;
       private string _answer;
 
       public string Sender
@@ -2334,16 +2336,16 @@ namespace bcvkSignal
         }
       }
 
-      public int CallId
+      public string ConnectionId
       {
         get
         {
-          return _callId;
+          return _connectionId;
         }
         set
         {
-          __isset.callId = true;
-          this._callId = value;
+          __isset.connectionId = true;
+          this._connectionId = value;
         }
       }
 
@@ -2368,7 +2370,7 @@ namespace bcvkSignal
       public struct Isset {
         public bool sender;
         public bool recipient;
-        public bool callId;
+        public bool connectionId;
         public bool answer;
       }
 
@@ -2402,8 +2404,8 @@ namespace bcvkSignal
               }
               break;
             case 3:
-              if (field.Type == TType.I32) {
-                CallId = iprot.ReadI32();
+              if (field.Type == TType.String) {
+                ConnectionId = iprot.ReadString();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -2444,12 +2446,12 @@ namespace bcvkSignal
           oprot.WriteString(Recipient);
           oprot.WriteFieldEnd();
         }
-        if (__isset.callId) {
-          field.Name = "callId";
-          field.Type = TType.I32;
+        if (ConnectionId != null && __isset.connectionId) {
+          field.Name = "connectionId";
+          field.Type = TType.String;
           field.ID = 3;
           oprot.WriteFieldBegin(field);
-          oprot.WriteI32(CallId);
+          oprot.WriteString(ConnectionId);
           oprot.WriteFieldEnd();
         }
         if (Answer != null && __isset.answer) {
@@ -2479,11 +2481,11 @@ namespace bcvkSignal
           __sb.Append("Recipient: ");
           __sb.Append(Recipient);
         }
-        if (__isset.callId) {
+        if (ConnectionId != null && __isset.connectionId) {
           if(!__first) { __sb.Append(", "); }
           __first = false;
-          __sb.Append("CallId: ");
-          __sb.Append(CallId);
+          __sb.Append("ConnectionId: ");
+          __sb.Append(ConnectionId);
         }
         if (Answer != null && __isset.answer) {
           if(!__first) { __sb.Append(", "); }
@@ -2550,18 +2552,18 @@ namespace bcvkSignal
     #endif
     public partial class GetCallStatus_args : TBase
     {
-      private int _callId;
+      private string _connectionId;
 
-      public int CallId
+      public string ConnectionId
       {
         get
         {
-          return _callId;
+          return _connectionId;
         }
         set
         {
-          __isset.callId = true;
-          this._callId = value;
+          __isset.connectionId = true;
+          this._connectionId = value;
         }
       }
 
@@ -2571,7 +2573,7 @@ namespace bcvkSignal
       [Serializable]
       #endif
       public struct Isset {
-        public bool callId;
+        public bool connectionId;
       }
 
       public GetCallStatus_args() {
@@ -2590,8 +2592,8 @@ namespace bcvkSignal
           switch (field.ID)
           {
             case 1:
-              if (field.Type == TType.I32) {
-                CallId = iprot.ReadI32();
+              if (field.Type == TType.String) {
+                ConnectionId = iprot.ReadString();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -2609,12 +2611,12 @@ namespace bcvkSignal
         TStruct struc = new TStruct("GetCallStatus_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        if (__isset.callId) {
-          field.Name = "callId";
-          field.Type = TType.I32;
+        if (ConnectionId != null && __isset.connectionId) {
+          field.Name = "connectionId";
+          field.Type = TType.String;
           field.ID = 1;
           oprot.WriteFieldBegin(field);
-          oprot.WriteI32(CallId);
+          oprot.WriteString(ConnectionId);
           oprot.WriteFieldEnd();
         }
         oprot.WriteFieldStop();
@@ -2624,11 +2626,11 @@ namespace bcvkSignal
       public override string ToString() {
         StringBuilder __sb = new StringBuilder("GetCallStatus_args(");
         bool __first = true;
-        if (__isset.callId) {
+        if (ConnectionId != null && __isset.connectionId) {
           if(!__first) { __sb.Append(", "); }
           __first = false;
-          __sb.Append("CallId: ");
-          __sb.Append(CallId);
+          __sb.Append("ConnectionId: ");
+          __sb.Append(ConnectionId);
         }
         __sb.Append(")");
         return __sb.ToString();
@@ -2739,7 +2741,7 @@ namespace bcvkSignal
     {
       private string _sender;
       private string _recipient;
-      private int _callId;
+      private string _connectionId;
 
       public string Sender
       {
@@ -2767,16 +2769,16 @@ namespace bcvkSignal
         }
       }
 
-      public int CallId
+      public string ConnectionId
       {
         get
         {
-          return _callId;
+          return _connectionId;
         }
         set
         {
-          __isset.callId = true;
-          this._callId = value;
+          __isset.connectionId = true;
+          this._connectionId = value;
         }
       }
 
@@ -2788,7 +2790,7 @@ namespace bcvkSignal
       public struct Isset {
         public bool sender;
         public bool recipient;
-        public bool callId;
+        public bool connectionId;
       }
 
       public EndCall_args() {
@@ -2821,8 +2823,8 @@ namespace bcvkSignal
               }
               break;
             case 3:
-              if (field.Type == TType.I32) {
-                CallId = iprot.ReadI32();
+              if (field.Type == TType.String) {
+                ConnectionId = iprot.ReadString();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -2856,12 +2858,12 @@ namespace bcvkSignal
           oprot.WriteString(Recipient);
           oprot.WriteFieldEnd();
         }
-        if (__isset.callId) {
-          field.Name = "callId";
-          field.Type = TType.I32;
+        if (ConnectionId != null && __isset.connectionId) {
+          field.Name = "connectionId";
+          field.Type = TType.String;
           field.ID = 3;
           oprot.WriteFieldBegin(field);
-          oprot.WriteI32(CallId);
+          oprot.WriteString(ConnectionId);
           oprot.WriteFieldEnd();
         }
         oprot.WriteFieldStop();
@@ -2883,11 +2885,11 @@ namespace bcvkSignal
           __sb.Append("Recipient: ");
           __sb.Append(Recipient);
         }
-        if (__isset.callId) {
+        if (ConnectionId != null && __isset.connectionId) {
           if(!__first) { __sb.Append(", "); }
           __first = false;
-          __sb.Append("CallId: ");
-          __sb.Append(CallId);
+          __sb.Append("ConnectionId: ");
+          __sb.Append(ConnectionId);
         }
         __sb.Append(")");
         return __sb.ToString();
