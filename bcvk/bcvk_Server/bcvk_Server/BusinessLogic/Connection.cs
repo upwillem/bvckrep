@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Dal;
 
 namespace Bu
 {
@@ -50,7 +51,8 @@ namespace Bu
             bool added = Participants.TryAdd(sender, "connected");
             if (added)
             {
-                owner = sender;              
+                owner = sender;
+                addConnection(Id);
                 addConnectionToAccount(sender);
                 ConnectionState = "establishing";
             }       
@@ -63,7 +65,7 @@ namespace Bu
         /// <param name="recipient"></param> 
         public void AddParticipant(string participant)
         {
-            bool added = Participants.TryAdd(participant, "connecting");
+           bool added = Participants.TryAdd(participant, "connecting");
            if (added)
            {
                addConnectionToAccount(participant);
@@ -131,23 +133,21 @@ namespace Bu
             }          
         }
 
-        /// <summary>
-        /// Add an instance of this connection to an instance of an account
-        /// </summary>
-        /// <param name="accountId"></param>
-        private void addConnectionToAccount(string accountId)
+        
+        private void addConnection(string connectionId)
         {
-            //TODO:
-            //try
-            //{
-            //    
-            //    //Account.AddConnection(accountId, this.id) 
-            //}
-            //catch(NullReferenceException nullex)
-            //{
-            //    //nullreference exception
-            //}      
+            //this needs to be sql injection safe
+            Mysql mysql = new Mysql();
+            mysql.Query("INSERT INTO connections(connection_id) VALUES('" + connectionId + "')");
+            
+        }
 
+        private void addConnectionToAccount(string participant)
+        {
+            Mysql mysql = new Mysql();
+            mysql.Query("INSERT INTO connections_users(connection_id,user_id) VALUES('" + Id + "','"+ participant +"')");
+            
+            
         }
     }
 }
