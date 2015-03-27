@@ -18,23 +18,23 @@ namespace Cc
         /// <param name="sender">call owner who is the owner of the call</param>
         /// <param name="recipient">call recipient who is invited to the call</param>
         /// <returns>callId</returns>
-        public static int DoConnect(string sender, string recipient)
+        public static string DoConnect(string sender, string recipient)
         {
             Connection con = new Connection(sender);
             con.AddParticipant(recipient);
             Connections.Add(con);
             //TODO:Notify parents
-            return con.id;
+            return con.Id;
         }
         /// <summary>
         /// During this methode the state of a specific connnection is checked
         /// </summary>
         /// <param name="callId">id to identify a specific call</param>
         /// <returns>connectionstate</returns>
-        public static string GetConnetionState(int connectionId)
+        public static string GetConnetionState(string connectionId)
         {
-            var con = Connections.Single(x => x.id == connectionId);
-            return con.ConnectionState;
+            var con = Connections.Single(x => x.Id == connectionId);
+            return con.GetConnectionState();
         }
         /// <summary>
         /// this method gives the connectionstate of a specific user in a connection
@@ -42,67 +42,43 @@ namespace Cc
         /// <param name="connectionId">connection identificationcode</param>
         /// <param name="who">indentification token to get the state of</param>
         /// <returns>connection state of a specific user </returns>
-        public static string GetConnetionState(int connectionId,string who)
+        public static string GetConnetionState(string connectionId,string participant)
         {
-            var con = Connections.Single(x => x.id == connectionId);
-            string result;
-            con.Participants.TryGetValue(who, out result);
-            return result;
+            var con = Connections.Single(x => x.Id == connectionId);
+            return con.GetConnectionState(participant);
         }
-
-        /// <summary>
-        /// Gets a specific stream of a connnection
-        /// </summary>
-        /// <param name="callId">connection identification token</param>
-        /// <param name="streamowner">identefies wich stream to return</param>
-        /// <returns>specific stream from streamowner</returns>
-        public static List<byte[]> GetStream(int connectionId, string streamowner)
-        {
-            Connection connection = FindConnectionById(connectionId);
-            List<byte[]>returnstream = new List<byte[]>();
-            connection.Streams.TryGetValue(streamowner, out returnstream);
-            return returnstream;
-        }
+       
         /// <summary>
         /// Giv a respond to a connection 
         /// </summary>
         /// <param name="sender">sender id</param>
         /// <param name="callId">connection identification token</param>
         /// <param name="answer">anwser</param>
-        public static void AnwserConnection(string sender, int connectionId, string answer)
+        public static void AnwserConnection(string sender, string connectionId, string answer)
         {
-            Connection connection = Connections.Single(x => x.id == connectionId);
+            Connection connection = Connections.Single(x => x.Id == connectionId);
             connection.ChangeConnectionState(sender, answer);            
         }
         /// <summary>
         /// end a specific call
         /// </summary>
         /// <param name="callId">call to end</param>
-        public static void EndConnection(int connectionId)
+        public static void EndConnection(string connectionId)
         {
             Connection connection = FindConnectionById(connectionId);
-            if (connection.EndConnection())
-            {
-                Connections.Remove(connection);           
-            }
+            connection.EndConnection();
+            Connections.Remove(connection);           
+            
         }
 
         /// <summary>
-        /// Set the stream availble in a connection
+        /// This methode is capable of findingConnections by a specific id
         /// </summary>
-        /// <param name="callId">connection identification token</param>
-        /// <param name="streamowner">sender of the stream</param>
-        /// <param name="stream">stream in list of a bytearray</param>
-        public static void SetStream(int connectionId, string streamowner, List<byte[]> stream)
+        /// <param name="connectionId">connection identification token</param>
+        /// <returns>s specific connection</returns>
+        private static Connection FindConnectionById(string connectionId)
         {
-            var con = Connections.Select(x => x.id == connectionId);
-            Connection connection = (Connection)con;
-            connection.SetStream(streamowner, stream);
-        }
-
-        private static Connection FindConnectionById(int connectionId)
-        {
-            Connection connection = Connections.Find(x => x.id == connectionId);
+            Connection connection = Connections.Find(x => x.Id == connectionId);
             return connection;
         }
     }

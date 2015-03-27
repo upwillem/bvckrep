@@ -20,7 +20,7 @@ namespace bcvk_Server
         /// Main kick to server  
         /// </summary>
         /// <param name="args"></param>
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             try
             {
@@ -43,7 +43,7 @@ namespace bcvk_Server
         /// Signal thread 
         /// </summary>
         /// <param name="applicationManager">main application manager</param>
-        static void DoWorkSignal(ApplicationManager applicationManager)
+        private static void DoWorkSignal(ApplicationManager applicationManager)
         {
             Signal.Processor signalProcessor = new Signal.Processor(applicationManager);
             var signalServerPort = 9090;
@@ -60,7 +60,7 @@ namespace bcvk_Server
         /// Stream thread 
         /// </summary>
         /// <param name="applicationManager">main application manager</param>
-        static void DoWorkStream(ApplicationManager applicationManager)
+        private static void DoWorkStream(ApplicationManager applicationManager)
         {
             Stream.Processor streamProcessor = new Stream.Processor(applicationManager);
 
