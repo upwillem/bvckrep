@@ -80,5 +80,25 @@ namespace AccountTest
 
             CollectionAssert.AreEquivalent(expected, actual);
         }
+
+        [TestMethod]
+        public void CreateAccountNotMachingPasswords()
+        {
+            string username = "123123123";
+            string password1 = "asdasdasd";
+            string password2 = "asdasdasd2";
+            string email = "johnny@harry.com";
+            string name = "Johnny";
+
+            List<string> actual = Cc.AccountHandler.CreateMainAccount(username, password1, password2, email, name);
+
+            List<string> expected = new List<string>();
+            expected.Add("error;Passwords do not match.");
+
+            CollectionAssert.AreEquivalent(expected, actual);
+
+            Dal.Mysql mysql = new Dal.Mysql();
+            mysql.Query(String.Format("DELETE FROM accounts WHERE username={0}", username));
+        }
     }
 }
