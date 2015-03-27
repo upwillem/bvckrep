@@ -10,6 +10,7 @@ service Signal
 	string DoCall(1:string sender, 2:string recipient),
 	void AnswerCall(1:string sender, 2:string recipient, 3:string connectionId, 4:string answer),
 	string GetCallStatus(1:string connectionId),
+	string GetParticipantCallStatus(1:string connectionId, 2:string participants),
 	void EndCall(1:string sender, 2:string recipient, 3:string connectionId),
 	bool ToggleBlock(1:string sender, 2:string recipient)
 }

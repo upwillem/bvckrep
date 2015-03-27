@@ -54,22 +54,23 @@ namespace bcvk_Server
 
         public void AnswerCall(string sender, string recipient, string connectionId, string answer)
         {
-            //replace -1 with connectionId
-            CommunicationHandler.AnwserConnection(sender, "-1", answer);          
+            CommunicationHandler.AnwserConnection(sender, connectionId, answer);          
         }
 
         ///
         public string GetCallStatus(string connectionId)
         {
-            return CommunicationHandler.GetConnetionState("-1");
+            return CommunicationHandler.GetConnetionState(connectionId);
         }
 
-        //TODO: overload GetCallStatus from specific Id
+        public string GetParticipantCallStatus(string connectionId, string participant)
+        {
+            return CommunicationHandler.GetConnetionState(connectionId,participant);
+        } 
 
         public void EndCall(string sender, string recipient, string connectionId)
-        {
-            //replace -1 with connectionId
-            CommunicationHandler.EndConnection("-1");
+        {  
+            CommunicationHandler.EndConnection(connectionId);
         }
         #endregion
 

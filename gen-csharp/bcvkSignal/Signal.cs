@@ -59,6 +59,11 @@ namespace bcvkSignal
       IAsyncResult Begin_GetCallStatus(AsyncCallback callback, object state, string connectionId);
       string End_GetCallStatus(IAsyncResult asyncResult);
       #endif
+      string GetParticipantCallStatus(string connectionId, string participants);
+      #if SILVERLIGHT
+      IAsyncResult Begin_GetParticipantCallStatus(AsyncCallback callback, object state, string connectionId, string participants);
+      string End_GetParticipantCallStatus(IAsyncResult asyncResult);
+      #endif
       void EndCall(string sender, string recipient, string connectionId);
       #if SILVERLIGHT
       IAsyncResult Begin_EndCall(AsyncCallback callback, object state, string sender, string recipient, string connectionId);
@@ -632,6 +637,69 @@ namespace bcvkSignal
 
       
       #if SILVERLIGHT
+      public IAsyncResult Begin_GetParticipantCallStatus(AsyncCallback callback, object state, string connectionId, string participants)
+      {
+        return send_GetParticipantCallStatus(callback, state, connectionId, participants);
+      }
+
+      public string End_GetParticipantCallStatus(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_GetParticipantCallStatus();
+      }
+
+      #endif
+
+      public string GetParticipantCallStatus(string connectionId, string participants)
+      {
+        #if !SILVERLIGHT
+        send_GetParticipantCallStatus(connectionId, participants);
+        return recv_GetParticipantCallStatus();
+
+        #else
+        var asyncResult = Begin_GetParticipantCallStatus(null, null, connectionId, participants);
+        return End_GetParticipantCallStatus(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_GetParticipantCallStatus(AsyncCallback callback, object state, string connectionId, string participants)
+      #else
+      public void send_GetParticipantCallStatus(string connectionId, string participants)
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("GetParticipantCallStatus", TMessageType.Call, seqid_));
+        GetParticipantCallStatus_args args = new GetParticipantCallStatus_args();
+        args.ConnectionId = connectionId;
+        args.Participants = participants;
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public string recv_GetParticipantCallStatus()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        GetParticipantCallStatus_result result = new GetParticipantCallStatus_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "GetParticipantCallStatus failed: unknown result");
+      }
+
+      
+      #if SILVERLIGHT
       public IAsyncResult Begin_EndCall(AsyncCallback callback, object state, string sender, string recipient, string connectionId)
       {
         return send_EndCall(callback, state, sender, recipient, connectionId);
@@ -767,6 +835,7 @@ namespace bcvkSignal
         processMap_["DoCall"] = DoCall_Process;
         processMap_["AnswerCall"] = AnswerCall_Process;
         processMap_["GetCallStatus"] = GetCallStatus_Process;
+        processMap_["GetParticipantCallStatus"] = GetParticipantCallStatus_Process;
         processMap_["EndCall"] = EndCall_Process;
         processMap_["ToggleBlock"] = ToggleBlock_Process;
       }
@@ -900,6 +969,19 @@ namespace bcvkSignal
         GetCallStatus_result result = new GetCallStatus_result();
         result.Success = iface_.GetCallStatus(args.ConnectionId);
         oprot.WriteMessageBegin(new TMessage("GetCallStatus", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void GetParticipantCallStatus_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        GetParticipantCallStatus_args args = new GetParticipantCallStatus_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        GetParticipantCallStatus_result result = new GetParticipantCallStatus_result();
+        result.Success = iface_.GetParticipantCallStatus(args.ConnectionId, args.Participants);
+        oprot.WriteMessageBegin(new TMessage("GetParticipantCallStatus", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
@@ -2856,6 +2938,229 @@ namespace bcvkSignal
 
       public override string ToString() {
         StringBuilder __sb = new StringBuilder("GetCallStatus_result(");
+        bool __first = true;
+        if (Success != null && __isset.success) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Success: ");
+          __sb.Append(Success);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class GetParticipantCallStatus_args : TBase
+    {
+      private string _connectionId;
+      private string _participants;
+
+      public string ConnectionId
+      {
+        get
+        {
+          return _connectionId;
+        }
+        set
+        {
+          __isset.connectionId = true;
+          this._connectionId = value;
+        }
+      }
+
+      public string Participants
+      {
+        get
+        {
+          return _participants;
+        }
+        set
+        {
+          __isset.participants = true;
+          this._participants = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool connectionId;
+        public bool participants;
+      }
+
+      public GetParticipantCallStatus_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.String) {
+                ConnectionId = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.String) {
+                Participants = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("GetParticipantCallStatus_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (ConnectionId != null && __isset.connectionId) {
+          field.Name = "connectionId";
+          field.Type = TType.String;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(ConnectionId);
+          oprot.WriteFieldEnd();
+        }
+        if (Participants != null && __isset.participants) {
+          field.Name = "participants";
+          field.Type = TType.String;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Participants);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("GetParticipantCallStatus_args(");
+        bool __first = true;
+        if (ConnectionId != null && __isset.connectionId) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("ConnectionId: ");
+          __sb.Append(ConnectionId);
+        }
+        if (Participants != null && __isset.participants) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Participants: ");
+          __sb.Append(Participants);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class GetParticipantCallStatus_result : TBase
+    {
+      private string _success;
+
+      public string Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public GetParticipantCallStatus_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.String) {
+                Success = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("GetParticipantCallStatus_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.__isset.success) {
+          if (Success != null) {
+            field.Name = "Success";
+            field.Type = TType.String;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteString(Success);
+            oprot.WriteFieldEnd();
+          }
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("GetParticipantCallStatus_result(");
         bool __first = true;
         if (Success != null && __isset.success) {
           if(!__first) { __sb.Append(", "); }
