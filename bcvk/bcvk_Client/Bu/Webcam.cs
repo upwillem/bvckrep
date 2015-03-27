@@ -10,17 +10,24 @@ using AForge.Video.DirectShow;
 using System.Drawing;
 #endregion
 
-namespace bcvk_Client
+namespace Bu
 {
     public class Webcam
     {
-        private VideoCaptureDevice videoSource = new VideoCaptureDevice();
+        private Converter converter;
+        private VideoCaptureDevice videoSource;
+        public event Action<Byte[]> byteArrayReady;
         public event Action<Bitmap> frameReady;
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public Webcam(){ }
+        public Webcam()
+        { 
+            converter = new Converter();
+            videoSource = new VideoCaptureDevice();
+            SetHighestResolution();
+        }
 
         /// <summary>
         /// Luc Schnabel 1207776,
@@ -28,7 +35,7 @@ namespace bcvk_Client
         /// and connects the frame event
         /// </summary>
         /// <returns>string error</returns>
-        public string On_Load()
+        private string SetHighestResolution()
         {
             //List all available video sources. (That can be webcams as well as tv cards, etc)
             FilterInfoCollection videosources = new FilterInfoCollection(FilterCategory.VideoInputDevice);
@@ -76,7 +83,9 @@ namespace bcvk_Client
         /// <param name="eventArgs"></param>
         private void videoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
+
             frameReady((Bitmap)eventArgs.Frame.Clone());
+            byteArrayReady(converter.ToByteArray((Image)eventArgs.Frame.Clone()));
         } 
 
         /// <summary>
@@ -93,7 +102,7 @@ namespace bcvk_Client
         /// Luc Schnabel 1207776,
         /// stop the camera
         /// </summary>
-        public void btnStopCamera()
+        public void StopCamera()
         {
             // signal to stop when you no longer need capturing
             videoSource.SignalToStop();
@@ -103,7 +112,7 @@ namespace bcvk_Client
         /// Luc Schnabel 1207776,
         /// stops and free the webcam object if application is closing
         /// </summary>
-        public void On_FormClosed()
+        public void On_Application_End()
         {
             //Stop and free the webcam object if application is closing
             if (videoSource != null && videoSource.IsRunning)
