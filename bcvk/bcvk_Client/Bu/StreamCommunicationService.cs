@@ -67,7 +67,7 @@ namespace Bu
         private void webcam_byteArrayReady(byte[] obj)
         {
             //TODO: send this byte[] to the blockbuffer
-            //throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         /// <summary>

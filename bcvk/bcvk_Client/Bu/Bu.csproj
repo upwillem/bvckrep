@@ -56,8 +56,8 @@
     <Compile Include="Webcam.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DALNEW\DAL.csproj">
-      <Project>{73f537a7-693a-4dd1-b73d-7450769e3457}</Project>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{e287ddf3-fced-41ab-882e-e77781818313}</Project>
       <Name>DAL</Name>
     </ProjectReference>
   </ItemGroup>
