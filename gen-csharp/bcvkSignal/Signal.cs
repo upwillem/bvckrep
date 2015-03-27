@@ -19,15 +19,15 @@ namespace bcvkSignal
 {
   public partial class Signal {
     public interface Iface {
-      void CreateMainAccount(string username, string password1, string password2, string email, string name);
+      List<string> CreateMainAccount(string username, string password1, string password2, string email, string name);
       #if SILVERLIGHT
       IAsyncResult Begin_CreateMainAccount(AsyncCallback callback, object state, string username, string password1, string password2, string email, string name);
-      void End_CreateMainAccount(IAsyncResult asyncResult);
+      List<string> End_CreateMainAccount(IAsyncResult asyncResult);
       #endif
-      void CreateSubAccount(string username, string password1, string password2, string name, byte[] profileImage);
+      List<string> CreateSubAccount(string username, string password1, string password2, string name, byte[] profileImage);
       #if SILVERLIGHT
       IAsyncResult Begin_CreateSubAccount(AsyncCallback callback, object state, string username, string password1, string password2, string name, byte[] profileImage);
-      void End_CreateSubAccount(IAsyncResult asyncResult);
+      List<string> End_CreateSubAccount(IAsyncResult asyncResult);
       #endif
       List<string> Login(string username, string password);
       #if SILVERLIGHT
@@ -134,23 +134,23 @@ namespace bcvkSignal
         return send_CreateMainAccount(callback, state, username, password1, password2, email, name);
       }
 
-      public void End_CreateMainAccount(IAsyncResult asyncResult)
+      public List<string> End_CreateMainAccount(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
-        recv_CreateMainAccount();
+        return recv_CreateMainAccount();
       }
 
       #endif
 
-      public void CreateMainAccount(string username, string password1, string password2, string email, string name)
+      public List<string> CreateMainAccount(string username, string password1, string password2, string email, string name)
       {
         #if !SILVERLIGHT
         send_CreateMainAccount(username, password1, password2, email, name);
-        recv_CreateMainAccount();
+        return recv_CreateMainAccount();
 
         #else
         var asyncResult = Begin_CreateMainAccount(null, null, username, password1, password2, email, name);
-        End_CreateMainAccount(asyncResult);
+        return End_CreateMainAccount(asyncResult);
 
         #endif
       }
@@ -176,7 +176,7 @@ namespace bcvkSignal
         #endif
       }
 
-      public void recv_CreateMainAccount()
+      public List<string> recv_CreateMainAccount()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -187,7 +187,10 @@ namespace bcvkSignal
         CreateMainAccount_result result = new CreateMainAccount_result();
         result.Read(iprot_);
         iprot_.ReadMessageEnd();
-        return;
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "CreateMainAccount failed: unknown result");
       }
 
       
@@ -197,23 +200,23 @@ namespace bcvkSignal
         return send_CreateSubAccount(callback, state, username, password1, password2, name, profileImage);
       }
 
-      public void End_CreateSubAccount(IAsyncResult asyncResult)
+      public List<string> End_CreateSubAccount(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
-        recv_CreateSubAccount();
+        return recv_CreateSubAccount();
       }
 
       #endif
 
-      public void CreateSubAccount(string username, string password1, string password2, string name, byte[] profileImage)
+      public List<string> CreateSubAccount(string username, string password1, string password2, string name, byte[] profileImage)
       {
         #if !SILVERLIGHT
         send_CreateSubAccount(username, password1, password2, name, profileImage);
-        recv_CreateSubAccount();
+        return recv_CreateSubAccount();
 
         #else
         var asyncResult = Begin_CreateSubAccount(null, null, username, password1, password2, name, profileImage);
-        End_CreateSubAccount(asyncResult);
+        return End_CreateSubAccount(asyncResult);
 
         #endif
       }
@@ -239,7 +242,7 @@ namespace bcvkSignal
         #endif
       }
 
-      public void recv_CreateSubAccount()
+      public List<string> recv_CreateSubAccount()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -250,7 +253,10 @@ namespace bcvkSignal
         CreateSubAccount_result result = new CreateSubAccount_result();
         result.Read(iprot_);
         iprot_.ReadMessageEnd();
-        return;
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "CreateSubAccount failed: unknown result");
       }
 
       
@@ -801,7 +807,7 @@ namespace bcvkSignal
         args.Read(iprot);
         iprot.ReadMessageEnd();
         CreateMainAccount_result result = new CreateMainAccount_result();
-        iface_.CreateMainAccount(args.Username, args.Password1, args.Password2, args.Email, args.Name);
+        result.Success = iface_.CreateMainAccount(args.Username, args.Password1, args.Password2, args.Email, args.Name);
         oprot.WriteMessageBegin(new TMessage("CreateMainAccount", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
@@ -814,7 +820,7 @@ namespace bcvkSignal
         args.Read(iprot);
         iprot.ReadMessageEnd();
         CreateSubAccount_result result = new CreateSubAccount_result();
-        iface_.CreateSubAccount(args.Username, args.Password1, args.Password2, args.Name, args.ProfileImage);
+        result.Success = iface_.CreateSubAccount(args.Username, args.Password1, args.Password2, args.Name, args.ProfileImage);
         oprot.WriteMessageBegin(new TMessage("CreateSubAccount", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
@@ -1169,6 +1175,29 @@ namespace bcvkSignal
     #endif
     public partial class CreateMainAccount_result : TBase
     {
+      private List<string> _success;
+
+      public List<string> Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
 
       public CreateMainAccount_result() {
       }
@@ -1185,6 +1214,23 @@ namespace bcvkSignal
           }
           switch (field.ID)
           {
+            case 0:
+              if (field.Type == TType.List) {
+                {
+                  Success = new List<string>();
+                  TList _list0 = iprot.ReadListBegin();
+                  for( int _i1 = 0; _i1 < _list0.Count; ++_i1)
+                  {
+                    string _elem2;
+                    _elem2 = iprot.ReadString();
+                    Success.Add(_elem2);
+                  }
+                  iprot.ReadListEnd();
+                }
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
             default: 
               TProtocolUtil.Skip(iprot, field.Type);
               break;
@@ -1197,13 +1243,38 @@ namespace bcvkSignal
       public void Write(TProtocol oprot) {
         TStruct struc = new TStruct("CreateMainAccount_result");
         oprot.WriteStructBegin(struc);
+        TField field = new TField();
 
+        if (this.__isset.success) {
+          if (Success != null) {
+            field.Name = "Success";
+            field.Type = TType.List;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            {
+              oprot.WriteListBegin(new TList(TType.String, Success.Count));
+              foreach (string _iter3 in Success)
+              {
+                oprot.WriteString(_iter3);
+              }
+              oprot.WriteListEnd();
+            }
+            oprot.WriteFieldEnd();
+          }
+        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
 
       public override string ToString() {
         StringBuilder __sb = new StringBuilder("CreateMainAccount_result(");
+        bool __first = true;
+        if (Success != null && __isset.success) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Success: ");
+          __sb.Append(Success);
+        }
         __sb.Append(")");
         return __sb.ToString();
       }
@@ -1452,6 +1523,29 @@ namespace bcvkSignal
     #endif
     public partial class CreateSubAccount_result : TBase
     {
+      private List<string> _success;
+
+      public List<string> Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
 
       public CreateSubAccount_result() {
       }
@@ -1468,6 +1562,23 @@ namespace bcvkSignal
           }
           switch (field.ID)
           {
+            case 0:
+              if (field.Type == TType.List) {
+                {
+                  Success = new List<string>();
+                  TList _list4 = iprot.ReadListBegin();
+                  for( int _i5 = 0; _i5 < _list4.Count; ++_i5)
+                  {
+                    string _elem6;
+                    _elem6 = iprot.ReadString();
+                    Success.Add(_elem6);
+                  }
+                  iprot.ReadListEnd();
+                }
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
             default: 
               TProtocolUtil.Skip(iprot, field.Type);
               break;
@@ -1480,13 +1591,38 @@ namespace bcvkSignal
       public void Write(TProtocol oprot) {
         TStruct struc = new TStruct("CreateSubAccount_result");
         oprot.WriteStructBegin(struc);
+        TField field = new TField();
 
+        if (this.__isset.success) {
+          if (Success != null) {
+            field.Name = "Success";
+            field.Type = TType.List;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            {
+              oprot.WriteListBegin(new TList(TType.String, Success.Count));
+              foreach (string _iter7 in Success)
+              {
+                oprot.WriteString(_iter7);
+              }
+              oprot.WriteListEnd();
+            }
+            oprot.WriteFieldEnd();
+          }
+        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
 
       public override string ToString() {
         StringBuilder __sb = new StringBuilder("CreateSubAccount_result(");
+        bool __first = true;
+        if (Success != null && __isset.success) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Success: ");
+          __sb.Append(Success);
+        }
         __sb.Append(")");
         return __sb.ToString();
       }
@@ -1670,12 +1806,12 @@ namespace bcvkSignal
               if (field.Type == TType.List) {
                 {
                   Success = new List<string>();
-                  TList _list0 = iprot.ReadListBegin();
-                  for( int _i1 = 0; _i1 < _list0.Count; ++_i1)
+                  TList _list8 = iprot.ReadListBegin();
+                  for( int _i9 = 0; _i9 < _list8.Count; ++_i9)
                   {
-                    string _elem2;
-                    _elem2 = iprot.ReadString();
-                    Success.Add(_elem2);
+                    string _elem10;
+                    _elem10 = iprot.ReadString();
+                    Success.Add(_elem10);
                   }
                   iprot.ReadListEnd();
                 }
@@ -1705,9 +1841,9 @@ namespace bcvkSignal
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.String, Success.Count));
-              foreach (string _iter3 in Success)
+              foreach (string _iter11 in Success)
               {
-                oprot.WriteString(_iter3);
+                oprot.WriteString(_iter11);
               }
               oprot.WriteListEnd();
             }
@@ -2013,12 +2149,12 @@ namespace bcvkSignal
               if (field.Type == TType.List) {
                 {
                   Success = new List<string>();
-                  TList _list4 = iprot.ReadListBegin();
-                  for( int _i5 = 0; _i5 < _list4.Count; ++_i5)
+                  TList _list12 = iprot.ReadListBegin();
+                  for( int _i13 = 0; _i13 < _list12.Count; ++_i13)
                   {
-                    string _elem6;
-                    _elem6 = iprot.ReadString();
-                    Success.Add(_elem6);
+                    string _elem14;
+                    _elem14 = iprot.ReadString();
+                    Success.Add(_elem14);
                   }
                   iprot.ReadListEnd();
                 }
@@ -2048,9 +2184,9 @@ namespace bcvkSignal
             oprot.WriteFieldBegin(field);
             {
               oprot.WriteListBegin(new TList(TType.String, Success.Count));
-              foreach (string _iter7 in Success)
+              foreach (string _iter15 in Success)
               {
-                oprot.WriteString(_iter7);
+                oprot.WriteString(_iter15);
               }
               oprot.WriteListEnd();
             }

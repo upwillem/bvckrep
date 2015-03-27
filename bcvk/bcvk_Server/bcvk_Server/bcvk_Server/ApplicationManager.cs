@@ -13,13 +13,14 @@ namespace bcvk_Server
     public class ApplicationManager: Signal.Iface, Stream.Iface
     {
     #region account
-        public void CreateMainAccount(string username, string password1, string password2, string email, string name)
+        public List<string> CreateMainAccount(string username, string password1, string password2, string email, string name)
         {
             //throw new NotImplementedException();
             AccountHandler.CreateMainAccount(username, password1, password2, email, name);
+            return new List<string>();
         }
 
-        public void CreateSubAccount(string username, string password1, string password2, string name, byte[] profileImage)
+        public List<string> CreateSubAccount(string username, string password1, string password2, string name, byte[] profileImage)
         {
             throw new NotImplementedException();
         }
@@ -46,29 +47,26 @@ namespace bcvk_Server
 
     #region callsignaling
 
-        public int DoCall(string sender, string recipient)
+        public string DoCall(string sender, string recipient)
         {
-            return -1;
-            CommunicationHandler.DoConnect(sender, recipient);
+            return CommunicationHandler.DoConnect(sender, recipient);
         }
 
-        public void AnswerCall(string sender, string recipient, int connectionId, string answer)
+        public void AnswerCall(string sender, string recipient, string connectionId, string answer)
         {
             //replace -1 with connectionId
             CommunicationHandler.AnwserConnection(sender, "-1", answer);          
         }
 
         ///
-        public string GetCallStatus(int connectionId)
+        public string GetCallStatus(string connectionId)
         {
-            return "";
-            //replace -1 with connectionId
-            CommunicationHandler.GetConnetionState("-1");
+            return CommunicationHandler.GetConnetionState("-1");
         }
 
         //TODO: overload GetCallStatus from specific Id
 
-        public void EndCall(string sender, string recipient, int connectionId)
+        public void EndCall(string sender, string recipient, string connectionId)
         {
             //replace -1 with connectionId
             CommunicationHandler.EndConnection("-1");
@@ -76,12 +74,12 @@ namespace bcvk_Server
         #endregion
 
     #region stream
-        public void SendStream(string sender, string recipient, byte[] stream)
+        public void SendStream(string sender, string recipient, List<byte[]> stream)
         {
             throw new NotImplementedException();
         }
 
-        public void SendVideo(string sender, string recipient, byte[] video)
+        public void SendVideo(string sender, string recipient, List<byte[]> video)
         {
             throw new NotImplementedException();
         }

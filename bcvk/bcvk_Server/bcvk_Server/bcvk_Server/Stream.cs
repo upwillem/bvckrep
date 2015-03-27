@@ -19,14 +19,14 @@ namespace bcvkStream
 {
   public partial class Stream {
     public interface Iface {
-      void SendStream(string sender, string recipient, byte[] stream);
+      void SendStream(string sender, string recipient, List<byte[]> stream);
       #if SILVERLIGHT
-      IAsyncResult Begin_SendStream(AsyncCallback callback, object state, string sender, string recipient, byte[] stream);
+      IAsyncResult Begin_SendStream(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> stream);
       void End_SendStream(IAsyncResult asyncResult);
       #endif
-      void SendVideo(string sender, string recipient, byte[] video);
+      void SendVideo(string sender, string recipient, List<byte[]> video);
       #if SILVERLIGHT
-      IAsyncResult Begin_SendVideo(AsyncCallback callback, object state, string sender, string recipient, byte[] video);
+      IAsyncResult Begin_SendVideo(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> video);
       void End_SendVideo(IAsyncResult asyncResult);
       #endif
       byte[] GetStream(string sender, string recipient);
@@ -99,7 +99,7 @@ namespace bcvkStream
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_SendStream(AsyncCallback callback, object state, string sender, string recipient, byte[] stream)
+      public IAsyncResult Begin_SendStream(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> stream)
       {
         return send_SendStream(callback, state, sender, recipient, stream);
       }
@@ -112,7 +112,7 @@ namespace bcvkStream
 
       #endif
 
-      public void SendStream(string sender, string recipient, byte[] stream)
+      public void SendStream(string sender, string recipient, List<byte[]> stream)
       {
         #if !SILVERLIGHT
         send_SendStream(sender, recipient, stream);
@@ -125,9 +125,9 @@ namespace bcvkStream
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_SendStream(AsyncCallback callback, object state, string sender, string recipient, byte[] stream)
+      public IAsyncResult send_SendStream(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> stream)
       #else
-      public void send_SendStream(string sender, string recipient, byte[] stream)
+      public void send_SendStream(string sender, string recipient, List<byte[]> stream)
       #endif
       {
         oprot_.WriteMessageBegin(new TMessage("SendStream", TMessageType.Call, seqid_));
@@ -160,7 +160,7 @@ namespace bcvkStream
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_SendVideo(AsyncCallback callback, object state, string sender, string recipient, byte[] video)
+      public IAsyncResult Begin_SendVideo(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> video)
       {
         return send_SendVideo(callback, state, sender, recipient, video);
       }
@@ -173,7 +173,7 @@ namespace bcvkStream
 
       #endif
 
-      public void SendVideo(string sender, string recipient, byte[] video)
+      public void SendVideo(string sender, string recipient, List<byte[]> video)
       {
         #if !SILVERLIGHT
         send_SendVideo(sender, recipient, video);
@@ -186,9 +186,9 @@ namespace bcvkStream
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_SendVideo(AsyncCallback callback, object state, string sender, string recipient, byte[] video)
+      public IAsyncResult send_SendVideo(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> video)
       #else
-      public void send_SendVideo(string sender, string recipient, byte[] video)
+      public void send_SendVideo(string sender, string recipient, List<byte[]> video)
       #endif
       {
         oprot_.WriteMessageBegin(new TMessage("SendVideo", TMessageType.Call, seqid_));
@@ -448,7 +448,7 @@ namespace bcvkStream
     {
       private string _sender;
       private string _recipient;
-      private byte[] _stream;
+      private List<byte[]> _stream;
 
       public string Sender
       {
@@ -476,7 +476,7 @@ namespace bcvkStream
         }
       }
 
-      public byte[] Stream
+      public List<byte[]> Stream
       {
         get
         {
@@ -530,8 +530,18 @@ namespace bcvkStream
               }
               break;
             case 3:
-              if (field.Type == TType.String) {
-                Stream = iprot.ReadBinary();
+              if (field.Type == TType.List) {
+                {
+                  Stream = new List<byte[]>();
+                  TList _list0 = iprot.ReadListBegin();
+                  for( int _i1 = 0; _i1 < _list0.Count; ++_i1)
+                  {
+                    byte[] _elem2;
+                    _elem2 = iprot.ReadBinary();
+                    Stream.Add(_elem2);
+                  }
+                  iprot.ReadListEnd();
+                }
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -567,10 +577,17 @@ namespace bcvkStream
         }
         if (Stream != null && __isset.stream) {
           field.Name = "stream";
-          field.Type = TType.String;
+          field.Type = TType.List;
           field.ID = 3;
           oprot.WriteFieldBegin(field);
-          oprot.WriteBinary(Stream);
+          {
+            oprot.WriteListBegin(new TList(TType.String, Stream.Count));
+            foreach (byte[] _iter3 in Stream)
+            {
+              oprot.WriteBinary(_iter3);
+            }
+            oprot.WriteListEnd();
+          }
           oprot.WriteFieldEnd();
         }
         oprot.WriteFieldStop();
@@ -659,7 +676,7 @@ namespace bcvkStream
     {
       private string _sender;
       private string _recipient;
-      private byte[] _video;
+      private List<byte[]> _video;
 
       public string Sender
       {
@@ -687,7 +704,7 @@ namespace bcvkStream
         }
       }
 
-      public byte[] Video
+      public List<byte[]> Video
       {
         get
         {
@@ -741,8 +758,18 @@ namespace bcvkStream
               }
               break;
             case 3:
-              if (field.Type == TType.String) {
-                Video = iprot.ReadBinary();
+              if (field.Type == TType.List) {
+                {
+                  Video = new List<byte[]>();
+                  TList _list4 = iprot.ReadListBegin();
+                  for( int _i5 = 0; _i5 < _list4.Count; ++_i5)
+                  {
+                    byte[] _elem6;
+                    _elem6 = iprot.ReadBinary();
+                    Video.Add(_elem6);
+                  }
+                  iprot.ReadListEnd();
+                }
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -778,10 +805,17 @@ namespace bcvkStream
         }
         if (Video != null && __isset.video) {
           field.Name = "video";
-          field.Type = TType.String;
+          field.Type = TType.List;
           field.ID = 3;
           oprot.WriteFieldBegin(field);
-          oprot.WriteBinary(Video);
+          {
+            oprot.WriteListBegin(new TList(TType.String, Video.Count));
+            foreach (byte[] _iter7 in Video)
+            {
+              oprot.WriteBinary(_iter7);
+            }
+            oprot.WriteListEnd();
+          }
           oprot.WriteFieldEnd();
         }
         oprot.WriteFieldStop();
