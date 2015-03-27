@@ -50,7 +50,7 @@ namespace Bu
             string passwordHash = MakeSHA512Hash(password);
 
             // Prepare the SQL statement.
-            string query = "INSERT INTO accounts (parent_id, username, password, email, name) VALUES('0', '" + username + "', '" + passwordHash + "', '" + email + "', '" + name + "')";
+            string query = "INSERT INTO accounts (parent_id, username, password, email, name) VALUES('0', '" + Mysql.MySQLEscape(username) + "', '" + Mysql.MySQLEscape(passwordHash) + "', '" + Mysql.MySQLEscape(email) + "', '" + Mysql.MySQLEscape(name) + "')";
 
             // Execute the query.
             mysql.Query(query);
