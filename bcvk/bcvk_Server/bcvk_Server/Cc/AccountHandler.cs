@@ -31,7 +31,7 @@ namespace Cc
                 response.Add("error;Account must be between 4 and 25 characters.");
             }
 
-            if (ac.AccountExists(username))
+            if (Account.AccountExists(username))
             {
                 response.Add("error;Account already exists.");
             }
