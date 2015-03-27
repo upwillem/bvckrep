@@ -137,7 +137,7 @@ namespace Dal
 
         public bool Exists(string table, string field, string value)
         {
-            string test = String.Format("SELECT {1} FROM {0} WHERE {1}={2}", table, field, value);
+            string test = String.Format("SELECT {1} FROM {0} WHERE {1}='{2}'", table, field, value);
             List<string[]> list = Select(test);
             return (list.Count > 0);
         }
