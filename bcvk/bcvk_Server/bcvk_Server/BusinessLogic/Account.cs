@@ -55,5 +55,11 @@ namespace Bu
             // Execute the query.
             mysql.Query(query);
         }
+
+        public bool AccountExists(string username)
+        {
+            Dal.Mysql mysql = new Mysql();
+            return mysql.Exists("accounts", "username", username);
+        }
     }
 }

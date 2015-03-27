@@ -54,9 +54,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BusinessLogic\Bu.csproj">
+      <Project>{7bbe90f6-9f3b-42d5-8275-c42b1b5f2589}</Project>
+      <Name>Bu</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Cc\Cc.csproj">
       <Project>{30ed5233-cae8-460f-bbdf-1eb5f94b989f}</Project>
       <Name>Cc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Dal\Dal.csproj">
+      <Project>{13bdc5e3-73b2-4fa9-97ec-548c2a7cc998}</Project>
+      <Name>Dal</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>
