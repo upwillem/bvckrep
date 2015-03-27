@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Bu
 {
     /// <summary>
-    /// OWNER: Roel Larik 1236830
+    /// OWNER: Roel Larik 1236830 & Ralph
     /// Allows interraction with the accounts.
     /// </summary>
     public class Account
@@ -27,16 +27,12 @@ namespace Bu
             mysql = new Mysql();
         }
 
-        private static byte[] GetHash(string inputString)
+        private static string MakeSHA512Hash(string inputString)
         {
             HashAlgorithm algorithm = SHA512.Create();
-            return algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString));
-        }
-
-        private static string GetHashString(string inputString)
-        {
+            byte[] hash = algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString));
             StringBuilder sb = new StringBuilder();
-            foreach (byte b in GetHash(inputString))
+            foreach (byte b in hash)
                 sb.Append(b.ToString("X2"));
 
             return sb.ToString();
@@ -51,7 +47,7 @@ namespace Bu
         /// <param name="name"></param>
         public void AddMainAccount(string username, string password, string email, string name)
         {
-            string passwordHash = GetHashString(password);
+            string passwordHash = MakeSHA512Hash(password);
 
             // Prepare the SQL statement.
             string query = "INSERT INTO accounts (parent_id, username, password, email, name) VALUES('0', '" + username + "', '" + passwordHash + "', '" + email + "', '" + name + "')";

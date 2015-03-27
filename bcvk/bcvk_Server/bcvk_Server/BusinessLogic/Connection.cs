@@ -26,35 +26,27 @@ namespace Bu
          */ 
         //initial maker of the connection;
         private string owner;
-        /// <summary>
-        /// List of all streams in connection 
-        /// </summary>
-        public ConcurrentDictionary<string, List<byte[]>> Streams { get; private set; }
 
         /// <summary>
         /// Current state of the connection
         /// </summary>
         public string ConnectionState { get; private set; }
-
-
         /// <summary>
         /// Unique connection idtentification token
         /// </summary>
-        public int id { get; private set; }
+        public string Id { get; private set; }
         /// <summary>
         /// All participants in the connection
         /// </summary>   
-        public ConcurrentDictionary<string, string> Participants { get; private set; }      
+        public ConcurrentDictionary<string, string> Participants { get; private set; }   
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="sender">Sender reference to identify the connection's owner</param>        
-        
         public Connection(string sender)
         {
-            id = Hash();
-            Participants = new ConcurrentDictionary<string, string>();
-            Streams = new ConcurrentDictionary<string, List<byte[]>>();
+            Id = Guid.NewGuid().ToString();
+            Participants = new ConcurrentDictionary<string, string>();            
             bool added = Participants.TryAdd(sender, "connected");
             if (added)
             {
@@ -63,27 +55,19 @@ namespace Bu
                 ConnectionState = "establishing";
             }       
         }             
+        
+        
         /// <summary>
         /// Add a client to a list of connection participants 
         /// </summary>
-        /// <param name="recipient"></param>
-        public void AddParticipant(string recipient)
+        /// <param name="recipient"></param> 
+        public void AddParticipant(string participant)
         {
-           bool added = Participants.TryAdd(recipient, "connecting");
+            bool added = Participants.TryAdd(participant, "connecting");
            if (added)
            {
-               addConnectionToAccount(recipient);
+               addConnectionToAccount(participant);
            }
-        }
-
-        /// <summary>
-        /// set the stream availble in the connection for participants
-        /// </summary>
-        /// <param name="steamowner">sender of the stream</param>
-        /// <param name="stream">the list byte array stream</param>
-        public void SetStream(string steamowner, List<byte[]> stream)
-        {
-            Streams.AddOrUpdate(steamowner, stream, null);
         }
 
         /// <summary>
@@ -91,17 +75,17 @@ namespace Bu
         /// </summary>
         /// <param name="sender">senderId</param>
         /// <param name="answer">anwser to the connection</param>
-        public void ChangeConnectionState(string sender, string answer)
+        public void ChangeConnectionState(string participant, string answer)
         {
             string oldValue;
-            Participants.TryGetValue(sender,out oldValue);
-            Participants.TryUpdate(sender, answer, oldValue);
+            Participants.TryGetValue(participant, out oldValue);
+            Participants.TryUpdate(participant, answer, oldValue);
                                     
             //check connectionstate 
             int connected = 0;
-            foreach (var participant in Participants)
+            foreach (var currentParticipant in Participants)
             {
-                if (participant.Value == "connected")
+                if (currentParticipant.Value == "connected")
                     connected++;
                 if (connected >= 2)                {
                     ConnectionState = "established";
@@ -114,18 +98,39 @@ namespace Bu
             }          
             
         }
+        /// <summary>
+        /// This methode is capable of getting a threadsafe connectionstate
+        /// </summary>
+        /// <returns>current connectionstate of a connection</returns>
+        public string GetConnectionState()
+        {
+            return ConnectionState;
+        }
+        /// <summary>
+        /// This methode is capable of getting a threadsafe connectionstate of a specific participant
+        /// </summary>
+        /// <param name="participant">participant to get the connectionState from</param>
+        /// <returns>connectionState of a specific participant</returns>
+        public string GetConnectionState(string participant)
+        {
+            string result;
+            Participants.TryGetValue(participant, out result);
+            return result;
+
+        }       
 
         /// <summary>
-        /// generate unique hash for each call to identify 
+        /// set every participant to a disconnected state
         /// </summary>
-        /// <returns></returns>
-        private static int Hash()
-        {
-            DateTime datetime = System.DateTime.Now;
-            int hash = (int)datetime.Ticks + new Random().Next(1, 1000000);
-            hash = hash.GetHashCode();
-            return Math.Abs(hash);
+        /// <returns>return true when correctly done</returns>
+        public void EndConnection()
+        {            
+            foreach (var item in Participants)
+            {
+                Participants.TryUpdate(item.Key, "disconnected", null);               
+            }          
         }
+
         /// <summary>
         /// Add an instance of this connection to an instance of an account
         /// </summary>
@@ -142,20 +147,7 @@ namespace Bu
             //{
             //    //nullreference exception
             //}      
-                      
-        }
-        /// <summary>
-        /// set every participant to a disconnected state
-        /// </summary>
-        /// <returns>return true when correctly done</returns>
-        public bool EndConnection()
-        {
-            bool passed = false;
-            foreach (var item in Participants)
-            {
-                passed =Participants.TryUpdate(item.Key, "disconnected", null);                
-            }
-            return passed;
+
         }
     }
 }
