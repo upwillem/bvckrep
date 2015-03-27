@@ -56,7 +56,7 @@ namespace Bu
             mysql.Query(query);
         }
 
-        public bool AccountExists(string username)
+        public static bool AccountExists(string username)
         {
             Dal.Mysql mysql = new Mysql();
             return mysql.Exists("accounts", "username", username);

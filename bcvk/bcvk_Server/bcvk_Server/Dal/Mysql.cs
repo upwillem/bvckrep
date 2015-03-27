@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using System.Data;
+using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace Dal
 {
@@ -135,11 +137,49 @@ namespace Dal
             return list;
         }
 
+        /// <summary>
+        /// Returns whether a result exists.
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="field"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public bool Exists(string table, string field, string value)
         {
-            string test = String.Format("SELECT {1} FROM {0} WHERE {1}={2}", table, field, value);
+            string test = String.Format("SELECT {1} FROM {0} WHERE {1}={2}", MySQLEscape(table), MySQLEscape(field), MySQLEscape(value));
             List<string[]> list = Select(test);
             return (list.Count > 0);
         }
+
+        /// <summary>
+        /// Escapes a string to prevent SQL injections.
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        private static string MySQLEscape(string str)
+        {
+            return Regex.Replace(str, @"[\x00'""\b\n\r\t\cZ\\%_]",
+                delegate(Match match)
+                {
+                    string v = match.Value;
+                    switch (v)
+                    {
+                        case "\x00":
+                            return "\\0";
+                        case "\b":
+                            return "\\b";
+                        case "\n":
+                            return "\\n";
+                        case "\r":
+                            return "\\r";
+                        case "\t":
+                            return "\\t";
+                        case "\u001A":
+                            return "\\Z";
+                        default:
+                            return "\\" + v;
+                    }
+                });
+        } 
     }
 }

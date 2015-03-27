@@ -10,7 +10,7 @@ namespace Cc
 {
     public class AccountHandler
     {
-        public static void CreateMainAccount(string username, string password1, string password2, string email, string name)
+        public static List<string> CreateMainAccount(string username, string password1, string password2, string email, string name)
         {
             List<string> response = new List<string>();
             
@@ -31,7 +31,7 @@ namespace Cc
                 response.Add("error;Account must be between 4 and 25 characters.");
             }
 
-            if (ac.AccountExists(username))
+            if (Account.AccountExists(username))
             {
                 response.Add("error;Account already exists.");
             }
@@ -41,9 +41,13 @@ namespace Cc
                 response.Add("error;Name must be between 2 and 60 characters.");
             }
 
-            
-            ac.AddMainAccount(username, password1, email, name);
-            response.Add("error;Passwords do not match.");
+            if (response.Count == 0)
+            {
+                ac.AddMainAccount(username, password1, email, name);
+                response.Add("success;Account registered.");
+            }
+
+            return response;
         }
         /*
         private bool IsValidEmail(string strIn)
