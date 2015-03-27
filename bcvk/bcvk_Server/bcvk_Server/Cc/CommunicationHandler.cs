@@ -34,7 +34,12 @@ namespace Cc
         public static string GetConnetionState(string connectionId)
         {
             var con = Connections.Single(x => x.Id == connectionId);
-            return con.GetConnectionState();
+            var status = "connectionended";
+            if (con != null)
+            {
+                status=con.GetConnectionState();;
+            }
+            return status;
         }
         /// <summary>
         /// this method gives the connectionstate of a specific user in a connection
@@ -45,7 +50,12 @@ namespace Cc
         public static string GetConnetionState(string connectionId,string participant)
         {
             var con = Connections.Single(x => x.Id == connectionId);
-            return con.GetConnectionState(participant);
+            string status = "connectionended";
+            if (con != null)
+            {
+                status=con.GetConnectionState(participant);
+            }
+            return status;
         }
        
         /// <summary>
@@ -57,6 +67,10 @@ namespace Cc
         public static void AnwserConnection(string sender, string connectionId, string answer)
         {
             Connection connection = Connections.Single(x => x.Id == connectionId);
+            if (connection == null)
+            {
+                return;
+            } 
             connection.ChangeConnectionState(sender, answer);            
         }
         /// <summary>
@@ -65,21 +79,16 @@ namespace Cc
         /// <param name="callId">call to end</param>
         public static void EndConnection(string connectionId)
         {
-            Connection connection = FindConnectionById(connectionId);
+            Connection connection = Connections.Single(x => x.Id == connectionId);
+            if (connection == null)
+            {
+                return;
+            }
             connection.EndConnection();
             Connections.Remove(connection);           
             
         }
 
-        /// <summary>
-        /// This methode is capable of findingConnections by a specific id
-        /// </summary>
-        /// <param name="connectionId">connection identification token</param>
-        /// <returns>s specific connection</returns>
-        private static Connection FindConnectionById(string connectionId)
-        {
-            Connection connection = Connections.Find(x => x.Id == connectionId);
-            return connection;
-        }
+
     }
 }

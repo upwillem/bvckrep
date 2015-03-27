@@ -47,17 +47,34 @@ namespace bcvk_Server
 
     #region callsignaling
 
+        /// <summary>
+        /// Try to establish a new call as an connection
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="recipient">recepient</param>
+        /// <returns>connectionId</returns>
         public string DoCall(string sender, string recipient)
         {
             return CommunicationHandler.DoConnect(sender, recipient);
         }
 
+        /// <summary>
+        /// This method is to give a response to a specific call
+        /// </summary>
+        /// <param name="sender">sender</param>
+        /// <param name="recipient">recipient not always required</param>
+        /// <param name="connectionId">connection identification token</param>
+        /// <param name="answer">anwser to give as an respond</param>
         public void AnswerCall(string sender, string recipient, string connectionId, string answer)
         {
             CommunicationHandler.AnwserConnection(sender, connectionId, answer);          
         }
 
-        ///
+        /// <summary>
+        /// Get the connetionState of a connection (established / establishing / connectionended)
+        /// </summary>
+        /// <param name="connectionId"></param>
+        /// <returns></returns>
         public string GetCallStatus(string connectionId)
         {
             return CommunicationHandler.GetConnetionState(connectionId);
