@@ -25,7 +25,7 @@ namespace ConnectionTest
         }
 
         [TestMethod]
-        public void TestAnwserConntection1()
+        public void TestAnwserConnection1()
         {
             string connectionId = CommunicationHandler.DoConnect("1", "2");
             CommunicationHandler.AnwserConnection("2", connectionId, "connected");
