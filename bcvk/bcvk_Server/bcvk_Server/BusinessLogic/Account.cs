@@ -93,7 +93,7 @@ namespace Bu
             return mysql.Exists("accounts", "username", username);
         }
 
-        public List<string> GetAccountData(string username)
+        public List<string[]> GetAccountData(string username)
         {
             Mysql mysql = new Mysql();
             return mysql.GetAccountData(username);

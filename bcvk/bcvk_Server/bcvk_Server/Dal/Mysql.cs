@@ -183,10 +183,10 @@ namespace Dal
                 });
         }
 
-        public List<string> GetAccountData(string username)
+        public List<string[]> GetAccountData(string username)
         {
-            string test = String.Format("SELECT * FROM accounts WHERE username = '{0}'", MySQLEscape(username));
-            List<string[]> list = Select(test);
+            string test = String.Format("SELECT id,parent_id,username,email,password,name,phone,photo FROM accounts WHERE username = '{0}'", MySQLEscape(username));
+            return Select(test);
 
 
 
@@ -196,11 +196,9 @@ namespace Dal
             //       { "toEmail", textBox2.Text }
             //   };
 
-            JavaScriptSerializer js = new JavaScriptSerializer();
-            string json = js.Serialize(list);
+            //JavaScriptSerializer js = new JavaScriptSerializer();
+            //string json = js.Serialize(list);
 
-
-            return new List<string>();
             // return json;
             //return (list.Count > 0);
         }

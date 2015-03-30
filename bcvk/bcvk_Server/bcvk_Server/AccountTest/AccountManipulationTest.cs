@@ -20,9 +20,40 @@ namespace AccountTest
             Cc.AccountHandler.CreateMainAccount(username, password1, password2, email, name, phoneNumber);
         }
 
-        public void AddSubAccount()
+        [TestMethod]
+        public void GetAccountData()
         {
+            string username = "123123123";
 
+            List<string[]> accountData = Cc.AccountHandler.GetAccountData(username);
+
+            string expected = "Johnny";
+            string actual = accountData[0][5];
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        public void CreateSubAccount()
+        {
+            int parentId = 1;
+            string username = "test1"; 
+            string password1 = "asdasdasd";
+            string password2 = "asdasdasd";
+            
+            string name = "Johnnysubaccount";
+
+            byte[] profileImage = new byte[1];
+
+            List<string> actual = Cc.AccountHandler.CreateSubAccount(parentId, username, password1, password2, name, profileImage);
+
+            List<string> expected = new List<string>();
+            expected.Add("success;Account registered.");
+
+            Dal.Mysql mysql = new Dal.Mysql();
+            mysql.Query(String.Format("DELETE FROM accounts WHERE username='{0}'", username));
+
+            CollectionAssert.AreEquivalent(expected, actual);
         }
 
         [TestMethod]
