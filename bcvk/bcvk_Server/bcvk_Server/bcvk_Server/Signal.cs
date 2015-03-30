@@ -24,9 +24,9 @@ namespace bcvkSignal
       IAsyncResult Begin_CreateMainAccount(AsyncCallback callback, object state, string username, string password1, string password2, string email, string name);
       List<string> End_CreateMainAccount(IAsyncResult asyncResult);
       #endif
-      List<string> CreateSubAccount(string username, string password1, string password2, string name, byte[] profileImage);
+      List<string> CreateSubAccount(int parentId, string username, string password1, string password2, string name, byte[] profileImage);
       #if SILVERLIGHT
-      IAsyncResult Begin_CreateSubAccount(AsyncCallback callback, object state, string username, string password1, string password2, string name, byte[] profileImage);
+      IAsyncResult Begin_CreateSubAccount(AsyncCallback callback, object state, int parentId, string username, string password1, string password2, string name, byte[] profileImage);
       List<string> End_CreateSubAccount(IAsyncResult asyncResult);
       #endif
       List<string> Login(string username, string password);
@@ -200,9 +200,9 @@ namespace bcvkSignal
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_CreateSubAccount(AsyncCallback callback, object state, string username, string password1, string password2, string name, byte[] profileImage)
+      public IAsyncResult Begin_CreateSubAccount(AsyncCallback callback, object state, int parentId, string username, string password1, string password2, string name, byte[] profileImage)
       {
-        return send_CreateSubAccount(callback, state, username, password1, password2, name, profileImage);
+        return send_CreateSubAccount(callback, state, parentId, username, password1, password2, name, profileImage);
       }
 
       public List<string> End_CreateSubAccount(IAsyncResult asyncResult)
@@ -213,26 +213,27 @@ namespace bcvkSignal
 
       #endif
 
-      public List<string> CreateSubAccount(string username, string password1, string password2, string name, byte[] profileImage)
+      public List<string> CreateSubAccount(int parentId, string username, string password1, string password2, string name, byte[] profileImage)
       {
         #if !SILVERLIGHT
-        send_CreateSubAccount(username, password1, password2, name, profileImage);
+        send_CreateSubAccount(parentId, username, password1, password2, name, profileImage);
         return recv_CreateSubAccount();
 
         #else
-        var asyncResult = Begin_CreateSubAccount(null, null, username, password1, password2, name, profileImage);
+        var asyncResult = Begin_CreateSubAccount(null, null, parentId, username, password1, password2, name, profileImage);
         return End_CreateSubAccount(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_CreateSubAccount(AsyncCallback callback, object state, string username, string password1, string password2, string name, byte[] profileImage)
+      public IAsyncResult send_CreateSubAccount(AsyncCallback callback, object state, int parentId, string username, string password1, string password2, string name, byte[] profileImage)
       #else
-      public void send_CreateSubAccount(string username, string password1, string password2, string name, byte[] profileImage)
+      public void send_CreateSubAccount(int parentId, string username, string password1, string password2, string name, byte[] profileImage)
       #endif
       {
         oprot_.WriteMessageBegin(new TMessage("CreateSubAccount", TMessageType.Call, seqid_));
         CreateSubAccount_args args = new CreateSubAccount_args();
+        args.ParentId = parentId;
         args.Username = username;
         args.Password1 = password1;
         args.Password2 = password2;
@@ -889,7 +890,7 @@ namespace bcvkSignal
         args.Read(iprot);
         iprot.ReadMessageEnd();
         CreateSubAccount_result result = new CreateSubAccount_result();
-        result.Success = iface_.CreateSubAccount(args.Username, args.Password1, args.Password2, args.Name, args.ProfileImage);
+        result.Success = iface_.CreateSubAccount(args.ParentId, args.Username, args.Password1, args.Password2, args.Name, args.ProfileImage);
         oprot.WriteMessageBegin(new TMessage("CreateSubAccount", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
@@ -1369,11 +1370,25 @@ namespace bcvkSignal
     #endif
     public partial class CreateSubAccount_args : TBase
     {
+      private int _parentId;
       private string _username;
       private string _password1;
       private string _password2;
       private string _name;
       private byte[] _profileImage;
+
+      public int ParentId
+      {
+        get
+        {
+          return _parentId;
+        }
+        set
+        {
+          __isset.parentId = true;
+          this._parentId = value;
+        }
+      }
 
       public string Username
       {
@@ -1446,6 +1461,7 @@ namespace bcvkSignal
       [Serializable]
       #endif
       public struct Isset {
+        public bool parentId;
         public bool username;
         public bool password1;
         public bool password2;
@@ -1469,34 +1485,41 @@ namespace bcvkSignal
           switch (field.ID)
           {
             case 1:
-              if (field.Type == TType.String) {
-                Username = iprot.ReadString();
+              if (field.Type == TType.I32) {
+                ParentId = iprot.ReadI32();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
             case 2:
               if (field.Type == TType.String) {
-                Password1 = iprot.ReadString();
+                Username = iprot.ReadString();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
             case 3:
               if (field.Type == TType.String) {
-                Password2 = iprot.ReadString();
+                Password1 = iprot.ReadString();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
             case 4:
               if (field.Type == TType.String) {
-                Name = iprot.ReadString();
+                Password2 = iprot.ReadString();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
             case 5:
+              if (field.Type == TType.String) {
+                Name = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 6:
               if (field.Type == TType.String) {
                 ProfileImage = iprot.ReadBinary();
               } else { 
@@ -1516,10 +1539,18 @@ namespace bcvkSignal
         TStruct struc = new TStruct("CreateSubAccount_args");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
+        if (__isset.parentId) {
+          field.Name = "parentId";
+          field.Type = TType.I32;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32(ParentId);
+          oprot.WriteFieldEnd();
+        }
         if (Username != null && __isset.username) {
           field.Name = "username";
           field.Type = TType.String;
-          field.ID = 1;
+          field.ID = 2;
           oprot.WriteFieldBegin(field);
           oprot.WriteString(Username);
           oprot.WriteFieldEnd();
@@ -1527,7 +1558,7 @@ namespace bcvkSignal
         if (Password1 != null && __isset.password1) {
           field.Name = "password1";
           field.Type = TType.String;
-          field.ID = 2;
+          field.ID = 3;
           oprot.WriteFieldBegin(field);
           oprot.WriteString(Password1);
           oprot.WriteFieldEnd();
@@ -1535,7 +1566,7 @@ namespace bcvkSignal
         if (Password2 != null && __isset.password2) {
           field.Name = "password2";
           field.Type = TType.String;
-          field.ID = 3;
+          field.ID = 4;
           oprot.WriteFieldBegin(field);
           oprot.WriteString(Password2);
           oprot.WriteFieldEnd();
@@ -1543,7 +1574,7 @@ namespace bcvkSignal
         if (Name != null && __isset.name) {
           field.Name = "name";
           field.Type = TType.String;
-          field.ID = 4;
+          field.ID = 5;
           oprot.WriteFieldBegin(field);
           oprot.WriteString(Name);
           oprot.WriteFieldEnd();
@@ -1551,7 +1582,7 @@ namespace bcvkSignal
         if (ProfileImage != null && __isset.profileImage) {
           field.Name = "profileImage";
           field.Type = TType.String;
-          field.ID = 5;
+          field.ID = 6;
           oprot.WriteFieldBegin(field);
           oprot.WriteBinary(ProfileImage);
           oprot.WriteFieldEnd();
@@ -1563,6 +1594,12 @@ namespace bcvkSignal
       public override string ToString() {
         StringBuilder __sb = new StringBuilder("CreateSubAccount_args(");
         bool __first = true;
+        if (__isset.parentId) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("ParentId: ");
+          __sb.Append(ParentId);
+        }
         if (Username != null && __isset.username) {
           if(!__first) { __sb.Append(", "); }
           __first = false;
