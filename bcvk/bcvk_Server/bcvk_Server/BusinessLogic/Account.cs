@@ -27,6 +27,11 @@ namespace Bu
             mysql = new Mysql();
         }
 
+        /// <summary>
+        /// Creates a SHA512 hash.
+        /// </summary>
+        /// <param name="inputString"></param>
+        /// <returns></returns>
         private static string MakeSHA512Hash(string inputString)
         {
             HashAlgorithm algorithm = SHA512.Create();
@@ -45,17 +50,43 @@ namespace Bu
         /// <param name="password"></param>
         /// <param name="email"></param>
         /// <param name="name"></param>
-        public void AddMainAccount(string username, string password, string email, string name)
+        public void AddMainAccount(string username, string password, string email, string name, string phone)
         {
+            // Make the password SHA512.
             string passwordHash = MakeSHA512Hash(password);
 
             // Prepare the SQL statement.
-            string query = "INSERT INTO accounts (parent_id, username, password, email, name) VALUES('0', '" + Mysql.MySQLEscape(username) + "', '" + Mysql.MySQLEscape(passwordHash) + "', '" + Mysql.MySQLEscape(email) + "', '" + Mysql.MySQLEscape(name) + "')";
+            string query = "INSERT INTO accounts (parent_id, username, password, email, name, phone) VALUES('0', '" + Mysql.MySQLEscape(username) + "', '" + Mysql.MySQLEscape(passwordHash) + "', '" + Mysql.MySQLEscape(email) + "', '" + Mysql.MySQLEscape(name) + "', '" + Mysql.MySQLEscape(phone) + "')";
 
             // Execute the query.
             mysql.Query(query);
         }
 
+        /// <summary>
+        /// Adds a sub-account.
+        /// </summary>
+        /// <param name="parentId"></param>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <param name="name"></param>
+        /// <param name="profleImage"></param>
+        public void AddSubAccount(int parentId, string username, string password, string name, byte[] profleImage)
+        {
+            // Make the password SHA512.
+            string passwordHash = MakeSHA512Hash(password);
+
+            // Prepare the SQL statement.
+            string query = "INSERT INTO accounts (parent_id, username, password, name, photo) VALUES('" + Mysql.MySQLEscape(parentId) + "', '" + Mysql.MySQLEscape(username) + "', '" + Mysql.MySQLEscape(passwordHash) + "', '" + Mysql.MySQLEscape(name) + "', '" + profleImage + "')";
+
+            // Execute the query.
+            mysql.Query(query);
+        }
+
+        /// <summary>
+        /// Returns whether an account exists.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public static bool AccountExists(string username)
         {
             Dal.Mysql mysql = new Mysql();

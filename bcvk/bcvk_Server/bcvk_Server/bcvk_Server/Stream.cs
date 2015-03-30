@@ -19,24 +19,24 @@ namespace bcvkStream
 {
   public partial class Stream {
     public interface Iface {
-      void SendStream(string sender, string recipient, List<byte[]> stream);
+      void SendStream(string sender, string recipient, List<byte[]> stream, string connectId, bool audio);
       #if SILVERLIGHT
-      IAsyncResult Begin_SendStream(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> stream);
+      IAsyncResult Begin_SendStream(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> stream, string connectId, bool audio);
       void End_SendStream(IAsyncResult asyncResult);
       #endif
-      void SendVideo(string sender, string recipient, List<byte[]> video);
+      void SendVideo(string sender, string recipient, List<byte[]> video, string connectId, bool audio);
       #if SILVERLIGHT
-      IAsyncResult Begin_SendVideo(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> video);
+      IAsyncResult Begin_SendVideo(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> video, string connectId, bool audio);
       void End_SendVideo(IAsyncResult asyncResult);
       #endif
-      byte[] GetStream(string sender, string recipient);
+      byte[] GetStream(string sender, string recipient, string connectId, bool audio);
       #if SILVERLIGHT
-      IAsyncResult Begin_GetStream(AsyncCallback callback, object state, string sender, string recipient);
+      IAsyncResult Begin_GetStream(AsyncCallback callback, object state, string sender, string recipient, string connectId, bool audio);
       byte[] End_GetStream(IAsyncResult asyncResult);
       #endif
-      byte[] GetVideo(string sender, string recipient);
+      byte[] GetVideo(string sender, string recipient, string connectId, bool audio);
       #if SILVERLIGHT
-      IAsyncResult Begin_GetVideo(AsyncCallback callback, object state, string sender, string recipient);
+      IAsyncResult Begin_GetVideo(AsyncCallback callback, object state, string sender, string recipient, string connectId, bool audio);
       byte[] End_GetVideo(IAsyncResult asyncResult);
       #endif
     }
@@ -99,9 +99,9 @@ namespace bcvkStream
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_SendStream(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> stream)
+      public IAsyncResult Begin_SendStream(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> stream, string connectId, bool audio)
       {
-        return send_SendStream(callback, state, sender, recipient, stream);
+        return send_SendStream(callback, state, sender, recipient, stream, connectId, audio);
       }
 
       public void End_SendStream(IAsyncResult asyncResult)
@@ -112,22 +112,22 @@ namespace bcvkStream
 
       #endif
 
-      public void SendStream(string sender, string recipient, List<byte[]> stream)
+      public void SendStream(string sender, string recipient, List<byte[]> stream, string connectId, bool audio)
       {
         #if !SILVERLIGHT
-        send_SendStream(sender, recipient, stream);
+        send_SendStream(sender, recipient, stream, connectId, audio);
         recv_SendStream();
 
         #else
-        var asyncResult = Begin_SendStream(null, null, sender, recipient, stream);
+        var asyncResult = Begin_SendStream(null, null, sender, recipient, stream, connectId, audio);
         End_SendStream(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_SendStream(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> stream)
+      public IAsyncResult send_SendStream(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> stream, string connectId, bool audio)
       #else
-      public void send_SendStream(string sender, string recipient, List<byte[]> stream)
+      public void send_SendStream(string sender, string recipient, List<byte[]> stream, string connectId, bool audio)
       #endif
       {
         oprot_.WriteMessageBegin(new TMessage("SendStream", TMessageType.Call, seqid_));
@@ -135,6 +135,8 @@ namespace bcvkStream
         args.Sender = sender;
         args.Recipient = recipient;
         args.Stream = stream;
+        args.ConnectId = connectId;
+        args.Audio = audio;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
         #if SILVERLIGHT
@@ -160,9 +162,9 @@ namespace bcvkStream
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_SendVideo(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> video)
+      public IAsyncResult Begin_SendVideo(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> video, string connectId, bool audio)
       {
-        return send_SendVideo(callback, state, sender, recipient, video);
+        return send_SendVideo(callback, state, sender, recipient, video, connectId, audio);
       }
 
       public void End_SendVideo(IAsyncResult asyncResult)
@@ -173,22 +175,22 @@ namespace bcvkStream
 
       #endif
 
-      public void SendVideo(string sender, string recipient, List<byte[]> video)
+      public void SendVideo(string sender, string recipient, List<byte[]> video, string connectId, bool audio)
       {
         #if !SILVERLIGHT
-        send_SendVideo(sender, recipient, video);
+        send_SendVideo(sender, recipient, video, connectId, audio);
         recv_SendVideo();
 
         #else
-        var asyncResult = Begin_SendVideo(null, null, sender, recipient, video);
+        var asyncResult = Begin_SendVideo(null, null, sender, recipient, video, connectId, audio);
         End_SendVideo(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_SendVideo(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> video)
+      public IAsyncResult send_SendVideo(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> video, string connectId, bool audio)
       #else
-      public void send_SendVideo(string sender, string recipient, List<byte[]> video)
+      public void send_SendVideo(string sender, string recipient, List<byte[]> video, string connectId, bool audio)
       #endif
       {
         oprot_.WriteMessageBegin(new TMessage("SendVideo", TMessageType.Call, seqid_));
@@ -196,6 +198,8 @@ namespace bcvkStream
         args.Sender = sender;
         args.Recipient = recipient;
         args.Video = video;
+        args.ConnectId = connectId;
+        args.Audio = audio;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
         #if SILVERLIGHT
@@ -221,9 +225,9 @@ namespace bcvkStream
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_GetStream(AsyncCallback callback, object state, string sender, string recipient)
+      public IAsyncResult Begin_GetStream(AsyncCallback callback, object state, string sender, string recipient, string connectId, bool audio)
       {
-        return send_GetStream(callback, state, sender, recipient);
+        return send_GetStream(callback, state, sender, recipient, connectId, audio);
       }
 
       public byte[] End_GetStream(IAsyncResult asyncResult)
@@ -234,28 +238,30 @@ namespace bcvkStream
 
       #endif
 
-      public byte[] GetStream(string sender, string recipient)
+      public byte[] GetStream(string sender, string recipient, string connectId, bool audio)
       {
         #if !SILVERLIGHT
-        send_GetStream(sender, recipient);
+        send_GetStream(sender, recipient, connectId, audio);
         return recv_GetStream();
 
         #else
-        var asyncResult = Begin_GetStream(null, null, sender, recipient);
+        var asyncResult = Begin_GetStream(null, null, sender, recipient, connectId, audio);
         return End_GetStream(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_GetStream(AsyncCallback callback, object state, string sender, string recipient)
+      public IAsyncResult send_GetStream(AsyncCallback callback, object state, string sender, string recipient, string connectId, bool audio)
       #else
-      public void send_GetStream(string sender, string recipient)
+      public void send_GetStream(string sender, string recipient, string connectId, bool audio)
       #endif
       {
         oprot_.WriteMessageBegin(new TMessage("GetStream", TMessageType.Call, seqid_));
         GetStream_args args = new GetStream_args();
         args.Sender = sender;
         args.Recipient = recipient;
+        args.ConnectId = connectId;
+        args.Audio = audio;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
         #if SILVERLIGHT
@@ -284,9 +290,9 @@ namespace bcvkStream
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_GetVideo(AsyncCallback callback, object state, string sender, string recipient)
+      public IAsyncResult Begin_GetVideo(AsyncCallback callback, object state, string sender, string recipient, string connectId, bool audio)
       {
-        return send_GetVideo(callback, state, sender, recipient);
+        return send_GetVideo(callback, state, sender, recipient, connectId, audio);
       }
 
       public byte[] End_GetVideo(IAsyncResult asyncResult)
@@ -297,28 +303,30 @@ namespace bcvkStream
 
       #endif
 
-      public byte[] GetVideo(string sender, string recipient)
+      public byte[] GetVideo(string sender, string recipient, string connectId, bool audio)
       {
         #if !SILVERLIGHT
-        send_GetVideo(sender, recipient);
+        send_GetVideo(sender, recipient, connectId, audio);
         return recv_GetVideo();
 
         #else
-        var asyncResult = Begin_GetVideo(null, null, sender, recipient);
+        var asyncResult = Begin_GetVideo(null, null, sender, recipient, connectId, audio);
         return End_GetVideo(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_GetVideo(AsyncCallback callback, object state, string sender, string recipient)
+      public IAsyncResult send_GetVideo(AsyncCallback callback, object state, string sender, string recipient, string connectId, bool audio)
       #else
-      public void send_GetVideo(string sender, string recipient)
+      public void send_GetVideo(string sender, string recipient, string connectId, bool audio)
       #endif
       {
         oprot_.WriteMessageBegin(new TMessage("GetVideo", TMessageType.Call, seqid_));
         GetVideo_args args = new GetVideo_args();
         args.Sender = sender;
         args.Recipient = recipient;
+        args.ConnectId = connectId;
+        args.Audio = audio;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
         #if SILVERLIGHT
@@ -392,7 +400,7 @@ namespace bcvkStream
         args.Read(iprot);
         iprot.ReadMessageEnd();
         SendStream_result result = new SendStream_result();
-        iface_.SendStream(args.Sender, args.Recipient, args.Stream);
+        iface_.SendStream(args.Sender, args.Recipient, args.Stream, args.ConnectId, args.Audio);
         oprot.WriteMessageBegin(new TMessage("SendStream", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
@@ -405,7 +413,7 @@ namespace bcvkStream
         args.Read(iprot);
         iprot.ReadMessageEnd();
         SendVideo_result result = new SendVideo_result();
-        iface_.SendVideo(args.Sender, args.Recipient, args.Video);
+        iface_.SendVideo(args.Sender, args.Recipient, args.Video, args.ConnectId, args.Audio);
         oprot.WriteMessageBegin(new TMessage("SendVideo", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
@@ -418,7 +426,7 @@ namespace bcvkStream
         args.Read(iprot);
         iprot.ReadMessageEnd();
         GetStream_result result = new GetStream_result();
-        result.Success = iface_.GetStream(args.Sender, args.Recipient);
+        result.Success = iface_.GetStream(args.Sender, args.Recipient, args.ConnectId, args.Audio);
         oprot.WriteMessageBegin(new TMessage("GetStream", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
@@ -431,7 +439,7 @@ namespace bcvkStream
         args.Read(iprot);
         iprot.ReadMessageEnd();
         GetVideo_result result = new GetVideo_result();
-        result.Success = iface_.GetVideo(args.Sender, args.Recipient);
+        result.Success = iface_.GetVideo(args.Sender, args.Recipient, args.ConnectId, args.Audio);
         oprot.WriteMessageBegin(new TMessage("GetVideo", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
@@ -449,6 +457,8 @@ namespace bcvkStream
       private string _sender;
       private string _recipient;
       private List<byte[]> _stream;
+      private string _connectId;
+      private bool _audio;
 
       public string Sender
       {
@@ -489,6 +499,32 @@ namespace bcvkStream
         }
       }
 
+      public string ConnectId
+      {
+        get
+        {
+          return _connectId;
+        }
+        set
+        {
+          __isset.connectId = true;
+          this._connectId = value;
+        }
+      }
+
+      public bool Audio
+      {
+        get
+        {
+          return _audio;
+        }
+        set
+        {
+          __isset.audio = true;
+          this._audio = value;
+        }
+      }
+
 
       public Isset __isset;
       #if !SILVERLIGHT
@@ -498,6 +534,8 @@ namespace bcvkStream
         public bool sender;
         public bool recipient;
         public bool stream;
+        public bool connectId;
+        public bool audio;
       }
 
       public SendStream_args() {
@@ -546,6 +584,20 @@ namespace bcvkStream
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
+            case 4:
+              if (field.Type == TType.String) {
+                ConnectId = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 5:
+              if (field.Type == TType.Bool) {
+                Audio = iprot.ReadBool();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
             default: 
               TProtocolUtil.Skip(iprot, field.Type);
               break;
@@ -590,6 +642,22 @@ namespace bcvkStream
           }
           oprot.WriteFieldEnd();
         }
+        if (ConnectId != null && __isset.connectId) {
+          field.Name = "connectId";
+          field.Type = TType.String;
+          field.ID = 4;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(ConnectId);
+          oprot.WriteFieldEnd();
+        }
+        if (__isset.audio) {
+          field.Name = "audio";
+          field.Type = TType.Bool;
+          field.ID = 5;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBool(Audio);
+          oprot.WriteFieldEnd();
+        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -614,6 +682,18 @@ namespace bcvkStream
           __first = false;
           __sb.Append("Stream: ");
           __sb.Append(Stream);
+        }
+        if (ConnectId != null && __isset.connectId) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("ConnectId: ");
+          __sb.Append(ConnectId);
+        }
+        if (__isset.audio) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Audio: ");
+          __sb.Append(Audio);
         }
         __sb.Append(")");
         return __sb.ToString();
@@ -677,6 +757,8 @@ namespace bcvkStream
       private string _sender;
       private string _recipient;
       private List<byte[]> _video;
+      private string _connectId;
+      private bool _audio;
 
       public string Sender
       {
@@ -717,6 +799,32 @@ namespace bcvkStream
         }
       }
 
+      public string ConnectId
+      {
+        get
+        {
+          return _connectId;
+        }
+        set
+        {
+          __isset.connectId = true;
+          this._connectId = value;
+        }
+      }
+
+      public bool Audio
+      {
+        get
+        {
+          return _audio;
+        }
+        set
+        {
+          __isset.audio = true;
+          this._audio = value;
+        }
+      }
+
 
       public Isset __isset;
       #if !SILVERLIGHT
@@ -726,6 +834,8 @@ namespace bcvkStream
         public bool sender;
         public bool recipient;
         public bool video;
+        public bool connectId;
+        public bool audio;
       }
 
       public SendVideo_args() {
@@ -774,6 +884,20 @@ namespace bcvkStream
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
+            case 4:
+              if (field.Type == TType.String) {
+                ConnectId = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 5:
+              if (field.Type == TType.Bool) {
+                Audio = iprot.ReadBool();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
             default: 
               TProtocolUtil.Skip(iprot, field.Type);
               break;
@@ -818,6 +942,22 @@ namespace bcvkStream
           }
           oprot.WriteFieldEnd();
         }
+        if (ConnectId != null && __isset.connectId) {
+          field.Name = "connectId";
+          field.Type = TType.String;
+          field.ID = 4;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(ConnectId);
+          oprot.WriteFieldEnd();
+        }
+        if (__isset.audio) {
+          field.Name = "audio";
+          field.Type = TType.Bool;
+          field.ID = 5;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBool(Audio);
+          oprot.WriteFieldEnd();
+        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -842,6 +982,18 @@ namespace bcvkStream
           __first = false;
           __sb.Append("Video: ");
           __sb.Append(Video);
+        }
+        if (ConnectId != null && __isset.connectId) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("ConnectId: ");
+          __sb.Append(ConnectId);
+        }
+        if (__isset.audio) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Audio: ");
+          __sb.Append(Audio);
         }
         __sb.Append(")");
         return __sb.ToString();
@@ -904,6 +1056,8 @@ namespace bcvkStream
     {
       private string _sender;
       private string _recipient;
+      private string _connectId;
+      private bool _audio;
 
       public string Sender
       {
@@ -931,6 +1085,32 @@ namespace bcvkStream
         }
       }
 
+      public string ConnectId
+      {
+        get
+        {
+          return _connectId;
+        }
+        set
+        {
+          __isset.connectId = true;
+          this._connectId = value;
+        }
+      }
+
+      public bool Audio
+      {
+        get
+        {
+          return _audio;
+        }
+        set
+        {
+          __isset.audio = true;
+          this._audio = value;
+        }
+      }
+
 
       public Isset __isset;
       #if !SILVERLIGHT
@@ -939,6 +1119,8 @@ namespace bcvkStream
       public struct Isset {
         public bool sender;
         public bool recipient;
+        public bool connectId;
+        public bool audio;
       }
 
       public GetStream_args() {
@@ -966,6 +1148,20 @@ namespace bcvkStream
             case 2:
               if (field.Type == TType.String) {
                 Recipient = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 3:
+              if (field.Type == TType.String) {
+                ConnectId = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 4:
+              if (field.Type == TType.Bool) {
+                Audio = iprot.ReadBool();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -999,6 +1195,22 @@ namespace bcvkStream
           oprot.WriteString(Recipient);
           oprot.WriteFieldEnd();
         }
+        if (ConnectId != null && __isset.connectId) {
+          field.Name = "connectId";
+          field.Type = TType.String;
+          field.ID = 3;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(ConnectId);
+          oprot.WriteFieldEnd();
+        }
+        if (__isset.audio) {
+          field.Name = "audio";
+          field.Type = TType.Bool;
+          field.ID = 4;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBool(Audio);
+          oprot.WriteFieldEnd();
+        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -1017,6 +1229,18 @@ namespace bcvkStream
           __first = false;
           __sb.Append("Recipient: ");
           __sb.Append(Recipient);
+        }
+        if (ConnectId != null && __isset.connectId) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("ConnectId: ");
+          __sb.Append(ConnectId);
+        }
+        if (__isset.audio) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Audio: ");
+          __sb.Append(Audio);
         }
         __sb.Append(")");
         return __sb.ToString();
@@ -1127,6 +1351,8 @@ namespace bcvkStream
     {
       private string _sender;
       private string _recipient;
+      private string _connectId;
+      private bool _audio;
 
       public string Sender
       {
@@ -1154,6 +1380,32 @@ namespace bcvkStream
         }
       }
 
+      public string ConnectId
+      {
+        get
+        {
+          return _connectId;
+        }
+        set
+        {
+          __isset.connectId = true;
+          this._connectId = value;
+        }
+      }
+
+      public bool Audio
+      {
+        get
+        {
+          return _audio;
+        }
+        set
+        {
+          __isset.audio = true;
+          this._audio = value;
+        }
+      }
+
 
       public Isset __isset;
       #if !SILVERLIGHT
@@ -1162,6 +1414,8 @@ namespace bcvkStream
       public struct Isset {
         public bool sender;
         public bool recipient;
+        public bool connectId;
+        public bool audio;
       }
 
       public GetVideo_args() {
@@ -1189,6 +1443,20 @@ namespace bcvkStream
             case 2:
               if (field.Type == TType.String) {
                 Recipient = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 3:
+              if (field.Type == TType.String) {
+                ConnectId = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 4:
+              if (field.Type == TType.Bool) {
+                Audio = iprot.ReadBool();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -1222,6 +1490,22 @@ namespace bcvkStream
           oprot.WriteString(Recipient);
           oprot.WriteFieldEnd();
         }
+        if (ConnectId != null && __isset.connectId) {
+          field.Name = "connectId";
+          field.Type = TType.String;
+          field.ID = 3;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(ConnectId);
+          oprot.WriteFieldEnd();
+        }
+        if (__isset.audio) {
+          field.Name = "audio";
+          field.Type = TType.Bool;
+          field.ID = 4;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBool(Audio);
+          oprot.WriteFieldEnd();
+        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -1240,6 +1524,18 @@ namespace bcvkStream
           __first = false;
           __sb.Append("Recipient: ");
           __sb.Append(Recipient);
+        }
+        if (ConnectId != null && __isset.connectId) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("ConnectId: ");
+          __sb.Append(ConnectId);
+        }
+        if (__isset.audio) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Audio: ");
+          __sb.Append(Audio);
         }
         __sb.Append(")");
         return __sb.ToString();

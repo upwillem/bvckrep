@@ -15,8 +15,9 @@ namespace AccountTest
             string password2 = "asdasdasd";
             string email = "johnny@harry.com"; 
             string name = "Johnny";
+            string phoneNumber = "123123123";
 
-            Cc.AccountHandler.CreateMainAccount(username, password1, password2, email, name);
+            Cc.AccountHandler.CreateMainAccount(username, password1, password2, email, name, phoneNumber);
         }
 
         [TestMethod]
@@ -42,8 +43,10 @@ namespace AccountTest
             string password2 = "asdasdasd";
             string email = "johnny@harry.com";
             string name = "Johnny";
+            string phoneNumber = "123123123";
 
-            List<string> actual = Cc.AccountHandler.CreateMainAccount(username, password1, password2, email, name);
+
+            List<string> actual = Cc.AccountHandler.CreateMainAccount(username, password1, password2, email, name, phoneNumber);
 
             List<string> expected = new List<string>();
             expected.Add("error;Account must be between 4 and 25 characters.");
@@ -72,8 +75,9 @@ namespace AccountTest
             string password2 = "asdasdasd";
             string email = "johnny@harry.com";
             string name = "Johnny";
+            string phoneNumber = "123123123";
 
-            List<string> actual = Cc.AccountHandler.CreateMainAccount(username, password1, password2, email, name);
+            List<string> actual = Cc.AccountHandler.CreateMainAccount(username, password1, password2, email, name, phoneNumber);
 
             List<string> expected = new List<string>();
             expected.Add("error;Account must be between 4 and 25 characters.");
@@ -84,13 +88,14 @@ namespace AccountTest
         [TestMethod]
         public void CreateAccountNotMachingPasswords()
         {
-            string username = "123123123";
+            string username = "123123120";
             string password1 = "asdasdasd";
             string password2 = "asdasdasd2";
             string email = "johnny@harry.com";
             string name = "Johnny";
+            string phoneNumber = "123123123";
 
-            List<string> actual = Cc.AccountHandler.CreateMainAccount(username, password1, password2, email, name);
+            List<string> actual = Cc.AccountHandler.CreateMainAccount(username, password1, password2, email, name, phoneNumber);
 
             List<string> expected = new List<string>();
             expected.Add("error;Passwords do not match.");

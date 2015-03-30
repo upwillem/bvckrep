@@ -19,9 +19,9 @@ namespace bcvkSignal
 {
   public partial class Signal {
     public interface Iface {
-      List<string> CreateMainAccount(string username, string password1, string password2, string email, string name);
+      List<string> CreateMainAccount(string username, string password1, string password2, string email, string name, string phoneNumber);
       #if SILVERLIGHT
-      IAsyncResult Begin_CreateMainAccount(AsyncCallback callback, object state, string username, string password1, string password2, string email, string name);
+      IAsyncResult Begin_CreateMainAccount(AsyncCallback callback, object state, string username, string password1, string password2, string email, string name, string phoneNumber);
       List<string> End_CreateMainAccount(IAsyncResult asyncResult);
       #endif
       List<string> CreateSubAccount(int parentId, string username, string password1, string password2, string name, byte[] profileImage);
@@ -134,9 +134,9 @@ namespace bcvkSignal
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_CreateMainAccount(AsyncCallback callback, object state, string username, string password1, string password2, string email, string name)
+      public IAsyncResult Begin_CreateMainAccount(AsyncCallback callback, object state, string username, string password1, string password2, string email, string name, string phoneNumber)
       {
-        return send_CreateMainAccount(callback, state, username, password1, password2, email, name);
+        return send_CreateMainAccount(callback, state, username, password1, password2, email, name, phoneNumber);
       }
 
       public List<string> End_CreateMainAccount(IAsyncResult asyncResult)
@@ -147,22 +147,22 @@ namespace bcvkSignal
 
       #endif
 
-      public List<string> CreateMainAccount(string username, string password1, string password2, string email, string name)
+      public List<string> CreateMainAccount(string username, string password1, string password2, string email, string name, string phoneNumber)
       {
         #if !SILVERLIGHT
-        send_CreateMainAccount(username, password1, password2, email, name);
+        send_CreateMainAccount(username, password1, password2, email, name, phoneNumber);
         return recv_CreateMainAccount();
 
         #else
-        var asyncResult = Begin_CreateMainAccount(null, null, username, password1, password2, email, name);
+        var asyncResult = Begin_CreateMainAccount(null, null, username, password1, password2, email, name, phoneNumber);
         return End_CreateMainAccount(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_CreateMainAccount(AsyncCallback callback, object state, string username, string password1, string password2, string email, string name)
+      public IAsyncResult send_CreateMainAccount(AsyncCallback callback, object state, string username, string password1, string password2, string email, string name, string phoneNumber)
       #else
-      public void send_CreateMainAccount(string username, string password1, string password2, string email, string name)
+      public void send_CreateMainAccount(string username, string password1, string password2, string email, string name, string phoneNumber)
       #endif
       {
         oprot_.WriteMessageBegin(new TMessage("CreateMainAccount", TMessageType.Call, seqid_));
@@ -172,6 +172,7 @@ namespace bcvkSignal
         args.Password2 = password2;
         args.Email = email;
         args.Name = name;
+        args.PhoneNumber = phoneNumber;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
         #if SILVERLIGHT
@@ -877,7 +878,7 @@ namespace bcvkSignal
         args.Read(iprot);
         iprot.ReadMessageEnd();
         CreateMainAccount_result result = new CreateMainAccount_result();
-        result.Success = iface_.CreateMainAccount(args.Username, args.Password1, args.Password2, args.Email, args.Name);
+        result.Success = iface_.CreateMainAccount(args.Username, args.Password1, args.Password2, args.Email, args.Name, args.PhoneNumber);
         oprot.WriteMessageBegin(new TMessage("CreateMainAccount", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
@@ -1027,6 +1028,7 @@ namespace bcvkSignal
       private string _password2;
       private string _email;
       private string _name;
+      private string _phoneNumber;
 
       public string Username
       {
@@ -1093,6 +1095,19 @@ namespace bcvkSignal
         }
       }
 
+      public string PhoneNumber
+      {
+        get
+        {
+          return _phoneNumber;
+        }
+        set
+        {
+          __isset.phoneNumber = true;
+          this._phoneNumber = value;
+        }
+      }
+
 
       public Isset __isset;
       #if !SILVERLIGHT
@@ -1104,6 +1119,7 @@ namespace bcvkSignal
         public bool password2;
         public bool email;
         public bool name;
+        public bool phoneNumber;
       }
 
       public CreateMainAccount_args() {
@@ -1152,6 +1168,13 @@ namespace bcvkSignal
             case 5:
               if (field.Type == TType.String) {
                 Name = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 6:
+              if (field.Type == TType.String) {
+                PhoneNumber = iprot.ReadString();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -1209,6 +1232,14 @@ namespace bcvkSignal
           oprot.WriteString(Name);
           oprot.WriteFieldEnd();
         }
+        if (PhoneNumber != null && __isset.phoneNumber) {
+          field.Name = "phoneNumber";
+          field.Type = TType.String;
+          field.ID = 6;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(PhoneNumber);
+          oprot.WriteFieldEnd();
+        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -1245,6 +1276,12 @@ namespace bcvkSignal
           __first = false;
           __sb.Append("Name: ");
           __sb.Append(Name);
+        }
+        if (PhoneNumber != null && __isset.phoneNumber) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("PhoneNumber: ");
+          __sb.Append(PhoneNumber);
         }
         __sb.Append(")");
         return __sb.ToString();

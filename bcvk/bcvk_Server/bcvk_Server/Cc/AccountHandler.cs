@@ -10,10 +10,21 @@ namespace Cc
 {
     public class AccountHandler
     {
-        public static List<string> CreateMainAccount(string username, string password1, string password2, string email, string name)
+        /// <summary>
+        /// Validates the request of creating a new main account.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password1"></param>
+        /// <param name="password2"></param>
+        /// <param name="email"></param>
+        /// <param name="name"></param>
+        /// <param name="phoneNumber"></param>
+        /// <returns></returns>
+        public static List<string> CreateMainAccount(string username, string password1, string password2, string email, string name, string phoneNumber)
         {
             List<string> response = new List<string>();
             
+            // Password validation.
             if (password1.Length < 6 || password2.Length < 6)
             {
                 response.Add("error;Password must be 6 characters long.");
@@ -26,6 +37,7 @@ namespace Cc
 
             Account ac = new Account();
 
+            // Username validation.
             if (username.Length < 4 || username.Length > 25)
             {
                 response.Add("error;Account must be between 4 and 25 characters.");
@@ -36,11 +48,19 @@ namespace Cc
                 response.Add("error;Account already exists.");
             }
 
+            // Name validation.
             if (name.Length < 2 || name.Length > 60)
             {
                 response.Add("error;Name must be between 2 and 60 characters.");
             }
 
+            // E-mail validation.
+            if (!IsValidEmailAddress(email))
+            {
+                response.Add("error;This is now a valid e-mail address.");
+            }
+
+            // Check for errors.
             if (response.Count == 0)
             {
                 ac.AddMainAccount(username, password1, email, name);
@@ -49,56 +69,24 @@ namespace Cc
 
             return response;
         }
-        /*
-        private bool IsValidEmail(string strIn)
+
+        /// <summary>
+        /// Validates an e-mail address
+        /// </summary>
+        /// <param name="mailAddress"></param>
+        /// <returns></returns>
+        public static bool IsValidEmailAddress(string mailAddress)
         {
-            bool invalid = false;
-            if (String.IsNullOrEmpty(strIn))
-                return false;
+            Regex mailIDPattern = new Regex(@"[\w-]+@([\w-]+\.)+[\w-]+");
 
-            // Use IdnMapping class to convert Unicode domain names. 
-            try
+            if (!string.IsNullOrEmpty(mailAddress) && mailIDPattern.IsMatch(mailAddress))
             {
-                strIn = Regex.Replace(strIn, @"(@)(.+)$", this.DomainMapper,
-                                      RegexOptions.None, TimeSpan.FromMilliseconds(200));
+                return true;
             }
-            catch (RegexMatchTimeoutException)
-            {
-                return false;
-            }
-
-            if (invalid)
-                return false;
-
-            // Return true if strIn is in valid e-mail format. 
-            try
-            {
-                return Regex.IsMatch(strIn,
-                      @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
-                      @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$",
-                      RegexOptions.IgnoreCase, TimeSpan.FromMilliseconds(250));
-            }
-            catch (RegexMatchTimeoutException)
+            else
             {
                 return false;
             }
         }
-
-        private string DomainMapper(Match match)
-        {
-            // IdnMapping class with default property values.
-            IdnMapping idn = new IdnMapping();
-
-            string domainName = match.Groups[2].Value;
-            try
-            {
-                domainName = idn.GetAscii(domainName);
-            }
-            catch (ArgumentException)
-            {
-                invalid = true;
-            }
-            return match.Groups[1].Value + domainName;
-        }*/
     }
 }
