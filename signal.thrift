@@ -2,7 +2,7 @@ namespace csharp bcvkSignal
 
 service Signal
 {
-	list<string> CreateMainAccount(1:string username, 2:string password1, 3:string password2, 4:string email, 5:string name),
+	list<string> CreateMainAccount(1:string username, 2:string password1, 3:string password2, 4:string email, 5:string name, 6:string phoneNumber),
 	list<string> CreateSubAccount(1:i32 parentId, 2:string username, 3:string password1, 4:string password2, 5:string name, 6:binary profileImage),
 	list<string> Login(1:string username, 2:string password),
 	void LogOut(1:string username),

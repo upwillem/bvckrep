@@ -13,10 +13,10 @@ namespace bcvk_Server
     public class ApplicationManager: Signal.Iface, Stream.Iface
     {
     #region account
-        public List<string> CreateMainAccount(string username, string password1, string password2, string email, string name)
+        public List<string> CreateMainAccount(string username, string password1, string password2, string email, string name, string phoneNumber)
         {
             //throw new NotImplementedException();
-            AccountHandler.CreateMainAccount(username, password1, password2, email, name);
+            AccountHandler.CreateMainAccount(username, password1, password2, email, name, phoneNumber);
             return new List<string>();
         }
 
@@ -92,22 +92,22 @@ namespace bcvk_Server
         #endregion
 
     #region stream
-        public void SendStream(string sender, string recipient, List<byte[]> stream)
+        public void SendStream(string sender, string recipient, List<byte[]> stream, string connectId)
         {
             throw new NotImplementedException();
         }
 
-        public void SendVideo(string sender, string recipient, List<byte[]> video)
+        public void SendVideo(string sender, string recipient, List<byte[]> video, string connectId)
         {
             throw new NotImplementedException();
         }
 
-        public byte[] GetStream(string sender, string recipient)
+        public byte[] GetStream(string sender, string recipient, string connectId)
         {
             throw new NotImplementedException();
         }
 
-        public byte[] GetVideo(string sender, string recipient)
+        public byte[] GetVideo(string sender, string recipient, string connectId)
         {
             throw new NotImplementedException();
         }
