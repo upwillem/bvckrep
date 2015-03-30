@@ -88,7 +88,7 @@ namespace AccountTest
         [TestMethod]
         public void CreateAccountNotMachingPasswords()
         {
-            string username = "123123123";
+            string username = "123123120";
             string password1 = "asdasdasd";
             string password2 = "asdasdasd2";
             string email = "johnny@harry.com";
