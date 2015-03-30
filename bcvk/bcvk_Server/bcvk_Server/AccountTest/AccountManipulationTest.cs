@@ -20,6 +20,11 @@ namespace AccountTest
             Cc.AccountHandler.CreateMainAccount(username, password1, password2, email, name, phoneNumber);
         }
 
+        public void AddSubAccount()
+        {
+
+        }
+
         [TestMethod]
         public void AccountExists1()
         {

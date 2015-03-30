@@ -88,5 +88,55 @@ namespace Cc
                 return false;
             }
         }
+
+        public static List<string> CreateSubAccount(int parentId, string username, string password1, string password2, string name, byte[] profileImage)
+        {
+            List<string> response = new List<string>();
+
+            // Password validation.
+            if (password1.Length < 6 || password2.Length < 6)
+            {
+                response.Add("error;Password must be 6 characters long.");
+            }
+
+            if (password1 != password2)
+            {
+                response.Add("error;Passwords do not match.");
+            }
+
+            Account ac = new Account();
+
+            // Username validation.
+            if (username.Length < 4 || username.Length > 25)
+            {
+                response.Add("error;Account must be between 4 and 25 characters.");
+            }
+
+            if (Account.AccountExists(username))
+            {
+                response.Add("error;Account already exists.");
+            }
+
+            // Name validation.
+            if (name.Length < 2 || name.Length > 60)
+            {
+                response.Add("error;Name must be between 2 and 60 characters.");
+            }
+
+            // Check for errors.
+            if (response.Count == 0)
+            {
+                ac.AddSubAccount(parentId, username, password1, name, profileImage);
+                response.Add("success;Account registered.");
+            }
+
+            return response;
+        }
+
+        public static List<string> GetAccountData(string username)
+        {
+            Account ac = new Account();
+            return ac.GetAccountData(username);
+        }
     }
 }

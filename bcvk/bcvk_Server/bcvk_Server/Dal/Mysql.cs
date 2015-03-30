@@ -7,6 +7,7 @@ using MySql.Data.MySqlClient;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
+using System.Web.Script.Serialization;
 
 namespace Dal
 {
@@ -180,6 +181,28 @@ namespace Dal
                             return "\\" + v;
                     }
                 });
-        } 
+        }
+
+        public List<string> GetAccountData(string username)
+        {
+            string test = String.Format("SELECT * FROM accounts WHERE username = '{0}'", MySQLEscape(username));
+            List<string[]> list = Select(test);
+
+
+
+            //var keyValues = new Dictionary<string, string>
+            //   {
+            //       { "emailSend", textBox1.Text },
+            //       { "toEmail", textBox2.Text }
+            //   };
+
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            string json = js.Serialize(list);
+
+
+            return new List<string>();
+            // return json;
+            //return (list.Count > 0);
+        }
     }
 }

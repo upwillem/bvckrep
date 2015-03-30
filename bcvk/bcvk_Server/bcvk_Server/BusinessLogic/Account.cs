@@ -89,8 +89,14 @@ namespace Bu
         /// <returns></returns>
         public static bool AccountExists(string username)
         {
-            Dal.Mysql mysql = new Mysql();
+            Mysql mysql = new Mysql();
             return mysql.Exists("accounts", "username", username);
+        }
+
+        public List<string> GetAccountData(string username)
+        {
+            Mysql mysql = new Mysql();
+            return mysql.GetAccountData(username);
         }
     }
 }
