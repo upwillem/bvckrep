@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Thrift.Protocol;
 using Thrift.Transport;
 using bcvkSignal;
+
 #endregion
 
 namespace Bu
@@ -28,7 +29,7 @@ namespace Bu
             try
             {
                 //Signal settings
-                transportSignal = new TSocket("localhost", signalPort);
+                transportSignal = new TSocket("127.0.0.1", signalPort);
                 protocolSignal = new TBinaryProtocol(transportSignal);
 
                 signalClient = new Signal.Client(protocolSignal);

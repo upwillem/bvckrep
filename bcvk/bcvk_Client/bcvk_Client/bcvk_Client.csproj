@@ -83,6 +83,7 @@
     <ProjectReference Include="..\Cc\Cc.csproj">
       <Project>{bb5bec42-7398-47e2-86bd-3ff00463d9f6}</Project>
       <Name>Cc</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
