@@ -92,22 +92,22 @@ namespace bcvk_Server
         #endregion
 
     #region stream
-        public void SendStream(string sender, string recipient, List<byte[]> stream, string connectId)
+        public void SendStream(string sender, string recipient, List<byte[]> stream, string connectId, bool audio)
         {
             throw new NotImplementedException();
         }
 
-        public void SendVideo(string sender, string recipient, List<byte[]> video, string connectId)
+        public void SendVideo(string sender, string recipient, List<byte[]> video, string connectId, bool audio)
         {
             throw new NotImplementedException();
         }
 
-        public byte[] GetStream(string sender, string recipient, string connectId)
+        public byte[] GetStream(string sender, string recipient, string connectId, bool audio)
         {
             throw new NotImplementedException();
         }
 
-        public byte[] GetVideo(string sender, string recipient, string connectId)
+        public byte[] GetVideo(string sender, string recipient, string connectId, bool audio)
         {
             throw new NotImplementedException();
         }
