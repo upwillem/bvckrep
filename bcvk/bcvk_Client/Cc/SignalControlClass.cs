@@ -19,7 +19,7 @@ namespace Cc
         {
             this.USERNAME = USERNAME;
             signalCommunicationService = new SignalCommunicationService();
-            //GetAccountData();
+            GetAccountData();
         }
 
         /// <summary>
