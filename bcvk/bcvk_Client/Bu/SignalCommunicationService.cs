@@ -43,11 +43,6 @@ namespace Bu
             {
                 //MessageBox.Show(exc.Message);
             }
-            finally
-            {
-                if (transportSignal.IsOpen)
-                    transportSignal.Close();
-            }
             #endregion
         }
 
