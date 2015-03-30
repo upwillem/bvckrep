@@ -53,7 +53,7 @@ namespace Bu
         public void GetAccountData(string USERNAME)
         {
             //signalClient.GetAccountData(USERNAME);
-            signalClient.DoCall("-1", "-2");
+            signalClient.DoCall("f", "-2");
         }
     }
 }
