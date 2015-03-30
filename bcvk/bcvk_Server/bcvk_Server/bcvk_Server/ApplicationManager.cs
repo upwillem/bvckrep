@@ -20,7 +20,7 @@ namespace bcvk_Server
             return new List<string>();
         }
 
-        public List<string> CreateSubAccount(string username, string password1, string password2, string name, byte[] profileImage)
+        public List<string> CreateSubAccount(int parentId, string username, string password1, string password2, string name, byte[] profileImage)
         {
             throw new NotImplementedException();
         }
