@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.pictureBoxVideoSend = new System.Windows.Forms.PictureBox();
-            this.btnCallContact = new System.Windows.Forms.Button();
+            this.btnTestCall = new System.Windows.Forms.Button();
             this.btnEndCall = new System.Windows.Forms.Button();
             this.cbShowYourVideo = new System.Windows.Forms.CheckBox();
             this.pictureBoxVideoReceived = new System.Windows.Forms.PictureBox();
-            this.listContacten = new System.Windows.Forms.ListBox();
+            this.listContacts = new System.Windows.Forms.ListBox();
             this.labelContacten = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideoSend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideoReceived)).BeginInit();
@@ -48,16 +48,16 @@
             this.pictureBoxVideoSend.TabIndex = 0;
             this.pictureBoxVideoSend.TabStop = false;
             // 
-            // btnCallContact
+            // btnTestCall
             // 
-            this.btnCallContact.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnCallContact.Location = new System.Drawing.Point(12, 325);
-            this.btnCallContact.Name = "btnCallContact";
-            this.btnCallContact.Size = new System.Drawing.Size(123, 23);
-            this.btnCallContact.TabIndex = 1;
-            this.btnCallContact.Text = "Bel contact";
-            this.btnCallContact.UseVisualStyleBackColor = true;
-            this.btnCallContact.Click += new System.EventHandler(this.btnCallContact_Click);
+            this.btnTestCall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnTestCall.Location = new System.Drawing.Point(12, 325);
+            this.btnTestCall.Name = "btnTestCall";
+            this.btnTestCall.Size = new System.Drawing.Size(123, 23);
+            this.btnTestCall.TabIndex = 1;
+            this.btnTestCall.Text = "Test bel";
+            this.btnTestCall.UseVisualStyleBackColor = true;
+            this.btnTestCall.Click += new System.EventHandler(this.btnTestCall_Click);
             // 
             // btnEndCall
             // 
@@ -96,15 +96,15 @@
             this.pictureBoxVideoReceived.TabIndex = 4;
             this.pictureBoxVideoReceived.TabStop = false;
             // 
-            // listContacten
+            // listContacts
             // 
-            this.listContacten.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.listContacts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.listContacten.FormattingEnabled = true;
-            this.listContacten.Location = new System.Drawing.Point(12, 38);
-            this.listContacten.Name = "listContacten";
-            this.listContacten.Size = new System.Drawing.Size(123, 277);
-            this.listContacten.TabIndex = 5;
+            this.listContacts.FormattingEnabled = true;
+            this.listContacts.Location = new System.Drawing.Point(12, 38);
+            this.listContacts.Name = "listContacts";
+            this.listContacts.Size = new System.Drawing.Size(123, 277);
+            this.listContacts.TabIndex = 5;
             // 
             // labelContacten
             // 
@@ -120,10 +120,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(685, 423);
-            this.Controls.Add(this.btnCallContact);
+            this.Controls.Add(this.btnTestCall);
             this.Controls.Add(this.labelContacten);
             this.Controls.Add(this.pictureBoxVideoSend);
-            this.Controls.Add(this.listContacten);
+            this.Controls.Add(this.listContacts);
             this.Controls.Add(this.pictureBoxVideoReceived);
             this.Controls.Add(this.cbShowYourVideo);
             this.Controls.Add(this.btnEndCall);
@@ -131,7 +131,6 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Communiceren voor kinderen";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.bcvk_FormClosed);
-            this.Load += new System.EventHandler(this.bcvk_Load);
             this.Resize += new System.EventHandler(this.bcvk_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideoSend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideoReceived)).EndInit();
@@ -143,11 +142,11 @@
         #endregion
 
         private System.Windows.Forms.PictureBox pictureBoxVideoSend;
-        private System.Windows.Forms.Button btnCallContact;
+        private System.Windows.Forms.Button btnTestCall;
         private System.Windows.Forms.Button btnEndCall;
         private System.Windows.Forms.CheckBox cbShowYourVideo;
         private System.Windows.Forms.PictureBox pictureBoxVideoReceived;
-        private System.Windows.Forms.ListBox listContacten;
+        private System.Windows.Forms.ListBox listContacts;
         private System.Windows.Forms.Label labelContacten;
     }
 }

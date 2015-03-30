@@ -7,17 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
-#region ManuallyAdded
-using Thrift.Protocol;
-using Thrift.Transport;
-using bcvkSignal;
-using bcvkStream;
-
-using AForge.Video;
-using AForge.Video.DirectShow;
-using System.IO;
-#endregion
+using Cc;
 
 namespace bcvk_Client
 {
@@ -33,24 +23,13 @@ namespace bcvk_Client
 
     public partial class bcvk : Form
     {
-        #region Thrift classes
-            //Thrift classes
-            private TTransport transportSignal;
-            private TProtocol protocolSignal;
-            private TTransport transportStream;
-            private TProtocol protocolStream;
-            private Signal.Client signalClient;
-            private bcvkStream.Stream.Client streamClient;
-            private int signalPort = 9090;
-            private int streamPort = 8080; 
-        #endregion
-
         private CallState callState;
-        private Webcam webcam;
-        private Converter converter;
-        private Buffer buffer;
+        private StreamControlClass streamControlClass;
+        private SignalControlClass signalControlClass;
+        private string USERNAME = "1";//testname
 
-        private string USERNAME;
+        public string Send_USERNAME_Login
+        { set { USERNAME = value; } }
 
         /// <summary>
         /// constructor
@@ -58,50 +37,20 @@ namespace bcvk_Client
         public bcvk()
         {
             InitializeComponent();
-
-            #region Declaration Thrift classes and open transport
-            try
-            {
-                //Signal settings
-                transportSignal = new TSocket("localhost", signalPort);
-                protocolSignal = new TBinaryProtocol(transportSignal);
-                //Stream settings
-                transportStream = new TSocket("localhost", streamPort);
-                protocolStream = new TBinaryProtocol(transportStream);
-
-                signalClient = new Signal.Client(protocolSignal);
-                streamClient = new bcvkStream.Stream.Client(protocolStream);
-
-                transportSignal.Open();
-                transportStream.Open();
-            }
-            catch (System.Net.Sockets.SocketException exc)
-            {
-                MessageBox.Show(exc.Message);
-            }
-            catch (Exception exc)
-            {
-                MessageBox.Show(exc.Message);
-            }
-            finally 
-            {
-                if(transportSignal.IsOpen)
-                    transportSignal.Close();
-                if(transportStream.IsOpen)
-                    transportStream.Close();
-            }
-            #endregion
-
-            //TODO: Retrieve account data
-            //var accountData = signalClient.GetAccountData(USERNAME);
-
-            webcam = new Webcam();
-            webcam.frameReady += new Action<Bitmap>(FrameReadyHandler);
-
-            converter = new Converter();
-            buffer = new Buffer();
-            buffer.bufferReady += buffer_bufferReady;
             SettingsCallState(CallState.CALL);
+
+            signalControlClass = new SignalControlClass(USERNAME);
+            streamControlClass = new StreamControlClass();
+            streamControlClass.frameReady += streamControlClass_frameReady;
+        }
+
+        /// <summary>
+        /// Event which is triggered when a new frame is ready
+        /// </summary>
+        /// <param name="bmp"></param>
+        private void streamControlClass_frameReady(Bitmap bmp)
+        {
+            pictureBoxVideoSend.BackgroundImage = bmp;
         }
 
         /// <summary>
@@ -117,25 +66,26 @@ namespace bcvk_Client
             else
                 pictureBoxVideoSend.Visible = false;
         }
-
+ 
         /// <summary>
         /// Luc Schnabel 1207776,
         /// call the selected contact
+        /// DISCLAIMER: (TODO:) THIS CODE BELONGS IN THE SELECT EVENT OF THE CONTACTLIST
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void btnCallContact_Click(object sender, EventArgs e)
+        private void btnTestCall_Click(object sender, EventArgs e)
         {
             SettingsCallState(CallState.IS_CALLING);
-            webcam.StartCamera();
+            streamControlClass.StartCamera();
 
             /*
-             * TODO: connect to recipient
+             *
              * if(ontvanger positief beantwoord)
              * {
              *      CallState = CallState.IN_CALL;
              *      Alle andere dingen hier regelen!
-             * }
+             *}
              */
         }
 
@@ -148,7 +98,7 @@ namespace bcvk_Client
         private void btnEndCall_Click(object sender, EventArgs e)
         {
             SettingsCallState(CallState.CALL);
-            webcam.btnStopCamera();
+            streamControlClass.StopCamera();
         }
 
         /// <summary>
@@ -185,49 +135,7 @@ namespace bcvk_Client
         /// <param name="e"></param>
         private void bcvk_FormClosed(object sender, FormClosedEventArgs e)
         {
-            webcam.On_FormClosed();
-        }
-
-        /// <summary>
-        /// Luc Schnabel 1207776,
-        /// enable webcam
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void bcvk_Load(object sender, EventArgs e)
-        {
-            string message = webcam.On_Load();
-            if (message != "")
-                MessageBox.Show(message);
-        }
-
-        /// <summary>
-        /// Luc Schnabel 1207776,
-        /// event will be triggered with each new available frame
-        /// </summary>
-        /// <param name="bmp">Bitmap of the frame</param>
-        private void FrameReadyHandler(Bitmap frame)
-        {
-            buffer.Buffer_VideoStream(converter.ToByteArray(frame));
-            Bitmap bmp = new Bitmap(frame, pictureBoxVideoSend.Width, pictureBoxVideoSend.Height);
-            pictureBoxVideoSend.BackgroundImage = bmp;
-        }
-
-        /// <summary>
-        /// Luc Schnabel 1207776,
-        /// this event is triggered when the buffer is ready
-        /// </summary>
-        /// <param name="videoStreamBuffer"></param>
-        void buffer_bufferReady(List<byte[]> videoStreamBuffer)
-        {
-            for (int i = 0; i < videoStreamBuffer.Count; i++)
-            {
-                pictureBoxVideoReceived.BackgroundImage = converter.ToBitmap(videoStreamBuffer[i], 
-                    pictureBoxVideoReceived.Width, pictureBoxVideoReceived.Height);
-                //System.Threading.Thread.Sleep(50);
-                //TODO: Sleep thread... It's going too fast!
-            }
-            //streamClient.send_SendStream();
+            streamControlClass.On_Application_Ended();
         }
 
         /// <summary>
