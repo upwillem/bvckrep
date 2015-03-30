@@ -63,7 +63,7 @@ namespace Cc
             // Check for errors.
             if (response.Count == 0)
             {
-                ac.AddMainAccount(username, password1, email, name);
+                ac.AddMainAccount(username, password1, email, name, phoneNumber);
                 response.Add("success;Account registered.");
             }
 

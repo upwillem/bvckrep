@@ -56,7 +56,7 @@ namespace Bu
             string passwordHash = MakeSHA512Hash(password);
 
             // Prepare the SQL statement.
-            string query = "INSERT INTO accounts (parent_id, username, password, email, name, phone) VALUES('0', '" + Mysql.MySQLEscape(username) + "', '" + Mysql.MySQLEscape(passwordHash) + "', '" + Mysql.MySQLEscape(email) + "', '" + Mysql.MySQLEscape(name) + "', '" + Mysql.MySQLEscape(phone) + "')";
+            string query = "INSERT INTO accounts (username, password, email, name, phone) VALUES('" + Mysql.MySQLEscape(username) + "', '" + Mysql.MySQLEscape(passwordHash) + "', '" + Mysql.MySQLEscape(email) + "', '" + Mysql.MySQLEscape(name) + "', '" + Mysql.MySQLEscape(phone) + "')";
 
             // Execute the query.
             mysql.Query(query);
@@ -76,7 +76,7 @@ namespace Bu
             string passwordHash = MakeSHA512Hash(password);
 
             // Prepare the SQL statement.
-            string query = "INSERT INTO accounts (parent_id, username, password, name, photo) VALUES('" + Mysql.MySQLEscape(parentId) + "', '" + Mysql.MySQLEscape(username) + "', '" + Mysql.MySQLEscape(passwordHash) + "', '" + Mysql.MySQLEscape(name) + "', '" + profleImage + "')";
+            string query = "INSERT INTO accounts (parent_id, username, password, name, photo) VALUES(" + parentId + ", '" + Mysql.MySQLEscape(username) + "', '" + Mysql.MySQLEscape(passwordHash) + "', '" + Mysql.MySQLEscape(name) + "', '" + profleImage + "')";
 
             // Execute the query.
             mysql.Query(query);
