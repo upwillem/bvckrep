@@ -94,7 +94,6 @@ namespace Bu
         /// </summary>
         public void StartCamera()
         { 
-            // start the video source
             videoSource.Start( );
         }
 

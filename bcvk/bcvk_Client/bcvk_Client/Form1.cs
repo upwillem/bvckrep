@@ -26,10 +26,6 @@ namespace bcvk_Client
         private CallState callState;
         private StreamControlClass streamControlClass;
         private SignalControlClass signalControlClass;
-        private string USERNAME = "1";//testname
-
-        public string Send_USERNAME_Login
-        { set { USERNAME = value; } }
 
         /// <summary>
         /// constructor
@@ -39,7 +35,7 @@ namespace bcvk_Client
             InitializeComponent();
             SettingsCallState(CallState.CALL);
 
-            signalControlClass = new SignalControlClass(USERNAME);
+            signalControlClass = new SignalControlClass();
             streamControlClass = new StreamControlClass();
             streamControlClass.frameReady += streamControlClass_frameReady;
         }
@@ -78,15 +74,6 @@ namespace bcvk_Client
         {
             SettingsCallState(CallState.IS_CALLING);
             streamControlClass.StartCamera();
-
-            /*
-             *
-             * if(ontvanger positief beantwoord)
-             * {
-             *      CallState = CallState.IN_CALL;
-             *      Alle andere dingen hier regelen!
-             *}
-             */
         }
 
         /// <summary>

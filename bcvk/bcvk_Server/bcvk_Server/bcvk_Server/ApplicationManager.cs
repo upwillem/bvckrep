@@ -40,6 +40,7 @@ namespace bcvk_Server
             return AccountHandler.GetAccountData(username);
             //return new List<string>();
         }
+
         public bool ToggleBlock(string sender, string recipient)
         {
             throw new NotImplementedException();
