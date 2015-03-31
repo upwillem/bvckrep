@@ -17,10 +17,13 @@ namespace Bu
 
         //TODO MUTEX IMPLEMENTEREN
 
-        /*Connection state
+        /*Connection state for specific users
          * -connected       in current connection
          * -disconnected    left or refused to join a connection
          * -connecting      invited to join a connection
+         * 
+         * 
+         * connectionstate for a connection
          * -establishing    not enough members to join a connection
          * -established     able to send and receive data
          * -connectionended connection ended
@@ -51,8 +54,7 @@ namespace Bu
             bool added = Participants.TryAdd(sender, "connected");
             if (added)
             {
-                owner = sender;
-                addConnection(Id);
+                owner = sender;                
                 addConnectionToAccount(sender);
                 ConnectionState = "establishing";
             }       
@@ -126,21 +128,15 @@ namespace Bu
         /// </summary>
         /// <returns>return true when correctly done</returns>
         public void EndConnection()
-        {            
+        {
+            Mysql mysql = new Mysql();
             foreach (var item in Participants)
             {
-                Participants.TryUpdate(item.Key, "disconnected", null);               
+                Participants.TryUpdate(item.Key, "disconnected", null);
+                mysql.Query("DELETE FROM connections_users WHERE connection_id='" + Id + "'");
             }          
         }
 
-        
-        private void addConnection(string connectionId)
-        {
-            //this needs to be sql injection safe
-            Mysql mysql = new Mysql();
-            mysql.Query("INSERT INTO connections(connection_id) VALUES('" + connectionId + "')");
-            
-        }
 
         private void addConnectionToAccount(string participant)
         {

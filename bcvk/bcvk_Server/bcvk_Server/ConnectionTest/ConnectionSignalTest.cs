@@ -11,17 +11,18 @@ namespace ConnectionTest
         [TestMethod]
         public void TestReceiveIdDoCall()
         {
-            string connectionId = CommunicationHandler.DoConnect("1", "2");          
-            
-            Assert.AreEqual(String.IsNullOrEmpty(connectionId), false);            
+            string connectionId = CommunicationHandler.DoConnect("1", "2");            
+            Assert.AreEqual(String.IsNullOrEmpty(connectionId), false);
+            CommunicationHandler.EndConnection(connectionId);
         }
 
         [TestMethod]
         public void TestGetConnectionState()
         {
             string connectionId = CommunicationHandler.DoConnect("1", "2");
-            string status = CommunicationHandler.GetConnetionState(connectionId);
+            string status = CommunicationHandler.GetConnectionState(connectionId);
             Assert.AreEqual(status,"establishing");
+            CommunicationHandler.EndConnection(connectionId);
         }
 
         [TestMethod]
@@ -29,8 +30,9 @@ namespace ConnectionTest
         {
             string connectionId = CommunicationHandler.DoConnect("1", "2");
             CommunicationHandler.AnwserConnection("2", connectionId, "connected");
-            string status = CommunicationHandler.GetConnetionState(connectionId);
+            string status = CommunicationHandler.GetConnectionState(connectionId);
             Assert.AreEqual(status, "established");
+            CommunicationHandler.EndConnection(connectionId);
         }
 
         [TestMethod]
@@ -38,8 +40,9 @@ namespace ConnectionTest
         {
             string connectionId = CommunicationHandler.DoConnect("1", "2");
             CommunicationHandler.AnwserConnection("2", connectionId, "discconected");
-            string status = CommunicationHandler.GetConnetionState(connectionId);
+            string status = CommunicationHandler.GetConnectionState(connectionId);
             Assert.AreEqual(status, "connectionended");
+            CommunicationHandler.EndConnection(connectionId);
         }
 
         [TestMethod]
@@ -47,8 +50,9 @@ namespace ConnectionTest
         {
             string connectionId = CommunicationHandler.DoConnect("1", "2");
             CommunicationHandler.AnwserConnection("2", connectionId, "connected");
-            string status = CommunicationHandler.GetConnetionState(connectionId,"2");
+            string status = CommunicationHandler.GetConnectionState(connectionId,"2");
             Assert.AreEqual(status, "connected");
+            CommunicationHandler.EndConnection(connectionId);
         }
 
         [TestMethod]
@@ -56,8 +60,9 @@ namespace ConnectionTest
         {
             string connectionId = CommunicationHandler.DoConnect("1", "2");
             CommunicationHandler.AnwserConnection("2", connectionId, "disconnected");
-            string status = CommunicationHandler.GetConnetionState(connectionId, "2");
+            string status = CommunicationHandler.GetConnectionState(connectionId, "2");
             Assert.AreEqual(status, "disconnected");
+            CommunicationHandler.EndConnection(connectionId);
         }
 
 
@@ -69,6 +74,7 @@ namespace ConnectionTest
             CommunicationHandler.EndConnection(connectionId);
             Connection connection = CommunicationHandler.Connections.Find(x => x.Id == connectionId);
             Assert.AreEqual(connection, null);
+            
         }
 
 
