@@ -60,7 +60,7 @@
     <ProjectReference Include="..\Cc\Cc.csproj">
       <Project>{30ed5233-cae8-460f-bbdf-1eb5f94b989f}</Project>
       <Name>Cc</Name>
-      <Private>False</Private>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

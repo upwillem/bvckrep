@@ -87,7 +87,7 @@ namespace Cc
                     case "children":
                         AccountData.Instance.Children = data.Split(';')[1];
                         break;
-                    case "contact":
+                    case "contacts":
                         AccountData.Instance.Contacts = data.Split(';')[1];
                         break;
                     default:

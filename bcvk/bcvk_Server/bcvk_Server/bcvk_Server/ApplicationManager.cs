@@ -37,6 +37,10 @@ namespace bcvk_Server
 
         public List<string> GetAccountData(string username)
         {
+            //List<string> temp = new List<string>();
+            //temp.Add("accountId;3");
+            //temp.Add("username;test");
+            //return temp;
             return AccountHandler.GetAccountData(username);
             //return new List<string>();
         }
