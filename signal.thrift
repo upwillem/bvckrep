@@ -12,5 +12,8 @@ service Signal
 	string GetCallStatus(1:string connectionId),
 	string GetParticipantCallStatus(1:string connectionId, 2:string participants),
 	void EndCall(1:string sender, 2:string recipient, 3:string connectionId),
-	bool ToggleBlock(1:string sender, 2:string recipient)
+	bool AddContact(1:string sender, 2:string recipient),
+	bool ToggleBlock(1:string sender, 2:string recipient),
+	bool DeleteContact(1:string sender, 2:string recipient),
+	bool AcceptContact(1:string sender, 2:string recipient)
 }

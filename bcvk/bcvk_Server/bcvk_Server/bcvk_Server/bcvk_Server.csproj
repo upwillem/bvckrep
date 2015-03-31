@@ -50,12 +50,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Signal.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="Stream.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
+    <Compile Include="Signal.cs" />
+    <Compile Include="Stream.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

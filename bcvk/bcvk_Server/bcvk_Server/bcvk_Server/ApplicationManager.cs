@@ -37,9 +37,8 @@ namespace bcvk_Server
 
         public List<string> GetAccountData(string username)
         {
-            //TODO: Accounthandler aanpassen, chrashproof maken!!!
-            AccountHandler.GetAccountData(username);
-            return new List<string>();
+            return AccountHandler.GetAccountData(username);
+            //return new List<string>();
         }
 
         public bool ToggleBlock(string sender, string recipient)
@@ -72,7 +71,6 @@ namespace bcvk_Server
         {
             CommunicationHandler.AnwserConnection(sender, connectionId, answer);          
         }
-
         /// <summary>
         /// Get the connetionState of a connection (established / establishing / connectionended)
         /// </summary>
@@ -80,12 +78,12 @@ namespace bcvk_Server
         /// <returns></returns>
         public string GetCallStatus(string connectionId)
         {
-            return CommunicationHandler.GetConnetionState(connectionId);
+            return CommunicationHandler.GetConnectionState(connectionId);
         }
 
         public string GetParticipantCallStatus(string connectionId, string participant)
         {
-            return CommunicationHandler.GetConnetionState(connectionId,participant);
+            return CommunicationHandler.GetConnectionState(connectionId,participant);
         } 
 
         public void EndCall(string sender, string recipient, string connectionId)

@@ -24,12 +24,12 @@ namespace AccountTest
         [TestMethod]
         public void GetAccountData()
         {
-            string username = "123123123";
+            string username = "johnny";
 
-            List<string[]> accountData = Cc.AccountHandler.GetAccountData(username);
+            List<string> accountData = Cc.AccountHandler.GetAccountData(username);
 
-            string expected = "Johnny";
-            string actual = accountData[0][5];
+            string expected = "displayName;Johnny";
+            string actual = accountData[4];
 
             Assert.AreEqual(expected, actual);
         }

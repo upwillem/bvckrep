@@ -133,7 +133,7 @@ namespace Cc
             return response;
         }
 
-        public static List<string[]> GetAccountData(string username)
+        public static List<string> GetAccountData(string username)
         {
             Account ac = new Account();
             return ac.GetAccountData(username);

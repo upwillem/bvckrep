@@ -49,10 +49,8 @@ namespace bcvk_Server
         {
             Signal.Processor signalProcessor = new Signal.Processor(applicationManager);
             var signalServerPort = 9090;
-
             TServerTransport signalServerTransport = new TServerSocket(signalServerPort);
             TServer signalServer = new TSimpleServer(signalProcessor, signalServerTransport);
-
             Console.WriteLine("signalserver listning on port: " + signalServerPort);
             signalServer.Serve();
         }
@@ -65,13 +63,9 @@ namespace bcvk_Server
         private static void DoWorkStream(ApplicationManager applicationManager)
         {
             Stream.Processor streamProcessor = new Stream.Processor(applicationManager);
-
             var streamServerPort = 8080;
-
             TServerTransport streamServerTransport = new TServerSocket(streamServerPort);
-
             TServer streamSever = new TSimpleServer(streamProcessor, streamServerTransport);
-
             Console.WriteLine("streamserver listning on port: " + streamServerPort);
             streamSever.Serve();
         }
