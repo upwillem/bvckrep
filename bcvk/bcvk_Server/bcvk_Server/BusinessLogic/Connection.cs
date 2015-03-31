@@ -129,21 +129,17 @@ namespace Bu
         /// <returns>return true when correctly done</returns>
         public void EndConnection()
         {
-            Mysql mysql = new Mysql();
             foreach (var item in Participants)
             {
                 Participants.TryUpdate(item.Key, "disconnected", null);
-                mysql.Query("DELETE FROM connections_users WHERE connection_id='" + Id + "'");
+                Mysql.Query("DELETE FROM connections_users WHERE connection_id='" + Id + "'");
             }          
         }
 
 
         private void addConnectionToAccount(string participant)
         {
-            Mysql mysql = new Mysql();
-            mysql.Query("INSERT INTO connections_users(connection_id,user_id) VALUES('" + Id + "','"+ participant +"')");
-            
-            
+            Mysql.Query("INSERT INTO connections_users(connection_id,user_id) VALUES('" + Id + "','"+ participant +"')");
         }
     }
 }

@@ -63,7 +63,7 @@ namespace Cc
             // Check for errors.
             if (response.Count == 0)
             {
-                ac.AddMainAccount(username, password1, email, name, phoneNumber);
+                Account.AddMainAccount(username, password1, email, name, phoneNumber);
                 response.Add("success;Account registered.");
             }
 
@@ -71,24 +71,15 @@ namespace Cc
         }
 
         /// <summary>
-        /// Validates an e-mail address
+        /// Creates a new sub-account.
         /// </summary>
-        /// <param name="mailAddress"></param>
+        /// <param name="parentId"></param>
+        /// <param name="username"></param>
+        /// <param name="password1"></param>
+        /// <param name="password2"></param>
+        /// <param name="name"></param>
+        /// <param name="profileImage"></param>
         /// <returns></returns>
-        public static bool IsValidEmailAddress(string mailAddress)
-        {
-            Regex mailIDPattern = new Regex(@"[\w-]+@([\w-]+\.)+[\w-]+");
-
-            if (!string.IsNullOrEmpty(mailAddress) && mailIDPattern.IsMatch(mailAddress))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         public static List<string> CreateSubAccount(int parentId, string username, string password1, string password2, string name, byte[] profileImage)
         {
             List<string> response = new List<string>();
@@ -126,17 +117,56 @@ namespace Cc
             // Check for errors.
             if (response.Count == 0)
             {
-                ac.AddSubAccount(parentId, username, password1, name, profileImage);
+                Account.AddSubAccount(parentId, username, password1, name, profileImage);
                 response.Add("success;Account registered.");
             }
 
             return response;
         }
 
+        /// <summary>
+        /// Returns all account data of a user.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public static List<string> GetAccountData(string username)
         {
             Account ac = new Account();
             return ac.GetAccountData(username);
+        }
+
+        public static bool AddContact(string sender, string recipient)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool DeleteContact(string sender, string recipient)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool AcceptContact(string sender, string recipient)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Validates an e-mail address
+        /// </summary>
+        /// <param name="mailAddress"></param>
+        /// <returns></returns>
+        public static bool IsValidEmailAddress(string mailAddress)
+        {
+            Regex mailIDPattern = new Regex(@"[\w-]+@([\w-]+\.)+[\w-]+");
+
+            if (!string.IsNullOrEmpty(mailAddress) && mailIDPattern.IsMatch(mailAddress))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

@@ -16,42 +16,13 @@ namespace Bu
     public class Account
     {
         /// <summary>
-        /// Stores the MySQL object.
-        /// </summary>
-        private Mysql mysql;
-
-        /// <summary>
-        /// Creating the MySQL connection.
-        /// </summary>
-        public Account()
-        {
-            mysql = new Mysql();
-        }
-
-        /// <summary>
-        /// Creates a SHA512 hash.
-        /// </summary>
-        /// <param name="inputString"></param>
-        /// <returns></returns>
-        private static string MakeSHA512Hash(string inputString)
-        {
-            HashAlgorithm algorithm = SHA512.Create();
-            byte[] hash = algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString));
-            StringBuilder sb = new StringBuilder();
-            foreach (byte b in hash)
-                sb.Append(b.ToString("X2"));
-
-            return sb.ToString();
-        }
-
-        /// <summary>
         /// Adds a new main account to the database.
         /// </summary>
         /// <param name="username"></param>
         /// <param name="password"></param>
         /// <param name="email"></param>
         /// <param name="name"></param>
-        public void AddMainAccount(string username, string password, string email, string name, string phone)
+        public static void AddMainAccount(string username, string password, string email, string name, string phone)
         {
             // Make the password SHA512.
             string passwordHash = MakeSHA512Hash(password);
@@ -60,7 +31,7 @@ namespace Bu
             string query = "INSERT INTO accounts (username, password, email, name, phone) VALUES('" + Mysql.MySQLEscape(username) + "', '" + Mysql.MySQLEscape(passwordHash) + "', '" + Mysql.MySQLEscape(email) + "', '" + Mysql.MySQLEscape(name) + "', '" + Mysql.MySQLEscape(phone) + "')";
 
             // Execute the query.
-            mysql.Query(query);
+            Mysql.Query(query);
         }
 
         /// <summary>
@@ -71,7 +42,7 @@ namespace Bu
         /// <param name="password"></param>
         /// <param name="name"></param>
         /// <param name="profleImage"></param>
-        public void AddSubAccount(int parentId, string username, string password, string name, byte[] profleImage)
+        public static void AddSubAccount(int parentId, string username, string password, string name, byte[] profleImage)
         {
             // Make the password SHA512.
             string passwordHash = MakeSHA512Hash(password);
@@ -80,7 +51,7 @@ namespace Bu
             string query = "INSERT INTO accounts (parent_id, username, password, name, photo) VALUES(" + parentId + ", '" + Mysql.MySQLEscape(username) + "', '" + Mysql.MySQLEscape(passwordHash) + "', '" + Mysql.MySQLEscape(name) + "', '" + profleImage + "')";
 
             // Execute the query.
-            mysql.Query(query);
+            Mysql.Query(query);
         }
 
         /// <summary>
@@ -90,8 +61,7 @@ namespace Bu
         /// <returns></returns>
         public static bool AccountExists(string username)
         {
-            Mysql mysql = new Mysql();
-            return mysql.Exists("accounts", "username", username);
+            return Mysql.Exists("accounts", "username", username);
         }
 
         /// <summary>
@@ -101,12 +71,9 @@ namespace Bu
         /// <returns></returns>
         public List<string> GetAccountData(string username)
         {
-            // Create a new MySQL instance.
-            Mysql mysql = new Mysql();
-
             // Select all accounts data.
             string query = String.Format("SELECT id,parent_id,username,email,name,phone,photo FROM accounts WHERE username = '{0}'", Mysql.MySQLEscape(username));
-            List<string[]> output = mysql.Select(query);
+            List<string[]> output = Mysql.Select(query);
             List<string> returnlist = new List<string>(output[0]);
 
             // Retrieve all contacts.
@@ -114,7 +81,7 @@ namespace Bu
             if (returnlist[1] != "0") // If not a parent
             {
                 string contacts = String.Format("SELECT * FROM contacts WHERE account_id = '{0}'", Mysql.MySQLEscape(output[0][0]));
-                List<string[]> contactList = mysql.Select(contacts);
+                List<string[]> contactList = Mysql.Select(contacts);
 
                 jsonContacts = new JavaScriptSerializer().Serialize(contactList);
             }
@@ -129,7 +96,7 @@ namespace Bu
             if (returnlist[1] == "0")
             {
                 string childrensql = String.Format("SELECT username FROM accounts WHERE parent_id = '{0}'", Mysql.MySQLEscape(returnlist[0]));
-                List<string[]> childrenUsernames = mysql.Select(childrensql);
+                List<string[]> childrenUsernames = Mysql.Select(childrensql);
 
                 List<List<string>> childrenList = new List<List<string>>();
 
@@ -138,11 +105,6 @@ namespace Bu
                     childrenList.Add(GetAccountData(item[0]));
                 }
                 jsonChild = new JavaScriptSerializer().Serialize(childrenList);
-
-
-
-
-
             }
 
             
@@ -174,6 +136,22 @@ namespace Bu
             }
 
             return returnlist;
+        }
+
+        /// <summary>
+        /// Creates a SHA512 hash.
+        /// </summary>
+        /// <param name="inputString"></param>
+        /// <returns></returns>
+        private static string MakeSHA512Hash(string inputString)
+        {
+            HashAlgorithm algorithm = SHA512.Create();
+            byte[] hash = algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputString));
+            StringBuilder sb = new StringBuilder();
+            foreach (byte b in hash)
+                sb.Append(b.ToString("X2"));
+
+            return sb.ToString();
         }
     }
 }
