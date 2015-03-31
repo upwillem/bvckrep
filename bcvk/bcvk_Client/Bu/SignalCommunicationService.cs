@@ -25,6 +25,8 @@ namespace Bu
         #endregion
 
         public event Action<List<string>> accountDataListReady;
+        public event Action<string> connectionStateReady;
+        public event Action<string> connectionParticipantStateReady;
 
         public SignalCommunicationService(string username)
         {
@@ -69,14 +71,39 @@ namespace Bu
             }
         }
 
-        public string PollConnection(string connectionId, string username)
+        /// <summary>
+        /// Aron Huntjens 1209361 this method pols if a user is in an specific connection
+        /// </summary>
+        /// <param name="connectionId">connection identification token</param>
+        /// <param name="username">specific user</param>
+        public void PollUserConnectionState(string connectionId)
         {
-            return signalClient.GetParticipantCallStatus(connectionId, username);           
+            while (true)
+            {
+                if (!string.IsNullOrEmpty(connectionId))
+                {
+                    string state = signalClient.GetParticipantCallStatus(connectionId, AccountData.Instance.Username);
+                    connectionParticipantStateReady(state);
+                }
+                Thread.Sleep(1);
+            }                   
         }
 
-        public string PollConnection(string connectionId)
+        /// <summary>
+        /// Aron Huntjens 1209361 this method pols the state of a connection
+        /// </summary>
+        /// <param name="connectionId">connection identification token</param>
+        public void PollConnection(string connectionId)
         {
-            return signalClient.GetCallStatus(connectionId);
+            while (true)
+            {
+                if (!string.IsNullOrEmpty(connectionId))
+                {
+                    string state = signalClient.GetCallStatus(connectionId);
+                    connectionStateReady(state);
+                }
+                Thread.Sleep(1);
+            }
         }
     }
 }

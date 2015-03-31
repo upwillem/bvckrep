@@ -11,7 +11,7 @@ namespace Cc
     public class SignalControlClass
     {
         private SignalCommunicationService signalCommunicationService;
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -21,6 +21,19 @@ namespace Cc
             acc.Username = username;
             signalCommunicationService = new SignalCommunicationService(username);
             signalCommunicationService.accountDataListReady += signalCommunicationService_accountDataListReady;
+            signalCommunicationService.connectionParticipantStateReady += signalCommunicationService_connectionParticipantStateReady;       
+            signalCommunicationService.connectionStateReady +=signalCommunicationService_connectionStateReady;
+            
+        }
+
+        void signalCommunicationService_connectionParticipantStateReady(string obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void signalCommunicationService_connectionStateReady(string obj)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
