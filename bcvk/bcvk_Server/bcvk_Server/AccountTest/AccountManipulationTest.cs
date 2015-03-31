@@ -24,7 +24,7 @@ namespace AccountTest
         [TestMethod]
         public void GetAccountData()
         {
-            string username = "123123123";
+            string username = "johnny";
 
             List<string> accountData = Cc.AccountHandler.GetAccountData(username);
 

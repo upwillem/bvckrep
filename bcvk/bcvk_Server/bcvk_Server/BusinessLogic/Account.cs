@@ -110,14 +110,45 @@ namespace Bu
             List<string> returnlist = new List<string>(output[0]);
 
             // Retrieve all contacts.
-            string contacts = String.Format("SELECT * FROM contacts WHERE account_id = '{0}'", Mysql.MySQLEscape(output[0][0]));
-            List<string[]> contactList = mysql.Select(contacts);
+            string jsonContacts = "";
+            if (returnlist[1] != "0") // If not a parent
+            {
+                string contacts = String.Format("SELECT * FROM contacts WHERE account_id = '{0}'", Mysql.MySQLEscape(output[0][0]));
+                List<string[]> contactList = mysql.Select(contacts);
 
-            string jsonContacts = new JavaScriptSerializer().Serialize(contactList);
+                jsonContacts = new JavaScriptSerializer().Serialize(contactList);
+            }
 
             returnlist.Add("");
             returnlist.Add("");
-            returnlist.Add("");
+
+
+            string jsonChild = "";
+
+            // Retrieve all children if user is a parent.
+            if (returnlist[1] == "0")
+            {
+                string childrensql = String.Format("SELECT username FROM accounts WHERE parent_id = '{0}'", Mysql.MySQLEscape(returnlist[0]));
+                List<string[]> childrenUsernames = mysql.Select(childrensql);
+
+                List<List<string>> childrenList = new List<List<string>>();
+
+                foreach (string[] item in childrenUsernames)
+                {
+                    childrenList.Add(GetAccountData(item[0]));
+                }
+                jsonChild = new JavaScriptSerializer().Serialize(childrenList);
+
+
+
+
+
+            }
+
+            
+
+            returnlist.Add(jsonChild);
+
             returnlist.Add(jsonContacts);
 
             for (int i = 0; i < returnlist.Count; i++)
