@@ -18,11 +18,10 @@ namespace Cc
         public SignalControlClass() 
         {
             signalCommunicationService = new SignalCommunicationService();
-            StartPoll("l");
             signalCommunicationService.accountDataListReady += signalCommunicationService_accountDataListReady;
         }
 
-        private void signalCommunicationService_accountDataListReady(List<string> obj)
+        private void signalCommunicationService_accountDataListReady(List<string> accountDataList)
         {
             throw new NotImplementedException();
         }
