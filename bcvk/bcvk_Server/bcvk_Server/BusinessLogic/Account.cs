@@ -99,17 +99,16 @@ namespace Bu
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public List<string[]> GetAccountData(string username)
+        public List<string> GetAccountData(string username)
         {
             // Create a new MySQL instance.
             Mysql mysql = new Mysql();
 
-            // Prepare the output.
-            List<string[]> output = new List<string[]>();
-
             // Select all accounts data.
             string query = String.Format("SELECT id,parent_id,username,email,password,name,phone,photo FROM accounts WHERE username = '{0}'", Mysql.MySQLEscape(username));
-            output = mysql.Select(query);
+            List<string[]> output = mysql.Select(query);
+
+            
 
             // Retrieve all contacts.
             string contacts = String.Format("SELECT * FROM contacts WHERE account_id = '{0}'", Mysql.MySQLEscape(output[0][0]));
@@ -119,7 +118,7 @@ namespace Bu
 
             Console.WriteLine(jsonContacts);
 
-            return output;
+            return new List<string>(output[0]);
         }
     }
 }

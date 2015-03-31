@@ -26,10 +26,10 @@ namespace AccountTest
         {
             string username = "123123123";
 
-            List<string[]> accountData = Cc.AccountHandler.GetAccountData(username);
+            List<string> accountData = Cc.AccountHandler.GetAccountData(username);
 
             string expected = "Johnny";
-            string actual = accountData[0][5];
+            string actual = accountData[5];
 
             Assert.AreEqual(expected, actual);
         }

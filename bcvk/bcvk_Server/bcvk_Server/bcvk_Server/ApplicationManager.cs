@@ -37,8 +37,8 @@ namespace bcvk_Server
 
         public List<string> GetAccountData(string username)
         {
-            AccountHandler.GetAccountData(username);
-            return new List<string>();
+            return AccountHandler.GetAccountData(username);
+            //return new List<string>();
         }
         public bool ToggleBlock(string sender, string recipient)
         {
