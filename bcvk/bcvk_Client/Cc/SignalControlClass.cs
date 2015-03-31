@@ -55,43 +55,44 @@ namespace Cc
         /// <param name="accountDataList"></param>
         private void signalCommunicationService_accountDataListReady(List<string> accountDataList)
         {
+            AccountData acc = AccountData.Instance;
             foreach (string data in accountDataList)
             {
                 #region switch cases accountdatalist
                 switch (data.Split(';')[0])
                 {
                     case "accountId":
-                        AccountData.Instance.AccountId = data.Split(';')[1];
+                        acc.AccountId = data.Split(';')[1];
                         break;
                     case "parentId":
-                        AccountData.Instance.ParentId = data.Split(';')[1];
+                        acc.ParentId = data.Split(';')[1];
                         break;
                     case "username":
-                        AccountData.Instance.Username = data.Split(';')[1];
+                        acc.Username = data.Split(';')[1];
                         break;
                     case "email":
-                        AccountData.Instance.Email = data.Split(';')[1];
+                        acc.Email = data.Split(';')[1];
                         break;
                     case "displayName":
-                        AccountData.Instance.DisplayName = data.Split(';')[1];
+                        acc.DisplayName = data.Split(';')[1];
                         break;
                     case "phonenumber":
-                        AccountData.Instance.Phonenumber = data.Split(';')[1];
+                        acc.Phonenumber = data.Split(';')[1];
                         break;
                     case "photo":
-                        AccountData.Instance.Photo = data.Split(';')[1];
+                        acc.Photo = data.Split(';')[1];
                         break;
                     case "connection":
-                        AccountData.Instance.Connection = data.Split(';')[1];
+                        acc.Connection = data.Split(';')[1];
                         break;
                     case "log":
-                        AccountData.Instance.Log = data.Split(';')[1];
+                        acc.Log = data.Split(';')[1];
                         break;
                     case "children":
-                        AccountData.Instance.Children = data.Split(';')[1];
+                        acc.Children = data.Split(';')[1];
                         break;
                     case "contacts":
-                        AccountData.Instance.Contacts = data.Split(';')[1];
+                        acc.Contacts = data.Split(';')[1];
                         break;
                     default:
                         break;
@@ -99,8 +100,14 @@ namespace Cc
                 #endregion
             }
 
-            if (AccountData.Instance.Connection == "connecting") { }
-            else if (AccountData.Instance.Connection == "connected") { }
+            if (AccountData.Instance.Connection == "connecting") 
+            { 
+                
+            }
+            else if (AccountData.Instance.Connection == "connected") 
+            { 
+                
+            }
         }
     }
 }
