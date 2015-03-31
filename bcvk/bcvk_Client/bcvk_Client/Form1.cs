@@ -77,7 +77,7 @@ namespace bcvk_Client
         private void btnTestCall_Click(object sender, EventArgs e)
         {
             SettingsCallState(CallState.IS_CALLING);
-            //streamControlClass.StartCamera();
+            streamControlClass.StartCamera();
 
             /*
              *

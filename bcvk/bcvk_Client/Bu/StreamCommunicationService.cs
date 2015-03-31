@@ -54,8 +54,8 @@ namespace Bu
             }
             finally
             {
-                if (transportStream.IsOpen)
-                    transportStream.Close();
+                //if (transportStream.IsOpen)
+                //    transportStream.Close();
             }
             #endregion
         }
@@ -66,8 +66,10 @@ namespace Bu
         /// <param name="bAFrame"></param>
         private void webcam_byteArrayReady(byte[] obj)
         {
+            List<byte[]> test = new List<byte[]>();
+            test.Add(obj);
             //TODO: send this byte[] to the blockbuffer
-            throw new NotImplementedException();
+            streamClient.SendStream("ik", "jij", test, "mijncon", false);//throw new NotImplementedException();
         }
 
         /// <summary>

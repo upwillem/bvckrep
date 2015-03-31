@@ -52,8 +52,7 @@ namespace Bu
         /// <param name="USERNAME">username of the logged in user</param>
         public void GetAccountData(string USERNAME)
         {
-            //signalClient.GetAccountData(USERNAME);
-            string test = signalClient.DoCall("f", "-2");
+            List<string> temp = signalClient.GetAccountData(USERNAME);
         }
     }
 }

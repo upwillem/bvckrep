@@ -15,6 +15,8 @@ namespace bcvk_Server
 
     public class Program
     {
+        static ApplicationManager applicationManager;
+
         /// <summary>
         /// Aron Huntjens 1209361
         /// Main kick to server  
@@ -24,7 +26,7 @@ namespace bcvk_Server
         {
             try
             {
-                ApplicationManager applicationManager = new ApplicationManager();
+                applicationManager = new ApplicationManager();
 
                 Thread signalThread = new Thread(() => DoWorkSignal(applicationManager));
                 signalThread.Start();
