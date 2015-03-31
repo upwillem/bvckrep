@@ -117,6 +117,25 @@ namespace Bu
                 string contacts = String.Format("SELECT * FROM contacts WHERE account_id = '{0}'", Mysql.MySQLEscape(output[0][0]));
                 List<string[]> contactList = Mysql.Select(contacts);
 
+                for (int i = 0; i < contactList.Count; i++)
+                {
+                    for (int j = 0; j < contactList[0].Length; j++)
+                    {
+                        string key = "";
+                        switch (j)
+                        {
+                            case 0: key = "id"; break;
+                            case 1: key = "accountId"; break;
+                            case 2: key = "contactId"; break;
+                            case 3: key = "isBlocked"; break;
+                            case 4: key = "timeAdded"; break;
+                            default: break;
+                        }
+                        key = key + ";";
+                        contactList[i][j] = key + contactList[i][j];
+                    }
+                }
+
                 jsonContacts = new JavaScriptSerializer().Serialize(contactList);
             }
 
