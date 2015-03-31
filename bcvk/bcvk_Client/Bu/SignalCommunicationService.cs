@@ -46,14 +46,5 @@ namespace Bu
             }
             #endregion
         }
-
-        /// <summary>
-        /// Get the most current accountdata
-        /// </summary>
-        /// <param name="USERNAME">username of the logged in user</param>
-        public void GetAccountData(string USERNAME)
-        {
-            signalClient.GetAccountData("sdfghj");
-        }
     }
 }
