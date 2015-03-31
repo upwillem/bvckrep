@@ -162,7 +162,7 @@ namespace Cc
         /// </summary>
         /// <param name="mailAddress"></param>
         /// <returns></returns>
-        public static bool IsValidEmailAddress(string mailAddress)
+        private static bool IsValidEmailAddress(string mailAddress)
         {
             Regex mailIDPattern = new Regex(@"[\w-]+@([\w-]+\.)+[\w-]+");
 

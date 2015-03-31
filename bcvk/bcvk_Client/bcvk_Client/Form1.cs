@@ -184,5 +184,10 @@ namespace bcvk_Client
             double ratio = Convert.ToDouble(pictureBoxVideoReceived.Width) / Convert.ToDouble(pictureBoxVideoReceived.Height);
             double formRatio = Convert.ToDouble(this.Width) / Convert.ToDouble(this.Height);
         }
+
+        private void listContacts_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            signalControlClass.DoCall(listContacts.SelectedValue.ToString());
+        }
     }
 }

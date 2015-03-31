@@ -105,6 +105,7 @@
             this.listContacts.Name = "listContacts";
             this.listContacts.Size = new System.Drawing.Size(123, 277);
             this.listContacts.TabIndex = 5;
+            this.listContacts.SelectedIndexChanged += new System.EventHandler(this.listContacts_SelectedIndexChanged);
             // 
             // labelContacten
             // 

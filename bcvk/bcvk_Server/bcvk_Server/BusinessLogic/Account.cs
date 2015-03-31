@@ -196,7 +196,7 @@ namespace Bu
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public static int GetAccountId(string username)
+        private static int GetAccountId(string username)
         {
             string query = String.Format("SELECT id FROM accounts WHERE username = '{0}'", Mysql.MySQLEscape(username));
             List<string[]> output = Mysql.Select(query);
