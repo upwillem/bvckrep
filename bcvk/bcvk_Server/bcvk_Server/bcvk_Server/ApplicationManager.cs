@@ -22,7 +22,7 @@ namespace bcvk_Server
 
         public List<string> CreateSubAccount(int parentId, string username, string password1, string password2, string name, byte[] profileImage)
         {
-            throw new NotImplementedException();
+            return AccountHandler.CreateSubAccount(parentId, username, password1, password2, name, profileImage);
         }
 
         public List<string> Login(string username, string password)
@@ -37,7 +37,8 @@ namespace bcvk_Server
 
         public List<string> GetAccountData(string username)
         {
-            throw new NotImplementedException();
+            AccountHandler.GetAccountData(username);
+            return new List<string>();
         }
         public bool ToggleBlock(string sender, string recipient)
         {
