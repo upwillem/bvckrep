@@ -90,6 +90,9 @@ namespace Cc
                     case "photo":
                         AccountData.Instance.Photo = data.Split(';')[1];
                         break;
+                    case "connection":
+                        AccountData.Instance.Connection = data.Split(';')[1];
+                        break;
                     case "log":
                         AccountData.Instance.Log = data.Split(';')[1];
                         break;
@@ -104,6 +107,9 @@ namespace Cc
                 }
                 #endregion
             }
+
+            if (AccountData.Instance.Connection == "connecting") { }
+            else if (AccountData.Instance.Connection == "connected") { }
         }
     }
 }

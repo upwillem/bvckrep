@@ -43,6 +43,8 @@ namespace Bu
 
         public string Photo { get; set; }
 
+        public string Connection { get; set; }
+
         public string Log { get; set; }
 
         public string Children { get; set; }
