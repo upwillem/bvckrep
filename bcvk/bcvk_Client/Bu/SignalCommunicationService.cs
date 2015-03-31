@@ -69,7 +69,6 @@ namespace Bu
                 { 
                     accountDataListReady(listAccountData); 
                 }
-                
                 Thread.Sleep(5);
             }
         }
@@ -109,8 +108,8 @@ namespace Bu
                     acc.ConnectionStatus = state;
                     if (state == "connectionended")
                     {
-                        keepPolling = false;                        
-                    }                    
+                        keepPolling = false;
+                    }
                     connectionStateReady(state);
                 }
                 Thread.Sleep(5);
