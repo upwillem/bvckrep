@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Thrift.Protocol;
 using Thrift.Transport;
 using bcvkSignal;
+using System.Threading;
 
 #endregion
 
@@ -22,6 +23,8 @@ namespace Bu
         private Signal.Client signalClient;
         private int signalPort = 9090;
         #endregion
+
+        public event Action<List<string>> accountDataListReady;
 
         public SignalCommunicationService()
         {
@@ -47,11 +50,15 @@ namespace Bu
             #endregion
         }
 
-        public List<string> PollAccountData(string username)
+        public void PollAccountData(string username)
         {
-            List<string> returnList = new List<string>();
-            returnList = signalClient.GetAccountData(username);
-            return returnList;
+            while (true)
+            {
+                List<string> accountData = new List<string>();
+                                //TODO: returnList = signalClient.GetAccountData(username);
+                accountDataListReady(accountData);
+                Thread.Sleep(1);
+            }
         }
 
         public string PollConnection(string connectionId, string username)
@@ -63,7 +70,5 @@ namespace Bu
         {
             throw new NotImplementedException();
         }
-
-
     }
 }
