@@ -37,8 +37,33 @@ namespace bcvk_Client
 
             signalControlClass = new SignalControlClass("pietje"/*testusername (subaccount)*/);
             signalControlClass.StartPoll();
+            signalControlClass.beingCalledEvent += signalControlClass_beingCalledEvent;
             streamControlClass = new StreamControlClass();
             streamControlClass.frameReady += streamControlClass_frameReady;
+
+            InitContacts();
+        }
+
+        /// <summary>
+        /// Sets the contacts to the list
+        /// </summary>
+        private void InitContacts()
+        {
+            
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// triggered when this user gets called (a new connection)
+        /// </summary>
+        /// <param name="obj"></param>
+        private void signalControlClass_beingCalledEvent(string message)
+        {
+            if (MessageBox.Show(message, "Je bent niet vriendenloos :D", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) 
+            {
+
+                //TODO: accept call
+            }
         }
 
         /// <summary>

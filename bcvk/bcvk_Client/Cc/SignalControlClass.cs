@@ -11,6 +11,7 @@ namespace Cc
     public class SignalControlClass
     {
         private SignalCommunicationService signalCommunicationService;
+        public event Action<string> beingCalledEvent;
 
         /// <summary>
         /// Constructor
@@ -38,10 +39,6 @@ namespace Cc
             signalCommunicationService.Docall(contact);
         }
 
-
-
-
-
         private void signalCommunicationService_connectionParticipantStateReady(string obj)
         {
             throw new NotImplementedException();
@@ -65,8 +62,9 @@ namespace Cc
 
         /// <summary>
         /// Luc Schnabel 1207776,
+        /// sets all values of 'AccountData'.
         /// </summary>
-        /// <param name="accountDataList"></param>
+        /// <param name="accountDataList">list of all accountdata</param>
         private void signalCommunicationService_accountDataListReady(List<string> accountDataList)
         {
             AccountData acc = AccountData.Instance;
@@ -114,13 +112,11 @@ namespace Cc
                 #endregion
             }
 
-            if (AccountData.Instance.Connection == "connecting") 
-            { 
-                
-            }
-            else if (AccountData.Instance.Connection == "connected") 
-            { 
-                
+            if (AccountData.Instance.Connection == "")//"connecting") 
+            {
+                beingCalledEvent("Je wordt gebeld");
+                //TODO: iets weergeven dat er gebeld wordt.
+                //CALL ANSWER
             }
         }
     }
