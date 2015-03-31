@@ -18,6 +18,8 @@ namespace Bu
         public event Action<Bitmap> frameReady;
 
         private Webcam webcam;
+        private List<byte[]> videoBuffer;
+        private List<byte[]> audioBuffer;
 
         #region Thrift classes
         //Thrift classes
@@ -40,7 +42,7 @@ namespace Bu
                 transportStream = new TSocket("localhost", streamPort);
                 protocolStream = new TBinaryProtocol(transportStream);
 
-                streamClient = new bcvkStream.Stream.Client(protocolStream);
+                streamClient = new Stream.Client(protocolStream);
 
                 transportStream.Open();
             }
@@ -53,6 +55,9 @@ namespace Bu
                 //MessageBox.Show(exc.Message);
             }
             #endregion
+
+            videoBuffer = new List<byte[]>();
+            audioBuffer = new List<byte[]>();
         }
 
         /// <summary>
@@ -61,7 +66,19 @@ namespace Bu
         /// <param name="bAFrame"></param>
         private void webcam_byteArrayReady(byte[] bA)
         {
-            throw new NotImplementedException();
+            videoBuffer.Add(bA);
+            if (videoBuffer.Count == 15)
+                sendBuffer(videoBuffer);
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// sends the buffer to the server
+        /// </summary>
+        /// <param name="videoBuffer"></param>
+        private void sendBuffer(List<byte[]> videoBuffer)
+        {
+            streamClient.SendStream(AccountData.Instance.Username, "je moeder", videoBuffer, AccountData.Instance.Connection, false);
         }
 
         /// <summary>

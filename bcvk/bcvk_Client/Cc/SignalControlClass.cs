@@ -11,6 +11,7 @@ namespace Cc
     public class SignalControlClass
     {
         private SignalCommunicationService signalCommunicationService;
+        public event Action<string> initContacts;
         public event Action<string> beingCalledEvent;
 
         /// <summary>
@@ -68,6 +69,7 @@ namespace Cc
         private void signalCommunicationService_accountDataListReady(List<string> accountDataList)
         {
             AccountData acc = AccountData.Instance;
+            string oldContacts = acc.Contacts;
             foreach (string data in accountDataList)
             {
                 #region switch cases accountdatalist
@@ -112,11 +114,12 @@ namespace Cc
                 #endregion
             }
 
-            if (AccountData.Instance.Connection == "")//"connecting") 
+            if (oldContacts != acc.Contacts)
+                initContacts(acc.Contacts);
+
+            if (AccountData.Instance.Connection == "connecting") 
             {
                 beingCalledEvent("Je wordt gebeld");
-                //TODO: iets weergeven dat er gebeld wordt.
-                //CALL ANSWER
             }
         }
     }

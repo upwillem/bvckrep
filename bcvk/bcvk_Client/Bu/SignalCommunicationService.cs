@@ -87,7 +87,7 @@ namespace Bu
                     string state = signalClient.GetParticipantCallStatus(connectionId, AccountData.Instance.Username);
                     connectionParticipantStateReady(state);
                 }
-                Thread.Sleep(1);
+                Thread.Sleep(5);
             }                   
         }
 
