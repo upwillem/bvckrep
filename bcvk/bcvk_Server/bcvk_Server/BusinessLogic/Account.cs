@@ -55,6 +55,24 @@ namespace Bu
         }
 
         /// <summary>
+        /// Adds a new contact to the database.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="recipient"></param>
+        public static void AddContact(string sender, string recipient)
+        {
+            // Get the account IDs of the sender and recipient.
+            int senderId = GetAccountId(sender);
+            int recipientId = GetAccountId(recipient);
+
+            // Prepare the SQL statement.
+            string query = String.Format("INSERT INTO contacts (account_id, contact_id, time_added) VALUES ('{0}', '{1}', '{2}')", senderId, recipientId, GetTimestamp());
+
+            // Execute the query.
+            Mysql.Query(query);
+        }
+
+        /// <summary>
         /// Returns whether an account exists.
         /// </summary>
         /// <param name="username"></param>
@@ -62,6 +80,22 @@ namespace Bu
         public static bool AccountExists(string username)
         {
             return Mysql.Exists("accounts", "username", username);
+        }
+
+        /// <summary>
+        /// Returns whether a contact already exists.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="recipient"></param>
+        /// <returns></returns>
+        public static bool ContactExists(string sender, string recipient)
+        {
+            // Retrieve the account IDs.
+            int senderId = GetAccountId(sender);
+            int recipientId = GetAccountId(recipient);
+
+            // Return the bool.
+            return Mysql.Exists("contacts", "account_id", senderId.ToString(), "contact_id", recipientId.ToString())
         }
 
         /// <summary>
@@ -139,6 +173,19 @@ namespace Bu
         }
 
         /// <summary>
+        /// Returns the ID of an account based on a username.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
+        public static string GetAccountId(string username)
+        {
+            string query = String.Format("SELECT id FROM accounts WHERE username = '{0}'", Mysql.MySQLEscape(username));
+            List<string[]> output = Mysql.Select(query);
+
+            return output[0][0];
+        }
+
+        /// <summary>
         /// Creates a SHA512 hash.
         /// </summary>
         /// <param name="inputString"></param>
@@ -152,6 +199,15 @@ namespace Bu
                 sb.Append(b.ToString("X2"));
 
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Returns the current UNIX timestamp.
+        /// </summary>
+        /// <returns></returns>
+        private static int GetTimestamp()
+        {
+            return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         }
     }
 }
