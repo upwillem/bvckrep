@@ -28,6 +28,11 @@ namespace Cc
             
         }
 
+        /// <summary>
+        /// Aron Huntjens 1209361
+        /// Call a client
+        /// </summary>
+        /// <param name="contact">client to call</param>
         public void DoCall(string contact)
         {
             signalCommunicationService.Docall(contact);
