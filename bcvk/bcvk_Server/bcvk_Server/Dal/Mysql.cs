@@ -104,7 +104,7 @@ namespace Dal
         /// <returns></returns>
         public static bool Exists(string table, string field1, string value1, string field2, string value2)
         {
-            string query = String.Format("SELECT {1} FROM {0} WHERE {1} = '{3}' AND {2} = '{4}'", MySQLEscape(table), MySQLEscape(field1), MySQLEscape(field2), MySQLEscape(value1), MySQLEscape(value2));
+            string query = String.Format("SELECT {1} FROM {0} WHERE {1} = {3} AND {2} = {4}", MySQLEscape(table), field1, field2, MySQLEscape(value1), MySQLEscape(value2));
             List<string[]> list = Select(query);
             return (list.Count > 0);
         }
