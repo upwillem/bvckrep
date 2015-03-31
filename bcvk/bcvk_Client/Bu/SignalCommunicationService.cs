@@ -46,5 +46,24 @@ namespace Bu
             }
             #endregion
         }
+
+        public List<string> PollAccountData(string username)
+        {
+            List<string> returnList = new List<string>();
+            returnList = signalClient.GetAccountData(username);
+            return returnList;
+        }
+
+        public string PollConnection(string connectionId, string username)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string PollConnection(string connectionId)
+        {
+            throw new NotImplementedException();
+        }
+
+
     }
 }
