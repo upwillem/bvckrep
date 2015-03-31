@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Dal;
 
 namespace AccountTest
 {
@@ -51,8 +52,7 @@ namespace AccountTest
             List<string> expected = new List<string>();
             expected.Add("success;Account registered.");
 
-            Dal.Mysql mysql = new Dal.Mysql();
-            mysql.Query(String.Format("DELETE FROM accounts WHERE username='{0}'", username));
+            Mysql.Query(String.Format("DELETE FROM accounts WHERE username='{0}'", username));
 
             CollectionAssert.AreEquivalent(expected, actual);
         }
@@ -64,10 +64,9 @@ namespace AccountTest
             string field = "username";
             string value = "123123123";
 
-            Dal.Mysql mysql = new Dal.Mysql();
-            bool got = mysql.Exists(table, field, value);
+            bool got = Mysql.Exists(table, field, value);
 
-            mysql.Query(String.Format("DELETE FROM accounts WHERE username={0}", value));
+            Mysql.Query(String.Format("DELETE FROM accounts WHERE username={0}", value));
 
             Assert.AreEqual(true, got);
         }
@@ -98,8 +97,7 @@ namespace AccountTest
             string field = "username";
             string value = "1";
 
-            Dal.Mysql mysql = new Dal.Mysql();
-            bool got = mysql.Exists(table, field, value);
+            bool got = Mysql.Exists(table, field, value);
 
             Assert.AreEqual(false, got);
         }
@@ -139,8 +137,7 @@ namespace AccountTest
 
             CollectionAssert.AreEquivalent(expected, actual);
 
-            Dal.Mysql mysql = new Dal.Mysql();
-            mysql.Query(String.Format("DELETE FROM accounts WHERE username={0}", username));
+            Mysql.Query(String.Format("DELETE FROM accounts WHERE username={0}", username));
         }
     }
 }
