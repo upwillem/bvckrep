@@ -69,10 +69,25 @@ namespace bcvkSignal
       IAsyncResult Begin_EndCall(AsyncCallback callback, object state, string sender, string recipient, string connectionId);
       void End_EndCall(IAsyncResult asyncResult);
       #endif
+      bool AddContact(string sender, string recipient);
+      #if SILVERLIGHT
+      IAsyncResult Begin_AddContact(AsyncCallback callback, object state, string sender, string recipient);
+      bool End_AddContact(IAsyncResult asyncResult);
+      #endif
       bool ToggleBlock(string sender, string recipient);
       #if SILVERLIGHT
       IAsyncResult Begin_ToggleBlock(AsyncCallback callback, object state, string sender, string recipient);
       bool End_ToggleBlock(IAsyncResult asyncResult);
+      #endif
+      bool DeleteContact(string sender, string recipient);
+      #if SILVERLIGHT
+      IAsyncResult Begin_DeleteContact(AsyncCallback callback, object state, string sender, string recipient);
+      bool End_DeleteContact(IAsyncResult asyncResult);
+      #endif
+      bool AcceptContact(string sender, string recipient);
+      #if SILVERLIGHT
+      IAsyncResult Begin_AcceptContact(AsyncCallback callback, object state, string sender, string recipient);
+      bool End_AcceptContact(IAsyncResult asyncResult);
       #endif
     }
 
@@ -763,6 +778,69 @@ namespace bcvkSignal
 
       
       #if SILVERLIGHT
+      public IAsyncResult Begin_AddContact(AsyncCallback callback, object state, string sender, string recipient)
+      {
+        return send_AddContact(callback, state, sender, recipient);
+      }
+
+      public bool End_AddContact(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_AddContact();
+      }
+
+      #endif
+
+      public bool AddContact(string sender, string recipient)
+      {
+        #if !SILVERLIGHT
+        send_AddContact(sender, recipient);
+        return recv_AddContact();
+
+        #else
+        var asyncResult = Begin_AddContact(null, null, sender, recipient);
+        return End_AddContact(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_AddContact(AsyncCallback callback, object state, string sender, string recipient)
+      #else
+      public void send_AddContact(string sender, string recipient)
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("AddContact", TMessageType.Call, seqid_));
+        AddContact_args args = new AddContact_args();
+        args.Sender = sender;
+        args.Recipient = recipient;
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public bool recv_AddContact()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        AddContact_result result = new AddContact_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "AddContact failed: unknown result");
+      }
+
+      
+      #if SILVERLIGHT
       public IAsyncResult Begin_ToggleBlock(AsyncCallback callback, object state, string sender, string recipient)
       {
         return send_ToggleBlock(callback, state, sender, recipient);
@@ -824,6 +902,132 @@ namespace bcvkSignal
         throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "ToggleBlock failed: unknown result");
       }
 
+      
+      #if SILVERLIGHT
+      public IAsyncResult Begin_DeleteContact(AsyncCallback callback, object state, string sender, string recipient)
+      {
+        return send_DeleteContact(callback, state, sender, recipient);
+      }
+
+      public bool End_DeleteContact(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_DeleteContact();
+      }
+
+      #endif
+
+      public bool DeleteContact(string sender, string recipient)
+      {
+        #if !SILVERLIGHT
+        send_DeleteContact(sender, recipient);
+        return recv_DeleteContact();
+
+        #else
+        var asyncResult = Begin_DeleteContact(null, null, sender, recipient);
+        return End_DeleteContact(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_DeleteContact(AsyncCallback callback, object state, string sender, string recipient)
+      #else
+      public void send_DeleteContact(string sender, string recipient)
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("DeleteContact", TMessageType.Call, seqid_));
+        DeleteContact_args args = new DeleteContact_args();
+        args.Sender = sender;
+        args.Recipient = recipient;
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public bool recv_DeleteContact()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        DeleteContact_result result = new DeleteContact_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "DeleteContact failed: unknown result");
+      }
+
+      
+      #if SILVERLIGHT
+      public IAsyncResult Begin_AcceptContact(AsyncCallback callback, object state, string sender, string recipient)
+      {
+        return send_AcceptContact(callback, state, sender, recipient);
+      }
+
+      public bool End_AcceptContact(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_AcceptContact();
+      }
+
+      #endif
+
+      public bool AcceptContact(string sender, string recipient)
+      {
+        #if !SILVERLIGHT
+        send_AcceptContact(sender, recipient);
+        return recv_AcceptContact();
+
+        #else
+        var asyncResult = Begin_AcceptContact(null, null, sender, recipient);
+        return End_AcceptContact(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_AcceptContact(AsyncCallback callback, object state, string sender, string recipient)
+      #else
+      public void send_AcceptContact(string sender, string recipient)
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("AcceptContact", TMessageType.Call, seqid_));
+        AcceptContact_args args = new AcceptContact_args();
+        args.Sender = sender;
+        args.Recipient = recipient;
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public bool recv_AcceptContact()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        AcceptContact_result result = new AcceptContact_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "AcceptContact failed: unknown result");
+      }
+
     }
     public class Processor : TProcessor {
       public Processor(Iface iface)
@@ -839,7 +1043,10 @@ namespace bcvkSignal
         processMap_["GetCallStatus"] = GetCallStatus_Process;
         processMap_["GetParticipantCallStatus"] = GetParticipantCallStatus_Process;
         processMap_["EndCall"] = EndCall_Process;
+        processMap_["AddContact"] = AddContact_Process;
         processMap_["ToggleBlock"] = ToggleBlock_Process;
+        processMap_["DeleteContact"] = DeleteContact_Process;
+        processMap_["AcceptContact"] = AcceptContact_Process;
       }
 
       protected delegate void ProcessFunction(int seqid, TProtocol iprot, TProtocol oprot);
@@ -1002,6 +1209,19 @@ namespace bcvkSignal
         oprot.Transport.Flush();
       }
 
+      public void AddContact_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        AddContact_args args = new AddContact_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        AddContact_result result = new AddContact_result();
+        result.Success = iface_.AddContact(args.Sender, args.Recipient);
+        oprot.WriteMessageBegin(new TMessage("AddContact", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
       public void ToggleBlock_Process(int seqid, TProtocol iprot, TProtocol oprot)
       {
         ToggleBlock_args args = new ToggleBlock_args();
@@ -1010,6 +1230,32 @@ namespace bcvkSignal
         ToggleBlock_result result = new ToggleBlock_result();
         result.Success = iface_.ToggleBlock(args.Sender, args.Recipient);
         oprot.WriteMessageBegin(new TMessage("ToggleBlock", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void DeleteContact_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        DeleteContact_args args = new DeleteContact_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        DeleteContact_result result = new DeleteContact_result();
+        result.Success = iface_.DeleteContact(args.Sender, args.Recipient);
+        oprot.WriteMessageBegin(new TMessage("DeleteContact", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void AcceptContact_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        AcceptContact_args args = new AcceptContact_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        AcceptContact_result result = new AcceptContact_result();
+        result.Success = iface_.AcceptContact(args.Sender, args.Recipient);
+        oprot.WriteMessageBegin(new TMessage("AcceptContact", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
@@ -3463,6 +3709,227 @@ namespace bcvkSignal
     #if !SILVERLIGHT
     [Serializable]
     #endif
+    public partial class AddContact_args : TBase
+    {
+      private string _sender;
+      private string _recipient;
+
+      public string Sender
+      {
+        get
+        {
+          return _sender;
+        }
+        set
+        {
+          __isset.sender = true;
+          this._sender = value;
+        }
+      }
+
+      public string Recipient
+      {
+        get
+        {
+          return _recipient;
+        }
+        set
+        {
+          __isset.recipient = true;
+          this._recipient = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool sender;
+        public bool recipient;
+      }
+
+      public AddContact_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.String) {
+                Sender = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.String) {
+                Recipient = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("AddContact_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (Sender != null && __isset.sender) {
+          field.Name = "sender";
+          field.Type = TType.String;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Sender);
+          oprot.WriteFieldEnd();
+        }
+        if (Recipient != null && __isset.recipient) {
+          field.Name = "recipient";
+          field.Type = TType.String;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Recipient);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("AddContact_args(");
+        bool __first = true;
+        if (Sender != null && __isset.sender) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Sender: ");
+          __sb.Append(Sender);
+        }
+        if (Recipient != null && __isset.recipient) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Recipient: ");
+          __sb.Append(Recipient);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class AddContact_result : TBase
+    {
+      private bool _success;
+
+      public bool Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public AddContact_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Bool) {
+                Success = iprot.ReadBool();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("AddContact_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.__isset.success) {
+          field.Name = "Success";
+          field.Type = TType.Bool;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBool(Success);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("AddContact_result(");
+        bool __first = true;
+        if (__isset.success) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Success: ");
+          __sb.Append(Success);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
     public partial class ToggleBlock_args : TBase
     {
       private string _sender;
@@ -3667,6 +4134,448 @@ namespace bcvkSignal
 
       public override string ToString() {
         StringBuilder __sb = new StringBuilder("ToggleBlock_result(");
+        bool __first = true;
+        if (__isset.success) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Success: ");
+          __sb.Append(Success);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class DeleteContact_args : TBase
+    {
+      private string _sender;
+      private string _recipient;
+
+      public string Sender
+      {
+        get
+        {
+          return _sender;
+        }
+        set
+        {
+          __isset.sender = true;
+          this._sender = value;
+        }
+      }
+
+      public string Recipient
+      {
+        get
+        {
+          return _recipient;
+        }
+        set
+        {
+          __isset.recipient = true;
+          this._recipient = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool sender;
+        public bool recipient;
+      }
+
+      public DeleteContact_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.String) {
+                Sender = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.String) {
+                Recipient = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("DeleteContact_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (Sender != null && __isset.sender) {
+          field.Name = "sender";
+          field.Type = TType.String;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Sender);
+          oprot.WriteFieldEnd();
+        }
+        if (Recipient != null && __isset.recipient) {
+          field.Name = "recipient";
+          field.Type = TType.String;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Recipient);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("DeleteContact_args(");
+        bool __first = true;
+        if (Sender != null && __isset.sender) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Sender: ");
+          __sb.Append(Sender);
+        }
+        if (Recipient != null && __isset.recipient) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Recipient: ");
+          __sb.Append(Recipient);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class DeleteContact_result : TBase
+    {
+      private bool _success;
+
+      public bool Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public DeleteContact_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Bool) {
+                Success = iprot.ReadBool();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("DeleteContact_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.__isset.success) {
+          field.Name = "Success";
+          field.Type = TType.Bool;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBool(Success);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("DeleteContact_result(");
+        bool __first = true;
+        if (__isset.success) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Success: ");
+          __sb.Append(Success);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class AcceptContact_args : TBase
+    {
+      private string _sender;
+      private string _recipient;
+
+      public string Sender
+      {
+        get
+        {
+          return _sender;
+        }
+        set
+        {
+          __isset.sender = true;
+          this._sender = value;
+        }
+      }
+
+      public string Recipient
+      {
+        get
+        {
+          return _recipient;
+        }
+        set
+        {
+          __isset.recipient = true;
+          this._recipient = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool sender;
+        public bool recipient;
+      }
+
+      public AcceptContact_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 1:
+              if (field.Type == TType.String) {
+                Sender = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 2:
+              if (field.Type == TType.String) {
+                Recipient = iprot.ReadString();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("AcceptContact_args");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+        if (Sender != null && __isset.sender) {
+          field.Name = "sender";
+          field.Type = TType.String;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Sender);
+          oprot.WriteFieldEnd();
+        }
+        if (Recipient != null && __isset.recipient) {
+          field.Name = "recipient";
+          field.Type = TType.String;
+          field.ID = 2;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Recipient);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("AcceptContact_args(");
+        bool __first = true;
+        if (Sender != null && __isset.sender) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Sender: ");
+          __sb.Append(Sender);
+        }
+        if (Recipient != null && __isset.recipient) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Recipient: ");
+          __sb.Append(Recipient);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class AcceptContact_result : TBase
+    {
+      private bool _success;
+
+      public bool Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public AcceptContact_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        TField field;
+        iprot.ReadStructBegin();
+        while (true)
+        {
+          field = iprot.ReadFieldBegin();
+          if (field.Type == TType.Stop) { 
+            break;
+          }
+          switch (field.ID)
+          {
+            case 0:
+              if (field.Type == TType.Bool) {
+                Success = iprot.ReadBool();
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            default: 
+              TProtocolUtil.Skip(iprot, field.Type);
+              break;
+          }
+          iprot.ReadFieldEnd();
+        }
+        iprot.ReadStructEnd();
+      }
+
+      public void Write(TProtocol oprot) {
+        TStruct struc = new TStruct("AcceptContact_result");
+        oprot.WriteStructBegin(struc);
+        TField field = new TField();
+
+        if (this.__isset.success) {
+          field.Name = "Success";
+          field.Type = TType.Bool;
+          field.ID = 0;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteBool(Success);
+          oprot.WriteFieldEnd();
+        }
+        oprot.WriteFieldStop();
+        oprot.WriteStructEnd();
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("AcceptContact_result(");
         bool __first = true;
         if (__isset.success) {
           if(!__first) { __sb.Append(", "); }
