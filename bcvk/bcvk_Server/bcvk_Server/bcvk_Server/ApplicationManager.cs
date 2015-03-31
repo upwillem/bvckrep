@@ -70,7 +70,6 @@ namespace bcvk_Server
         {
             CommunicationHandler.AnwserConnection(sender, connectionId, answer);          
         }
-
         /// <summary>
         /// Get the connetionState of a connection (established / establishing / connectionended)
         /// </summary>
@@ -78,12 +77,12 @@ namespace bcvk_Server
         /// <returns></returns>
         public string GetCallStatus(string connectionId)
         {
-            return CommunicationHandler.GetConnetionState(connectionId);
+            return CommunicationHandler.GetConnectionState(connectionId);
         }
 
         public string GetParticipantCallStatus(string connectionId, string participant)
         {
-            return CommunicationHandler.GetConnetionState(connectionId,participant);
+            return CommunicationHandler.GetConnectionState(connectionId,participant);
         } 
 
         public void EndCall(string sender, string recipient, string connectionId)

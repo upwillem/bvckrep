@@ -31,7 +31,7 @@ namespace Cc
         /// </summary>
         /// <param name="callId">id to identify a specific call</param>
         /// <returns>connectionstate</returns>
-        public static string GetConnetionState(string connectionId)
+        public static string GetConnectionState(string connectionId)
         {
             var con = Connections.Single(x => x.Id == connectionId);
             var status = "connectionended";
@@ -47,7 +47,7 @@ namespace Cc
         /// <param name="connectionId">connection identificationcode</param>
         /// <param name="who">indentification token to get the state of</param>
         /// <returns>connection state of a specific user </returns>
-        public static string GetConnetionState(string connectionId,string participant)
+        public static string GetConnectionState(string connectionId, string participant)
         {
             var con = Connections.Single(x => x.Id == connectionId);
             string status = "connectionended";
