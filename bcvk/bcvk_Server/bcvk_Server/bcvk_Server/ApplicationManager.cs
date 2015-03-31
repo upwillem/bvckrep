@@ -37,9 +37,11 @@ namespace bcvk_Server
 
         public List<string> GetAccountData(string username)
         {
+            //TODO: Accounthandler aanpassen, chrashproof maken!!!
             AccountHandler.GetAccountData(username);
             return new List<string>();
         }
+
         public bool ToggleBlock(string sender, string recipient)
         {
             throw new NotImplementedException();

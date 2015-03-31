@@ -52,11 +52,6 @@ namespace Bu
             {
                 //MessageBox.Show(exc.Message);
             }
-            finally
-            {
-                //if (transportStream.IsOpen)
-                //    transportStream.Close();
-            }
             #endregion
         }
 
@@ -64,12 +59,9 @@ namespace Bu
         /// New frame is ready (bitmap format)
         /// </summary>
         /// <param name="bAFrame"></param>
-        private void webcam_byteArrayReady(byte[] obj)
+        private void webcam_byteArrayReady(byte[] bA)
         {
-            List<byte[]> test = new List<byte[]>();
-            test.Add(obj);
-            //TODO: send this byte[] to the blockbuffer
-            streamClient.SendStream("ik", "jij", test, "mijncon", false);//throw new NotImplementedException();
+            throw new NotImplementedException();
         }
 
         /// <summary>

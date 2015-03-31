@@ -29,7 +29,7 @@ namespace Bu
             try
             {
                 //Signal settings
-                transportSignal = new TSocket("127.0.0.1", signalPort);
+                transportSignal = new TSocket("localhost", signalPort);
                 protocolSignal = new TBinaryProtocol(transportSignal);
 
                 signalClient = new Signal.Client(protocolSignal);
@@ -53,7 +53,7 @@ namespace Bu
         /// <param name="USERNAME">username of the logged in user</param>
         public void GetAccountData(string USERNAME)
         {
-            List<string> temp = signalClient.GetAccountData(USERNAME);
+            signalClient.GetAccountData("sdfghj");
         }
     }
 }
