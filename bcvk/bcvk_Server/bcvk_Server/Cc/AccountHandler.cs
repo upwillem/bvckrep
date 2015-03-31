@@ -131,8 +131,7 @@ namespace Cc
         /// <returns></returns>
         public static List<string> GetAccountData(string username)
         {
-            Account ac = new Account();
-            return ac.GetAccountData(username);
+            return Account.GetAccountData(username);
         }
 
         public static bool AddContact(string sender, string recipient)

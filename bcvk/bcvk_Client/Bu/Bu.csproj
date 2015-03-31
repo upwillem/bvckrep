@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountData.cs" />
     <Compile Include="Converter.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
