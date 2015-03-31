@@ -71,12 +71,12 @@ namespace Bu
 
         public string PollConnection(string connectionId, string username)
         {
-            throw new NotImplementedException();
+            return signalClient.GetParticipantCallStatus(connectionId, username);           
         }
 
         public string PollConnection(string connectionId)
         {
-            throw new NotImplementedException();
+            return signalClient.GetCallStatus(connectionId);
         }
     }
 }

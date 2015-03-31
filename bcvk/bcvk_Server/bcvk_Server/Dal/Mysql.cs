@@ -94,6 +94,22 @@ namespace Dal
         }
 
         /// <summary>
+        /// Returns whether a result exists.
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="field1"></param>
+        /// <param name="value1"></param>
+        /// <param name="field2"></param>
+        /// <param name="value2"></param>
+        /// <returns></returns>
+        public static bool Exists(string table, string field1, string value1, string field2, string value2)
+        {
+            string query = String.Format("SELECT {1} FROM {0} WHERE {1} = '{3}' AND {2} = '{4}'", MySQLEscape(table), MySQLEscape(field1), MySQLEscape(field2), MySQLEscape(value1), MySQLEscape(value2));
+            List<string[]> list = Select(query);
+            return (list.Count > 0);
+        }
+
+        /// <summary>
         /// Escapes a string to prevent SQL injections.
         /// </summary>
         /// <param name="str"></param>
