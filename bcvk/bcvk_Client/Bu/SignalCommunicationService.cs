@@ -93,20 +93,43 @@ namespace Bu
         }
 
         /// <summary>
-        /// Aron Huntjens 1209361 this method pols the state of a connection
+        /// Aron Huntjens 1209361 this method polls the state of a connection.
+        /// Polling stops automatically when a connection is ended.
         /// </summary>
         /// <param name="connectionId">connection identification token</param>
         public void PollConnection(string connectionId)
         {
-            while (true)
+            bool keepPolling = true;
+            AccountData acc = AccountData.Instance;
+            while (keepPolling)
             {
                 if (!string.IsNullOrEmpty(connectionId))
                 {
                     string state = signalClient.GetCallStatus(connectionId);
+                    acc.ConnectionStatus = state;
+                    if (state == "connectionended")
+                    {
+                        keepPolling = false;
+                        
+                    }
+                    
                     connectionStateReady(state);
                 }
-                Thread.Sleep(1);
+                Thread.Sleep(5);
             }
+        }
+
+        /// <summary>
+        /// Aron Huntjens 1209361 
+        /// Call a client
+        /// </summary>
+        /// <param name="contact">client to call</param>
+        public void Docall(string contact)
+        {
+            AccountData acc = AccountData.Instance;
+            string connectionId= signalClient.DoCall(acc.AccountId, contact);
+            acc.Connection = connectionId;
+            PollConnection(connectionId);
         }
     }
 }

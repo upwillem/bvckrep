@@ -28,7 +28,21 @@ namespace Cc
             
         }
 
-        void signalCommunicationService_connectionParticipantStateReady(string obj)
+        /// <summary>
+        /// Aron Huntjens 1209361
+        /// Call a client
+        /// </summary>
+        /// <param name="contact">client to call</param>
+        public void DoCall(string contact)
+        {
+            signalCommunicationService.Docall(contact);
+        }
+
+
+
+
+
+        private void signalCommunicationService_connectionParticipantStateReady(string obj)
         {
             throw new NotImplementedException();
         }
