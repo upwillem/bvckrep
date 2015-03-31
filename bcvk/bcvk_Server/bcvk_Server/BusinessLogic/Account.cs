@@ -69,7 +69,7 @@ namespace Bu
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public List<string> GetAccountData(string username)
+        public static List<string> GetAccountData(string username)
         {
             // Select all accounts data.
             string query = String.Format("SELECT id,parent_id,username,email,name,phone,photo FROM accounts WHERE username = '{0}'", Mysql.MySQLEscape(username));
