@@ -105,9 +105,8 @@ namespace Bu
             Mysql mysql = new Mysql();
 
             // Select all accounts data.
-            string query = String.Format("SELECT id,parent_id,username,email,password,name,phone,photo FROM accounts WHERE username = '{0}'", Mysql.MySQLEscape(username));
+            string query = String.Format("SELECT id,parent_id,username,email,name,phone,photo FROM accounts WHERE username = '{0}'", Mysql.MySQLEscape(username));
             List<string[]> output = mysql.Select(query);
-
             List<string> returnlist = new List<string>(output[0]);
 
             // Retrieve all contacts.
@@ -116,7 +115,32 @@ namespace Bu
 
             string jsonContacts = new JavaScriptSerializer().Serialize(contactList);
 
+            returnlist.Add("");
+            returnlist.Add("");
+            returnlist.Add("");
             returnlist.Add(jsonContacts);
+
+            for (int i = 0; i < returnlist.Count; i++)
+            {
+                string key = "";
+                switch (i)
+                {
+                    case 0: key = "accountId"; break;
+                    case 1: key = "parentId"; break;
+                    case 2: key = "username"; break;
+                    case 3: key = "email"; break;
+                    case 4: key = "displayName"; break;
+                    case 5: key = "phoneNumber"; break;
+                    case 6: key = "photo"; break;
+                    case 7: key = "connection"; break;
+                    case 8: key = "log"; break;
+                    case 9: key = "children"; break;
+                    case 10: key = "contacts"; break;
+                    default: break;
+                }
+                key = key + ";";
+                returnlist[i] = key + returnlist[i];
+            }
 
             return returnlist;
         }
