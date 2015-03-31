@@ -149,7 +149,12 @@ namespace Cc
 
         public static bool DeleteContact(string sender, string recipient)
         {
-            throw new NotImplementedException();
+            if (Account.AccountExists(recipient))
+            {
+                Account.DeleteContact(sender, recipient);
+                return true;
+            }
+            return false;
         }
 
         public static bool AcceptContact(string sender, string recipient)
