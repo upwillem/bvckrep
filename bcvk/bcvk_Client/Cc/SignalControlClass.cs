@@ -19,7 +19,21 @@ namespace Cc
         {
             signalCommunicationService = new SignalCommunicationService();
             signalCommunicationService.accountDataListReady += signalCommunicationService_accountDataListReady;
+            signalCommunicationService.connectionParticipantStateReady += signalCommunicationService_connectionParticipantStateReady;
+            signalCommunicationService.connectionStateReady +=signalCommunicationService_connectionStateReady;
+            
         }
+
+        private void signalCommunicationService_connectionStateReady(string obj)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void signalCommunicationService_connectionParticipantStateReady(string obj)
+        {
+            throw new NotImplementedException();
+        }
+
 
         private void signalCommunicationService_accountDataListReady(List<string> accountDataList)
         {
