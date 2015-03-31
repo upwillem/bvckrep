@@ -136,7 +136,15 @@ namespace Cc
 
         public static bool AddContact(string sender, string recipient)
         {
-            throw new NotImplementedException();
+            if (Account.AccountExists(recipient))
+            {
+                if (!Account.ContactExists(sender, recipient))
+                {
+                    Account.AddContact(sender, recipient);
+                    return true;
+                }
+            }
+            return false;
         }
 
         public static bool DeleteContact(string sender, string recipient)

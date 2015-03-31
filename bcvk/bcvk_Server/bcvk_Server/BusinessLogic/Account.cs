@@ -95,7 +95,7 @@ namespace Bu
             int recipientId = GetAccountId(recipient);
 
             // Return the bool.
-            return Mysql.Exists("contacts", "account_id", senderId.ToString(), "contact_id", recipientId.ToString())
+            return Mysql.Exists("contacts", "account_id", senderId.ToString(), "contact_id", recipientId.ToString());
         }
 
         /// <summary>
@@ -177,12 +177,12 @@ namespace Bu
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public static string GetAccountId(string username)
+        public static int GetAccountId(string username)
         {
             string query = String.Format("SELECT id FROM accounts WHERE username = '{0}'", Mysql.MySQLEscape(username));
             List<string[]> output = Mysql.Select(query);
 
-            return output[0][0];
+            return Convert.ToInt32(output[0][0]);
         }
 
         /// <summary>
