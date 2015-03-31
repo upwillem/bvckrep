@@ -35,7 +35,7 @@ namespace bcvk_Client
             InitializeComponent();
             SettingsCallState(CallState.CALL);
 
-            signalControlClass = new SignalControlClass("johnny"/*testusername (hoofdaccount)*/);
+            signalControlClass = new SignalControlClass("pietje"/*testusername (subaccount)*/);
             signalControlClass.StartPoll();
             streamControlClass = new StreamControlClass();
             streamControlClass.frameReady += streamControlClass_frameReady;

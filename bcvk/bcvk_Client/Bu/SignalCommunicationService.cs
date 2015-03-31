@@ -54,17 +54,20 @@ namespace Bu
         /// Luc Schnabel 1207776,
         /// polls the accountdata. If data is received, a event is triggered.
         /// </summary>
-        /// <param name="username"></param>
+        /// <param name="username">username</param>
         public void PollAccountData(string username)
         {
+            //Thread
             while (true)
             {
                 List<string> listAccountData = new List<string>();
                 listAccountData = signalClient.GetAccountData(username);
+                
                 if ((listAccountData != null) && (listAccountData.Count != 0))
                 { 
                     accountDataListReady(listAccountData); 
                 }
+                
                 Thread.Sleep(1);
             }
         }

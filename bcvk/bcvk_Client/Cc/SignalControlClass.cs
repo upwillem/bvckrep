@@ -17,8 +17,10 @@ namespace Cc
         /// </summary>
         public SignalControlClass(string username)
         {
+            //create singleton object
             AccountData acc = AccountData.Instance;
             acc.Username = username;
+
             signalCommunicationService = new SignalCommunicationService(username);
             signalCommunicationService.accountDataListReady += signalCommunicationService_accountDataListReady;
         }
@@ -40,7 +42,46 @@ namespace Cc
         /// <param name="accountDataList"></param>
         private void signalCommunicationService_accountDataListReady(List<string> accountDataList)
         {
-            throw new NotImplementedException();
+            foreach (string data in accountDataList)
+            {
+                #region switch cases accountdatalist
+                switch (data.Split(';')[0])
+                {
+                    case "accountId":
+                        AccountData.Instance.AccountId = data.Split(';')[1];
+                        break;
+                    case "parentId":
+                        AccountData.Instance.ParentId = data.Split(';')[1];
+                        break;
+                    case "username":
+                        AccountData.Instance.Username = data.Split(';')[1];
+                        break;
+                    case "email":
+                        AccountData.Instance.Email = data.Split(';')[1];
+                        break;
+                    case "displayName":
+                        AccountData.Instance.DisplayName = data.Split(';')[1];
+                        break;
+                    case "phonenumber":
+                        AccountData.Instance.Phonenumber = data.Split(';')[1];
+                        break;
+                    case "photo":
+                        AccountData.Instance.Photo = data.Split(';')[1];
+                        break;
+                    case "log":
+                        AccountData.Instance.Log = data.Split(';')[1];
+                        break;
+                    case "children":
+                        AccountData.Instance.Children = data.Split(';')[1];
+                        break;
+                    case "contact":
+                        AccountData.Instance.Contacts = data.Split(';')[1];
+                        break;
+                    default:
+                        break;
+                }
+                #endregion
+            }
         }
     }
 }
