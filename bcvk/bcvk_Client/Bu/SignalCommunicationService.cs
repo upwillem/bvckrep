@@ -26,7 +26,7 @@ namespace Bu
 
         public event Action<List<string>> accountDataListReady;
 
-        public SignalCommunicationService()
+        public SignalCommunicationService(string username)
         {
             #region Declaration Thrift classes and open transport
             try
@@ -50,13 +50,21 @@ namespace Bu
             #endregion
         }
 
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// polls the accountdata. If data is received, a event is triggered.
+        /// </summary>
+        /// <param name="username"></param>
         public void PollAccountData(string username)
         {
             while (true)
             {
-                List<string> accountData = new List<string>();
-                                //TODO: returnList = signalClient.GetAccountData(username);
-                accountDataListReady(accountData);
+                List<string> listAccountData = new List<string>();
+                listAccountData = signalClient.GetAccountData(username);
+                if ((listAccountData != null) && (listAccountData.Count != 0))
+                { 
+                    accountDataListReady(listAccountData); 
+                }
                 Thread.Sleep(1);
             }
         }
