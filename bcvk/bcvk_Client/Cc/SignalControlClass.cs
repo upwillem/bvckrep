@@ -28,7 +28,16 @@ namespace Cc
             
         }
 
-        void signalCommunicationService_connectionParticipantStateReady(string obj)
+        public void DoCall(string contact)
+        {
+            signalCommunicationService.Docall(contact);
+        }
+
+
+
+
+
+        private void signalCommunicationService_connectionParticipantStateReady(string obj)
         {
             throw new NotImplementedException();
         }

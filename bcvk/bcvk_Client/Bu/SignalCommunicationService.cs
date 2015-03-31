@@ -108,5 +108,11 @@ namespace Bu
                 Thread.Sleep(1);
             }
         }
+
+        public void Docall(string contact)
+        {
+            
+
+        }
     }
 }
