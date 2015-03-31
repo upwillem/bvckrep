@@ -28,8 +28,8 @@ namespace AccountTest
 
             List<string> accountData = Cc.AccountHandler.GetAccountData(username);
 
-            string expected = "Johnny";
-            string actual = accountData[5];
+            string expected = "displayName;Johnny";
+            string actual = accountData[4];
 
             Assert.AreEqual(expected, actual);
         }
