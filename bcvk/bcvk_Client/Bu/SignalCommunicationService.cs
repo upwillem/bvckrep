@@ -76,13 +76,13 @@ namespace Bu
         /// </summary>
         /// <param name="connectionId">connection identification token</param>
         /// <param name="username">specific user</param>
-        public void PollUserConnectionState(string connectionId, string username)
+        public void PollUserConnectionState(string connectionId)
         {
             while (true)
             {
                 if (!string.IsNullOrEmpty(connectionId))
                 {
-                    string state = signalClient.GetParticipantCallStatus(connectionId, username);
+                    string state = signalClient.GetParticipantCallStatus(connectionId, AccountData.Instance.Username);
                     connectionParticipantStateReady(state);
                 }
                 Thread.Sleep(1);
@@ -98,12 +98,12 @@ namespace Bu
             while (true)
             {
                 if (!string.IsNullOrEmpty(connectionId))
-        {
+                {
                     string state = signalClient.GetCallStatus(connectionId);
                     connectionStateReady(state);
                 }
                 Thread.Sleep(1);
-            }            
+            }
         }
     }
 }
