@@ -44,6 +44,18 @@ namespace bcvk_Server
         {
             throw new NotImplementedException();
         }
+        public bool AcceptContact(string sender, string recipient)
+        {
+            return false;
+        }
+        public bool DeleteContact(string sender, string recipient)
+        {
+            return false;
+        }
+        public bool AddContact(string sender, string recipient)
+        {
+            return false;
+        }
     #endregion
 
     #region callsignaling
