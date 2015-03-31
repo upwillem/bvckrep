@@ -18,84 +18,20 @@ namespace Dal
     public class Mysql
     {
         /// <summary>
-        /// MySQLConnection object.
-        /// </summary>
-        private MySqlConnection connection;
-
-        /// <summary>
-        /// DataTable to store SELECT statements in.
-        /// </summary>
-        private DataTable table;
-
-        /// <summary>
-        /// Constructor of the class receiving the connection string.
-        /// </summary>
-        public Mysql()
-        {
-            // Establish the connection
-            connection = new MySqlConnection(Settings.Default.connectionString);
-        }
-
-        /// <summary>
-        /// Opens the connection with the database.
-        /// </summary>
-        /// <returns>True if successful, false if not successful</returns>
-        private bool OpenConnection()
-        {
-            try
-            {
-                connection.Open();
-                return true;
-            }
-            catch (MySqlException ex)
-            {
-                switch (ex.Number)
-                {
-                    case 0:
-                        Console.WriteLine("Cannot connect to server.");
-                        break;
-
-                    case 1045:
-                        Console.WriteLine("Invalid username/password.");
-                        break;
-                }
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Closes the connection with the database.
-        /// </summary>
-        /// <returns>True if successful, false if not successful</returns>
-        public bool CloseConnection()
-        {
-            try
-            {
-                connection.Close();
-                return true;
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine("Database connection could not be closed.");
-                return false;
-            }
-        }
-
-        /// <summary>
         /// Executes a query on the database.
         /// </summary>
         /// <param name="query"></param>
-        public void Query(string query)
+        public static void Query(string query)
         {
-            if (OpenConnection())
+            using (MySqlConnection con = new MySqlConnection(Settings.Default.connectionString))
             {
-                // Set the command with the connection.
-                MySqlCommand cmd = new MySqlCommand(query, connection);
-
-                // Execute the command.
-                cmd.ExecuteNonQuery();
+                using(MySqlCommand com = new MySqlCommand(query, con))
+                {
+                    con.Open();
+                    com.ExecuteNonQuery();
+                    con.Close();
+                }
             }
-            CloseConnection();
         }
 
         /// <summary>
@@ -103,18 +39,21 @@ namespace Dal
         /// </summary>
         /// <param name="command">The given SQL statement.</param>
         /// <returns></returns>
-        public List<string[]> Select(string command)
+        public static List<string[]> Select(string command)
         {
             // Create a list to store the results.
             List<string[]> list = new List<string[]>();
 
-            if (OpenConnection())
+            using (MySqlConnection con = new MySqlConnection(Settings.Default.connectionString))
             {
+                // Open the connection.
+                con.Open();
+
                 // Store the DataTable object.
-                table = new DataTable();
+                DataTable table = new DataTable();
 
                 // Create the SQL command.
-                MySqlCommand cmd = new MySqlCommand(command, connection);
+                MySqlCommand cmd = new MySqlCommand(command, con);
 
                 // Create a Data Adapter.
                 MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
@@ -131,10 +70,12 @@ namespace Dal
 
                     list.Add(rows);
                 }
+
+                // Close the connection
+                con.Close();
             }
 
             // Return the list with data.
-            CloseConnection();
             return list;
         }
 
@@ -145,7 +86,7 @@ namespace Dal
         /// <param name="field"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public bool Exists(string table, string field, string value)
+        public static bool Exists(string table, string field, string value)
         {
             string test = String.Format("SELECT {1} FROM {0} WHERE {1} = '{2}'", MySQLEscape(table), MySQLEscape(field), MySQLEscape(value));
             List<string[]> list = Select(test);
