@@ -182,25 +182,5 @@ namespace Dal
                     }
                 });
         }
-
-        public List<string[]> GetAccountData(string username)
-        {
-            string test = String.Format("SELECT id,parent_id,username,email,password,name,phone,photo FROM accounts WHERE username = '{0}'", MySQLEscape(username));
-            return Select(test);
-
-
-
-            //var keyValues = new Dictionary<string, string>
-            //   {
-            //       { "emailSend", textBox1.Text },
-            //       { "toEmail", textBox2.Text }
-            //   };
-
-            //JavaScriptSerializer js = new JavaScriptSerializer();
-            //string json = js.Serialize(list);
-
-            // return json;
-            //return (list.Count > 0);
-        }
     }
 }

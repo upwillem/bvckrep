@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 
 namespace Bu
 {
@@ -93,10 +94,32 @@ namespace Bu
             return mysql.Exists("accounts", "username", username);
         }
 
+        /// <summary>
+        /// Returns all accounts data.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public List<string[]> GetAccountData(string username)
         {
+            // Create a new MySQL instance.
             Mysql mysql = new Mysql();
-            return mysql.GetAccountData(username);
+
+            // Prepare the output.
+            List<string[]> output = new List<string[]>();
+
+            // Select all accounts data.
+            string query = String.Format("SELECT id,parent_id,username,email,password,name,phone,photo FROM accounts WHERE username = '{0}'", Mysql.MySQLEscape(username));
+            output = mysql.Select(query);
+
+            // Retrieve all contacts.
+            string contacts = String.Format("SELECT * FROM contacts WHERE account_id = '{0}'", Mysql.MySQLEscape(output[0][0]));
+            List<string[]> contactList = mysql.Select(contacts);
+
+            var jsonContacts = new JavaScriptSerializer().Serialize(contactList);
+
+            Console.WriteLine(jsonContacts);
+
+            return output;
         }
     }
 }
