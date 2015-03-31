@@ -109,10 +109,8 @@ namespace Bu
                     acc.ConnectionStatus = state;
                     if (state == "connectionended")
                     {
-                        keepPolling = false;
-                        
-                    }
-                    
+                        keepPolling = false;                        
+                    }                    
                     connectionStateReady(state);
                 }
                 Thread.Sleep(5);
@@ -130,6 +128,15 @@ namespace Bu
             string connectionId= signalClient.DoCall(acc.AccountId, contact);
             acc.Connection = connectionId;
             PollConnection(connectionId);
+        }
+
+        /// <summary>
+        /// Aron Huntjens 1209361
+        /// initalize contact list
+        /// </summary>
+        private void InitContacts()
+        {
+
         }
     }
 }
