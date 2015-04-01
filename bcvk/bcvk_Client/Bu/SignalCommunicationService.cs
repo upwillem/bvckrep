@@ -128,14 +128,5 @@ namespace Bu
             acc.Connection = connectionId;
             PollConnection(connectionId);
         }
-
-        /// <summary>
-        /// Aron Huntjens 1209361
-        /// initalize contact list
-        /// </summary>
-        private void InitContacts()
-        {
-
-        }
     }
 }

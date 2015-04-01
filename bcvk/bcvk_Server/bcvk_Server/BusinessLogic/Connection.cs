@@ -139,7 +139,7 @@ namespace Bu
 
         private void addConnectionToAccount(string participant)
         {
-            Mysql.Query("INSERT INTO connections_users(connection_id,user_id) VALUES('" + Id + "','"+ participant +"')");
+            Mysql.Query("INSERT INTO connections_users(connection_id,user_id) VALUES('" + Mysql.MySQLEscape(Id) + "','"+ Mysql.MySQLEscape(participant) +"')");
         }
     }
 }
