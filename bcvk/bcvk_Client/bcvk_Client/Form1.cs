@@ -38,18 +38,20 @@ namespace bcvk_Client
             signalControlClass = new SignalControlClass("pietje"/*testusername (subaccount)*/);
             signalControlClass.StartPoll();
             signalControlClass.beingCalledEvent += signalControlClass_beingCalledEvent;
+            signalControlClass.initContacts += signalControlClass_initContacts;
+
             streamControlClass = new StreamControlClass();
             streamControlClass.frameReady += streamControlClass_frameReady;
 
-            InitContacts();
         }
 
         /// <summary>
         /// Sets the contacts to the list
         /// </summary>
-        private void InitContacts()
+        private void signalControlClass_initContacts(string contacts)
         {
-            
+            //TODO: set contacts to list
+            //throw new NotImplementedException();
         }
 
         /// <summary>
@@ -59,10 +61,13 @@ namespace bcvk_Client
         /// <param name="obj"></param>
         private void signalControlClass_beingCalledEvent(string message)
         {
-            if (MessageBox.Show(message, "Je bent niet vriendenloos :D", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) 
+            if (MessageBox.Show(message, "Je wordt gebeld", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) 
             {
-
                 //TODO: accept call
+            }
+            else
+            { 
+                //TODO: decline call
             }
         }
 

@@ -149,7 +149,12 @@ namespace Cc
 
         public static bool DeleteContact(string sender, string recipient)
         {
-            throw new NotImplementedException();
+            if (Account.AccountExists(recipient))
+            {
+                Account.DeleteContact(sender, recipient);
+                return true;
+            }
+            return false;
         }
 
         public static bool AcceptContact(string sender, string recipient)
@@ -162,7 +167,7 @@ namespace Cc
         /// </summary>
         /// <param name="mailAddress"></param>
         /// <returns></returns>
-        public static bool IsValidEmailAddress(string mailAddress)
+        private static bool IsValidEmailAddress(string mailAddress)
         {
             Regex mailIDPattern = new Regex(@"[\w-]+@([\w-]+\.)+[\w-]+");
 

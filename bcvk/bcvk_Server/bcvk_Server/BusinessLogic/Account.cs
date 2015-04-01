@@ -71,6 +71,23 @@ namespace Bu
             // Execute the query.
             Mysql.Query(query);
         }
+        /// <summary>
+        /// Delete a contact from the database.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="recipient"></param>
+        public static void DeleteContact(string sender, string recipient)
+        {
+            // Get the account IDs of the sender and recipient.
+            int senderId = GetAccountId(sender);
+            int recipientId = GetAccountId(recipient);
+
+            // Prepare the SQL statement.
+            string query = String.Format("DELETE FROM contacts WHERE (account_id={0} AND contact_id={1}) OR (account_id={1} AND contact_id={0})", senderId, recipientId);
+
+            // Execute the query.
+            Mysql.Query(query);
+        }
 
         /// <summary>
         /// Returns whether an account exists.
@@ -196,7 +213,7 @@ namespace Bu
         /// </summary>
         /// <param name="username"></param>
         /// <returns></returns>
-        public static int GetAccountId(string username)
+        private static int GetAccountId(string username)
         {
             string query = String.Format("SELECT id FROM accounts WHERE username = '{0}'", Mysql.MySQLEscape(username));
             List<string[]> output = Mysql.Select(query);
