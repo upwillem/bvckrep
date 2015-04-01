@@ -12,7 +12,7 @@ namespace Cc
     {
         private SignalCommunicationService signalCommunicationService;
         public event Action<string> initContacts;
-        public event Action<string> beingCalledEvent;
+        public event Action<string> beingCalled;
 
         /// <summary>
         /// Constructor
