@@ -106,17 +106,17 @@ namespace bcvk_Server
     #region stream
         public void SendStream(string sender, string recipient, List<byte[]> stream, string connectId, bool audio)
         {
-            throw new NotImplementedException();
+            CommunicationHandler.SetStream(connectId, stream, audio);
         }
 
         public void SendVideo(string sender, string recipient, List<byte[]> video, string connectId, bool audio)
         {
-            throw new NotImplementedException();
+            
         }
 
         public List<byte[]> GetStream(string sender, string recipient, string connectId, bool audio)
         {
-            throw new NotImplementedException();
+            return CommunicationHandler.GetStream(connectId, audio);
         }
 
         public List<byte[]> GetVideo(string sender, string recipient, string connectId, bool audio)
