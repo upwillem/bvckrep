@@ -11,7 +11,6 @@ namespace Cc
     public class StreamControlClass
     {
         public event Action<Bitmap> frameReady;
-
         private StreamCommunicationService streamCommunicationService;
 
         /// <summary>

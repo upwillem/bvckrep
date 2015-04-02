@@ -63,6 +63,7 @@ namespace Bu
             }
             audioStream = new List<byte[]>();
             videoStream = new List<byte[]>();
+            Logger.SetLog(0, Logger.Activity.ConnectionMade);
         }             
         
         
@@ -76,7 +77,9 @@ namespace Bu
            if (added)
            {
                addConnectionToAccount(participant);
+               Logger.SetLog(0, Logger.Activity.ConnectionAddedContact);
            }
+
         }
 
         /// <summary>
@@ -98,12 +101,14 @@ namespace Bu
                     connected++;
                 if (connected >= 2)                {
                     ConnectionState = "established";
+                    Logger.SetLog(0, Logger.Activity.ConnectionEstablished);
                     break;
                 }
             }
             if (connected < 2)
             {
                 ConnectionState = "connectionended";
+                Logger.SetLog(0, Logger.Activity.ConnectionEnded);
             }          
             
         }
