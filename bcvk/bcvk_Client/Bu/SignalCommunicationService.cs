@@ -126,9 +126,12 @@ namespace Bu
             AccountData acc = AccountData.Instance;
             string connectionId= signalClient.DoCall(acc.AccountId, contact);
             acc.Connection = connectionId;
+
+            //TODO: TEST THROW AWAY LATER!
             signalClient.AnswerCall("3", "2", acc.Connection, "connected");
             acc.ConnectionEstablishedStatus = signalClient.GetCallStatus(acc.Connection);
             
+
             //Thread pollConnectionThread = new Thread(() => PollConnection(connectionId));
             //pollConnectionThread.Start();
         }

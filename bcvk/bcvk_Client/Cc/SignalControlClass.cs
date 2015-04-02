@@ -51,6 +51,7 @@ namespace Cc
         public void DoCall(string contact)
         {
             signalCommunicationService.Docall(contact);
+
         }
 
         /// <summary>
@@ -77,6 +78,7 @@ namespace Cc
             //pollThread.Start();
             AccountData.Instance.Username = "pietje";
             AccountData.Instance.AccountId = "2";
+
         }
 
         /// <summary>

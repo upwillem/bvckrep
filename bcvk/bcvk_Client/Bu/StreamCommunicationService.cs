@@ -93,11 +93,14 @@ namespace Bu
         /// gets the buffer from the server
         /// </summary>
         /// <param name="videoBuffer"></param>
-        private void GetBuffer(List<byte[]> videoBuffer)
+        public void GetBuffer()
         {
-            if (AccountData.Instance.ConnectionEstablishedStatus == "established")
+            while (true)
             {
-                streamClient.GetStream("3", AccountData.Instance.AccountId, AccountData.Instance.Connection, false);
+                if (AccountData.Instance.ConnectionEstablishedStatus == "established")
+                {
+                    streamClient.GetStream("3", AccountData.Instance.AccountId, AccountData.Instance.Connection, false);
+                }
             }
         }
 
