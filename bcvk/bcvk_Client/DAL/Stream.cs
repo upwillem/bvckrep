@@ -29,15 +29,15 @@ namespace bcvkStream
       IAsyncResult Begin_SendVideo(AsyncCallback callback, object state, string sender, string recipient, List<byte[]> video, string connectId, bool audio);
       void End_SendVideo(IAsyncResult asyncResult);
       #endif
-      byte[] GetStream(string sender, string recipient, string connectId, bool audio);
+      List<byte[]> GetStream(string sender, string recipient, string connectId, bool audio);
       #if SILVERLIGHT
       IAsyncResult Begin_GetStream(AsyncCallback callback, object state, string sender, string recipient, string connectId, bool audio);
-      byte[] End_GetStream(IAsyncResult asyncResult);
+      List<byte[]> End_GetStream(IAsyncResult asyncResult);
       #endif
-      byte[] GetVideo(string sender, string recipient, string connectId, bool audio);
+      List<byte[]> GetVideo(string sender, string recipient, string connectId, bool audio);
       #if SILVERLIGHT
       IAsyncResult Begin_GetVideo(AsyncCallback callback, object state, string sender, string recipient, string connectId, bool audio);
-      byte[] End_GetVideo(IAsyncResult asyncResult);
+      List<byte[]> End_GetVideo(IAsyncResult asyncResult);
       #endif
     }
 
@@ -230,7 +230,7 @@ namespace bcvkStream
         return send_GetStream(callback, state, sender, recipient, connectId, audio);
       }
 
-      public byte[] End_GetStream(IAsyncResult asyncResult)
+      public List<byte[]> End_GetStream(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
         return recv_GetStream();
@@ -238,7 +238,7 @@ namespace bcvkStream
 
       #endif
 
-      public byte[] GetStream(string sender, string recipient, string connectId, bool audio)
+      public List<byte[]> GetStream(string sender, string recipient, string connectId, bool audio)
       {
         #if !SILVERLIGHT
         send_GetStream(sender, recipient, connectId, audio);
@@ -271,7 +271,7 @@ namespace bcvkStream
         #endif
       }
 
-      public byte[] recv_GetStream()
+      public List<byte[]> recv_GetStream()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -295,7 +295,7 @@ namespace bcvkStream
         return send_GetVideo(callback, state, sender, recipient, connectId, audio);
       }
 
-      public byte[] End_GetVideo(IAsyncResult asyncResult)
+      public List<byte[]> End_GetVideo(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
         return recv_GetVideo();
@@ -303,7 +303,7 @@ namespace bcvkStream
 
       #endif
 
-      public byte[] GetVideo(string sender, string recipient, string connectId, bool audio)
+      public List<byte[]> GetVideo(string sender, string recipient, string connectId, bool audio)
       {
         #if !SILVERLIGHT
         send_GetVideo(sender, recipient, connectId, audio);
@@ -336,7 +336,7 @@ namespace bcvkStream
         #endif
       }
 
-      public byte[] recv_GetVideo()
+      public List<byte[]> recv_GetVideo()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -1254,9 +1254,9 @@ namespace bcvkStream
     #endif
     public partial class GetStream_result : TBase
     {
-      private byte[] _success;
+      private List<byte[]> _success;
 
-      public byte[] Success
+      public List<byte[]> Success
       {
         get
         {
@@ -1294,8 +1294,18 @@ namespace bcvkStream
           switch (field.ID)
           {
             case 0:
-              if (field.Type == TType.String) {
-                Success = iprot.ReadBinary();
+              if (field.Type == TType.List) {
+                {
+                  Success = new List<byte[]>();
+                  TList _list8 = iprot.ReadListBegin();
+                  for( int _i9 = 0; _i9 < _list8.Count; ++_i9)
+                  {
+                    byte[] _elem10;
+                    _elem10 = iprot.ReadBinary();
+                    Success.Add(_elem10);
+                  }
+                  iprot.ReadListEnd();
+                }
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -1317,10 +1327,17 @@ namespace bcvkStream
         if (this.__isset.success) {
           if (Success != null) {
             field.Name = "Success";
-            field.Type = TType.String;
+            field.Type = TType.List;
             field.ID = 0;
             oprot.WriteFieldBegin(field);
-            oprot.WriteBinary(Success);
+            {
+              oprot.WriteListBegin(new TList(TType.String, Success.Count));
+              foreach (byte[] _iter11 in Success)
+              {
+                oprot.WriteBinary(_iter11);
+              }
+              oprot.WriteListEnd();
+            }
             oprot.WriteFieldEnd();
           }
         }
@@ -1549,9 +1566,9 @@ namespace bcvkStream
     #endif
     public partial class GetVideo_result : TBase
     {
-      private byte[] _success;
+      private List<byte[]> _success;
 
-      public byte[] Success
+      public List<byte[]> Success
       {
         get
         {
@@ -1589,8 +1606,18 @@ namespace bcvkStream
           switch (field.ID)
           {
             case 0:
-              if (field.Type == TType.String) {
-                Success = iprot.ReadBinary();
+              if (field.Type == TType.List) {
+                {
+                  Success = new List<byte[]>();
+                  TList _list12 = iprot.ReadListBegin();
+                  for( int _i13 = 0; _i13 < _list12.Count; ++_i13)
+                  {
+                    byte[] _elem14;
+                    _elem14 = iprot.ReadBinary();
+                    Success.Add(_elem14);
+                  }
+                  iprot.ReadListEnd();
+                }
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -1612,10 +1639,17 @@ namespace bcvkStream
         if (this.__isset.success) {
           if (Success != null) {
             field.Name = "Success";
-            field.Type = TType.String;
+            field.Type = TType.List;
             field.ID = 0;
             oprot.WriteFieldBegin(field);
-            oprot.WriteBinary(Success);
+            {
+              oprot.WriteListBegin(new TList(TType.String, Success.Count));
+              foreach (byte[] _iter15 in Success)
+              {
+                oprot.WriteBinary(_iter15);
+              }
+              oprot.WriteListEnd();
+            }
             oprot.WriteFieldEnd();
           }
         }

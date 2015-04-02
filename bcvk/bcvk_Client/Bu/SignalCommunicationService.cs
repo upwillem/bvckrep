@@ -59,7 +59,6 @@ namespace Bu
         /// <param name="username">username</param>
         public void PollAccountData(string username)
         {
-            //Thread
             while (true)
             {
                 List<string> listAccountData = new List<string>();
@@ -127,6 +126,19 @@ namespace Bu
             string connectionId= signalClient.DoCall(acc.AccountId, contact);
             acc.Connection = connectionId;
             PollConnection(connectionId);
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// answer the received call
+        /// </summary>
+        /// <param name="sender">the sender of the answer</param>
+        /// <param name="contact">contact to send the answer to</param>
+        /// <param name="connectionId">the connectionId of the call</param>
+        /// <param name="answer">the answer of the sender</param>
+        public void AnswerCall(string sender, string contact, string connectionId, string answer)
+        {
+            signalClient.AnswerCall(sender, contact, connectionId, answer);
         }
     }
 }

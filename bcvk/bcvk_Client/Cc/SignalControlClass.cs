@@ -14,6 +14,9 @@ namespace Cc
         public event Action<string> initContacts;
         public event Action<string> beingCalled;
 
+        public string Username
+        { get { return AccountData.Instance.Username; } }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -38,6 +41,19 @@ namespace Cc
         public void DoCall(string contact)
         {
             signalCommunicationService.Docall(contact);
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// answer the received call
+        /// </summary>
+        /// <param name="sender">the sender of the answer</param>
+        /// <param name="contact">contact to send the answer to</param>
+        /// <param name="connectionId">the connectionId of the call</param>
+        /// <param name="answer">the answer of the sender</param>
+        public void AnswerCall(string sender, string contact, string connectionId, string answer)
+        {
+            signalCommunicationService.AnswerCall(sender, contact, connectionId, answer);
         }
 
         private void signalCommunicationService_connectionParticipantStateReady(string obj)
@@ -117,9 +133,9 @@ namespace Cc
             if (oldContacts != acc.Contacts)
                 initContacts(acc.Contacts);
 
-            if (AccountData.Instance.Connection == "connecting") 
+            if (AccountData.Instance.Connection == "")//"connecting") 
             {
-                beingCalledEvent("Je wordt gebeld");
+                beingCalled("Je wordt gebeld");
             }
         }
     }

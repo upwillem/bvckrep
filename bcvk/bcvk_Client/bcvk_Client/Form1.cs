@@ -28,7 +28,7 @@ namespace bcvk_Client
         private SignalControlClass signalControlClass;
 
         /// <summary>
-        /// constructor
+        /// Constructor
         /// </summary>
         public bcvk()
         {
@@ -36,8 +36,9 @@ namespace bcvk_Client
             SettingsCallState(CallState.CALL);
 
             signalControlClass = new SignalControlClass("pietje"/*testusername (subaccount)*/);
+            //Start the thread of polling
             signalControlClass.StartPoll();
-            signalControlClass.beingCalledEvent += signalControlClass_beingCalledEvent;
+            signalControlClass.beingCalled += signalControlClass_beingCalled;
             signalControlClass.initContacts += signalControlClass_initContacts;
 
             streamControlClass = new StreamControlClass();
@@ -59,14 +60,15 @@ namespace bcvk_Client
         /// triggered when this user gets called (a new connection)
         /// </summary>
         /// <param name="obj"></param>
-        private void signalControlClass_beingCalledEvent(string message)
+        private void signalControlClass_beingCalled(string message)
         {
             if (MessageBox.Show(message, "Je wordt gebeld", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) 
             {
                 //TODO: accept call
             }
             else
-            { 
+            {
+                signalControlClass.AnswerCall(signalControlClass.Username,);
                 //TODO: decline call
             }
         }
