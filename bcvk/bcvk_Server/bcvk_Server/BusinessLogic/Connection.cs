@@ -161,10 +161,14 @@ namespace Bu
         {
             if (audio)
             {
+                audioStream.Clear();
+                audioStream = new List<byte[]>();
                 audioStream = stream;
             }
             else
             {
+                videoStream.Clear();
+                videoStream = new List<byte[]>();
                 videoStream = stream;
             }
         }
