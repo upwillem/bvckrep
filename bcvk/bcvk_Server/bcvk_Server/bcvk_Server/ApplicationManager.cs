@@ -111,7 +111,7 @@ namespace bcvk_Server
 
         public void SendVideo(string sender, string recipient, List<byte[]> video, string connectId, bool audio)
         {
-            
+            throw new NotImplementedException();
         }
 
         public List<byte[]> GetStream(string sender, string recipient, string connectId, bool audio)

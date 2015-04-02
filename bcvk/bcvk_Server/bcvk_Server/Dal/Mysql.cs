@@ -110,6 +110,23 @@ namespace Dal
         }
 
         /// <summary>
+        /// Returns the value of a specific field.
+        /// </summary>
+        /// <param name="table"></param>
+        /// <param name="field1"></param>
+        /// <param name="value1"></param>
+        /// <param name="field2"></param>
+        /// <param name="value2"></param>
+        /// <param name="field3"></param>
+        /// <returns></returns>
+        public static string Value(string table, string field1, string value1, string field2, string value2, string field3)
+        {
+            string query = String.Format("SELECT {5} FROM {0} WHERE {1} = {2} AND {3} = {4}", table, field1, value1, field2, value2);
+            List<string[]> list = Select(query);
+            return list[0][0];
+        }
+
+        /// <summary>
         /// Escapes a string to prevent SQL injections.
         /// </summary>
         /// <param name="str"></param>

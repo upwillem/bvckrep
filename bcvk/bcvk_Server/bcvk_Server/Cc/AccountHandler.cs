@@ -134,6 +134,12 @@ namespace Cc
             return Account.GetAccountData(username);
         }
 
+        /// <summary>
+        /// Adds a new contact to an account.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="recipient"></param>
+        /// <returns></returns>
         public static bool AddContact(string sender, string recipient)
         {
             if (Account.AccountExists(recipient))
@@ -147,6 +153,12 @@ namespace Cc
             return false;
         }
 
+        /// <summary>
+        /// Deletes a contact from the contactlist.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="recipient"></param>
+        /// <returns></returns>
         public static bool DeleteContact(string sender, string recipient)
         {
             if (Account.AccountExists(recipient))
@@ -160,6 +172,25 @@ namespace Cc
         public static bool AcceptContact(string sender, string recipient)
         {
             throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="recipient"></param>
+        /// <returns></returns>
+        public static bool ToggleBlock(string sender, string recipient)
+        {
+            if (Account.AccountExists(recipient))
+            {
+                if (Account.ContactExists(sender, recipient))
+                {
+                    Account.ToggleBlock(sender, recipient);
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
