@@ -50,12 +50,13 @@ namespace bcvk_Client
 
         private void streamControlClass_bufferReceived(List<byte[]> obj)
         {
-            Bitmap bmp = new Bitmap(pictureBoxVideoReceived.Width, pictureBoxVideoReceived.Height);
+            //Bitmap bmp = new Bitmap(pictureBoxVideoReceived.Width, pictureBoxVideoReceived.Height);
             ImageConverter imgC = new ImageConverter();
             foreach (byte[] bA in obj)
             {
-                bmp = (Bitmap)imgC.ConvertFrom(bA);
-                pictureBoxVideoReceived.BackgroundImage = bmp;
+                //bmp = (Bitmap)imgC.ConvertFrom(bA);
+                pictureBoxVideoReceived.BackgroundImage = new Bitmap((Bitmap)imgC.ConvertFrom(bA), pictureBoxVideoReceived.Width, pictureBoxVideoReceived.Height);
+                Thread.Sleep(50);
             }
         }
 

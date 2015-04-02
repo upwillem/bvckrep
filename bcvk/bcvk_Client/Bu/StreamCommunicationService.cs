@@ -69,7 +69,7 @@ namespace Bu
         private void webcam_byteArrayReady(byte[] bA)
         {
             videoBuffer.Add(bA);
-            if (videoBuffer.Count == 50)
+            if (videoBuffer.Count == 65)
             {
                 sendBuffer(videoBuffer);
                 videoBuffer.Clear();
@@ -103,12 +103,12 @@ namespace Bu
                 {
                     List<byte[]>stream = new List<byte[]>();
                     stream   = streamClient.GetStream("3", AccountData.Instance.AccountId, AccountData.Instance.Connection, false);
-                    if(stream.Count >0)
+                    if(stream.Count > 0)
                     {
                         bufferReceived(stream);
                     }
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(750);
 
             }
         }
