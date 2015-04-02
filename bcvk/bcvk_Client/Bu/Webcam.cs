@@ -26,7 +26,7 @@ namespace Bu
         { 
             converter = new Converter();
             videoSource = new VideoCaptureDevice();
-            SetHighestResolution();
+            SetResolution();
         }
 
         /// <summary>
@@ -35,7 +35,7 @@ namespace Bu
         /// and connects the frame event
         /// </summary>
         /// <returns>string error</returns>
-        private string SetHighestResolution()
+        private string SetResolution()
         {
             //List all available video sources. (That can be webcams as well as tv cards, etc)
             FilterInfoCollection videosources = new FilterInfoCollection(FilterCategory.VideoInputDevice);
@@ -55,7 +55,7 @@ namespace Bu
                         //Search for the highest resolution
                         for (int i = 0; i < videoSource.VideoCapabilities.Length; i++)
                         {
-                            if (videoSource.VideoCapabilities[i].FrameSize.Width <= highestSolution[0])
+                            if ((videoSource.VideoCapabilities[i].FrameSize.Width >= highestSolution[0]) && (videoSource.VideoCapabilities[i].FrameSize.Width <= 320 ))
                                 highestSolution = videoSource.VideoCapabilities[i].FrameSize.Width.ToString() + ";" + i.ToString();
                         }
 
