@@ -53,5 +53,7 @@ namespace Bu
 
         public string ConnectionStatus { get; set; }
         #endregion
+
+        public string ConnectionEstablishedStatus { get; set; }
     }
 }
