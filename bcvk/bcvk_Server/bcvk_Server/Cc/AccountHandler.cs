@@ -171,7 +171,15 @@ namespace Cc
 
         public static bool AcceptContact(string sender, string recipient)
         {
-            throw new NotImplementedException();
+            if (Account.AccountExists(recipient) && Account.AccountExists(sender))
+            {
+                if (!Account.ContactExists(sender, recipient) && Account.ContactExists(recipient, sender))
+                {
+                    Account.AcceptContact(sender, recipient);
+                    return true;
+                }
+            }
+            return false;
         }
 
         /// <summary>
