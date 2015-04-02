@@ -107,9 +107,8 @@ namespace bcvk_Client
         private void btnTestCall_Click(object sender, EventArgs e)
         {
             SettingsCallState(CallState.IS_CALLING);
-            signalControlClass.DoCall("3");
+            signalControlClass.DoCall("3");//listContacts.SelectedValue.ToString());
             streamControlClass.StartCamera();
-
         }
 
         /// <summary>

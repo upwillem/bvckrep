@@ -74,7 +74,9 @@ namespace Cc
         public void StartPoll()
         {
             pollThread = new Thread(() => signalCommunicationService.PollAccountData(AccountData.Instance.Username));
-            pollThread.Start();
+            //pollThread.Start();
+            AccountData.Instance.Username = "pietje";
+            AccountData.Instance.AccountId = "2";
         }
 
         /// <summary>
