@@ -25,7 +25,7 @@ namespace Bu
         #endregion
 
         public event Action<List<string>> accountDataListReady;        
-        public event Action<string> connectionParticipantStateReady;
+        public event Action<string> connectionParticipantStateReady;        
 
         public SignalCommunicationService(string username)
         {
@@ -107,6 +107,9 @@ namespace Bu
                     if (state == "connectionended")
                     {
                         keepPolling = false;
+                        
+                        Thread.ResetAbort();
+                        
                     }                    
                 }
                 Thread.Sleep(5);
@@ -123,7 +126,8 @@ namespace Bu
             AccountData acc = AccountData.Instance;
             string connectionId= signalClient.DoCall(acc.AccountId, contact);
             acc.Connection = connectionId;
-            PollConnection(connectionId);
+            Thread pollConnectionThread = new Thread(() => PollConnection(connectionId));
+            pollConnectionThread.Start();
         }
 
         /// <summary>
