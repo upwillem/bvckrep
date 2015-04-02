@@ -24,8 +24,7 @@ namespace Bu
         private int signalPort = 9090;
         #endregion
 
-        public event Action<List<string>> accountDataListReady;
-        public event Action<string> connectionStateReady;
+        public event Action<List<string>> accountDataListReady;        
         public event Action<string> connectionParticipantStateReady;
 
         public SignalCommunicationService(string username)
@@ -104,12 +103,11 @@ namespace Bu
                 if (!string.IsNullOrEmpty(connectionId))
                 {
                     string state = signalClient.GetCallStatus(connectionId);
-                    acc.ConnectionStatus = state;
+                    acc.ConnectionEstablishedStatus = state;
                     if (state == "connectionended")
                     {
                         keepPolling = false;
-                    }
-                    connectionStateReady(state);
+                    }                    
                 }
                 Thread.Sleep(5);
             }
