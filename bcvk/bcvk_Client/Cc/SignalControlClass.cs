@@ -13,6 +13,13 @@ namespace Cc
         private SignalCommunicationService signalCommunicationService;
         public event Action<string> initContacts;
         public event Action<string> beingCalled;
+        private Thread pollThread;
+
+        public Thread PollThread
+        {
+            get { return pollThread; }
+            set { pollThread = value; }
+        }
 
         public string Username
         { get { return AccountData.Instance.Username; } }
@@ -20,6 +27,10 @@ namespace Cc
 
         public string ConnectionId 
         { get { return AccountData.Instance.Connection; } }
+
+        //TODO: Throw this away
+        public string AccountId
+        { get { return AccountData.Instance.AccountId; } }
 
         /// <summary>
         /// Constructor
@@ -57,8 +68,6 @@ namespace Cc
             signalCommunicationService.AnswerCall(sender, contact, connectionId, answer);
         }
 
-
-
         /// <summary>
         /// Luc Schnabel 1207776,
         /// creates the thread of polling the accountdata
@@ -66,7 +75,7 @@ namespace Cc
         /// <param name="username">username of the current user</param>
         public void StartPoll()
         {
-            Thread pollThread = new Thread(() => signalCommunicationService.PollAccountData(AccountData.Instance.Username));
+            pollThread = new Thread(() => signalCommunicationService.PollAccountData(AccountData.Instance.Username));
             pollThread.Start();
         }
 

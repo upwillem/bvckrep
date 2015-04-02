@@ -59,7 +59,6 @@ namespace bcvk_Client
         /// Luc Schnabel 1207776,
         /// triggered when this user gets called (a new connection)
         /// </summary>
-        /// <param name="obj"></param>
         private void signalControlClass_beingCalled(string message)
         {
             if (MessageBox.Show(message, "Je wordt gebeld", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) 
@@ -107,7 +106,9 @@ namespace bcvk_Client
         private void btnTestCall_Click(object sender, EventArgs e)
         {
             SettingsCallState(CallState.IS_CALLING);
+            signalControlClass.DoCall("3");
             streamControlClass.StartCamera();
+
         }
 
         /// <summary>
@@ -156,6 +157,7 @@ namespace bcvk_Client
         /// <param name="e"></param>
         private void bcvk_FormClosed(object sender, FormClosedEventArgs e)
         {
+            signalControlClass.PollThread.Abort();
             streamControlClass.On_Application_Ended();
         }
 
@@ -188,6 +190,9 @@ namespace bcvk_Client
             double formRatio = Convert.ToDouble(this.Width) / Convert.ToDouble(this.Height);
         }
 
+        /// <summary>
+        /// Call the selected contact
+        /// </summary>
         private void listContacts_SelectedIndexChanged(object sender, EventArgs e)
         {
             signalControlClass.DoCall(listContacts.SelectedValue.ToString());

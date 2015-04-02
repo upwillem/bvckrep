@@ -68,7 +68,10 @@ namespace Bu
         {
             videoBuffer.Add(bA);
             if (videoBuffer.Count == 15)
+            {
                 sendBuffer(videoBuffer);
+                videoBuffer.Clear();
+            }
         }
 
         /// <summary>
@@ -77,8 +80,12 @@ namespace Bu
         /// </summary>
         /// <param name="videoBuffer"></param>
         private void sendBuffer(List<byte[]> videoBuffer)
-        {   
-            streamClient.SendStream(AccountData.Instance.Username, AccountData.Instance.Username, videoBuffer, AccountData.Instance.Connection, false);
+        {
+            if (AccountData.Instance.ConnectionEstablishedStatus == "established")
+            {
+                streamClient.SendStream(AccountData.Instance.Username, AccountData.Instance.Username,
+                    videoBuffer, AccountData.Instance.Connection, false);
+            }
         }
 
         /// <summary>
