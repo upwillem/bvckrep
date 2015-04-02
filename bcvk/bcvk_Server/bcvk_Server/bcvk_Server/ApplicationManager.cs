@@ -114,12 +114,12 @@ namespace bcvk_Server
             throw new NotImplementedException();
         }
 
-        public byte[] GetStream(string sender, string recipient, string connectId, bool audio)
+        public List<byte[]> GetStream(string sender, string recipient, string connectId, bool audio)
         {
             throw new NotImplementedException();
         }
 
-        public byte[] GetVideo(string sender, string recipient, string connectId, bool audio)
+        public List<byte[]> GetVideo(string sender, string recipient, string connectId, bool audio)
         {
             throw new NotImplementedException();
         }
