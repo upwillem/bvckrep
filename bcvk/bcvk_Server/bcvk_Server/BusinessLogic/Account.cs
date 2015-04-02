@@ -93,6 +93,27 @@ namespace Bu
         }
 
         /// <summary>
+        /// Toggles a block between a specific relation of contacts.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="recipient"></param>
+        public static void ToggleBlock(string sender, string recipient)
+        {
+            // Get the account IDs of the sender and recipient.
+            int senderId = GetAccountId(sender);
+            int recipientId = GetAccountId(recipient);
+
+            // Get the current status.
+            bool isBlocked = Convert.ToBoolean(Mysql.Value("contacts", "account_id", senderId.ToString(), "contact_id", recipientId.ToString(), "is_blocked"));
+
+            // Toggle the block.
+            string query = String.Format("UPDATE contacts SET is_blocked = '{0}' WHERE account_id = '{1}' AND contact_id = '{2}'", !isBlocked, senderId, recipientId);
+
+            // Execute the query.
+            Mysql.Query(query);
+        }
+
+        /// <summary>
         /// Returns whether an account exists.
         /// </summary>
         /// <param name="username"></param>

@@ -116,7 +116,11 @@ namespace bcvk_Server
 
         public List<byte[]> GetStream(string sender, string recipient, string connectId, bool audio)
         {
-            return CommunicationHandler.GetStream(connectId, audio);
+            List<byte[]> list = CommunicationHandler.GetStream(connectId, audio);
+            if(list.Count <=0){
+                list = new List<byte[]>();
+            }
+            return list;
         }
 
         public List<byte[]> GetVideo(string sender, string recipient, string connectId, bool audio)
