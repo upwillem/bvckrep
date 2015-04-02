@@ -16,10 +16,7 @@ namespace Cc
         private Thread pollThread;
 
         public Thread PollThread
-        {
-            get { return pollThread; }
-            set { pollThread = value; }
-        }
+        { get { return pollThread; } }
 
         public string Username
         { get { return AccountData.Instance.Username; } }
@@ -42,6 +39,7 @@ namespace Cc
             acc.Username = username;
 
             signalCommunicationService = new SignalCommunicationService(username);
+            //Get the account data
             signalCommunicationService.accountDataListReady += signalCommunicationService_accountDataListReady;
         }
 
