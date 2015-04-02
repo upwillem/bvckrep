@@ -139,6 +139,11 @@ namespace Bu
             return Mysql.Exists("contacts", "account_id", senderId.ToString(), "contact_id", recipientId.ToString());
         }
 
+        public static void AcceptContact(string sender, string recipient)
+        {
+            AddContact(sender, recipient);
+        }
+
         /// <summary>
         /// Returns all accounts data.
         /// </summary>

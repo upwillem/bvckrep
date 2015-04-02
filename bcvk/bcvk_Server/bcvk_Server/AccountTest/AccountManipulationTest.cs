@@ -70,6 +70,18 @@ namespace AccountTest
         }
 
         [TestMethod]
+        public void AcceptContact1()
+        {
+            string sender = "Jeffke";
+            string recipient = "Hansje";
+
+            bool expected = true;
+            bool actual = Cc.AccountHandler.AcceptContact(sender, recipient);
+
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
         public void DeleteContact()
         {
             string sender = "Pietje";
