@@ -8,6 +8,9 @@ using Bu;
 
 namespace Cc
 {
+    /// <summary>
+    /// Aron Huntjens 1209361
+    /// </summary>
     public class CommunicationHandler
     {
         public static List<Connection> Connections = new List<Connection>();
@@ -87,6 +90,38 @@ namespace Cc
             connection.EndConnection();
             Connections.Remove(connection);           
             
+        }
+
+        /// <summary>
+        /// sets a stream
+        /// </summary>
+        /// <param name="connectionId">connection identificatino token</param>
+        /// <param name="video">stream to set</param>
+        /// <param name="audio">audio identifier</param>
+        public static void SetStream(string connectionId, List<byte[]>video, bool audio)
+        {
+            Connection connection = Connections.Single(x => x.Id == connectionId);
+            if (connection != null)
+            {
+                connection.SetStream(video, audio);
+            }
+        }
+
+        /// <summary>
+        /// gets a specific stream
+        /// </summary>
+        /// <param name="connectionId">connection Identificatino token</param>
+        /// <param name="audio">audio idientifier</param>
+        /// <returns></returns>
+        public static List<byte[]> GetStream(string connectionId, bool audio)
+        {
+            List<byte[]> stream = new List<byte[]>();
+            Connection connection = Connections.Single(x => x.Id == connectionId);
+            if (connection != null)
+            {
+                stream = connection.GetStream(audio);
+            }
+            return stream;
         }
 
 

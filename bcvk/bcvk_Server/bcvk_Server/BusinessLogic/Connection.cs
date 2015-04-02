@@ -31,6 +31,9 @@ namespace Bu
         //initial maker of the connection;
         private string owner;
 
+        private List<byte[]> videoStream;
+        private List<byte[]> audioStream;
+
         /// <summary>
         /// Current state of the connection
         /// </summary>
@@ -57,7 +60,9 @@ namespace Bu
                 owner = sender;                
                 addConnectionToAccount(sender);
                 ConnectionState = "establishing";
-            }       
+            }
+            audioStream = new List<byte[]>();
+            videoStream = new List<byte[]>();
         }             
         
         
@@ -140,6 +145,38 @@ namespace Bu
         private void addConnectionToAccount(string participant)
         {
             Mysql.Query("INSERT INTO connections_users(connection_id,user_id) VALUES('" + Mysql.MySQLEscape(Id) + "','"+ Mysql.MySQLEscape(participant) +"')");
+        }
+
+        /// <summary>
+        /// this methode sets a stream in the connection 
+        /// </summary>
+        /// <param name="video">stream</param>
+        /// <param name="audio">audio in dicator</param>
+        public void SetStream(List<byte[]> stream, bool audio)
+        {
+            if (audio)
+            {
+                audioStream = stream;
+            }
+            else
+            {
+                videoStream = stream;
+            }
+        }
+
+        public List<byte[]> GetStream(bool audio)
+        {
+            List<byte[]> stream = new List<byte[]>();
+            if (audio)
+            {
+                stream = audioStream;
+            }
+            else
+            {
+                stream = videoStream;
+            }
+            return stream;
+
         }
     }
 }

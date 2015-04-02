@@ -17,6 +17,7 @@ namespace bcvk_Server
     {
         static ApplicationManager applicationManager;
 
+
         /// <summary>
         /// Aron Huntjens 1209361
         /// Main kick to server  
