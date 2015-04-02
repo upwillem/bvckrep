@@ -163,5 +163,25 @@ namespace AccountTest
 
             Mysql.Query(String.Format("DELETE FROM accounts WHERE username={0}", username));
         }
+
+        [TestMethod]
+        public void ToggleBlock()
+        {
+            string sender = "Hansje";
+            int senderId = 3;
+            string receiver = "Jeffke";
+            int receiverId = 4;
+
+            List<string[]> currentData = Mysql.Select(String.Format("SELECT * FROM contacts WHERE account_id={0} AND contact_id={1}", senderId, receiverId));
+
+            bool expected = !Convert.ToBoolean(currentData[0][3]);
+
+            Cc.AccountHandler.ToggleBlock(sender, receiver);
+
+            List<string[]> actualData = Mysql.Select(String.Format("SELECT * FROM contacts WHERE account_id={0} AND contact_id={1}", senderId, receiverId));
+            bool actual = Convert.ToBoolean(actualData[0][3]);
+
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

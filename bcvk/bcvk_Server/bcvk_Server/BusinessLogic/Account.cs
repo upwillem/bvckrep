@@ -107,7 +107,7 @@ namespace Bu
             bool isBlocked = Convert.ToBoolean(Mysql.Value("contacts", "account_id", senderId.ToString(), "contact_id", recipientId.ToString(), "is_blocked"));
 
             // Toggle the block.
-            string query = String.Format("UPDATE contacts SET is_blocked = '{0}' WHERE account_id = '{1}' AND contact_id = '{2}'", !isBlocked, senderId, recipientId);
+            string query = String.Format("UPDATE contacts SET is_blocked = '{0}' WHERE account_id = '{1}' AND contact_id = '{2}'", Convert.ToInt32(!isBlocked), senderId, recipientId);
 
             // Execute the query.
             Mysql.Query(query);

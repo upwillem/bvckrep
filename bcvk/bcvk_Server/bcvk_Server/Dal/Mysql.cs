@@ -121,7 +121,7 @@ namespace Dal
         /// <returns></returns>
         public static string Value(string table, string field1, string value1, string field2, string value2, string field3)
         {
-            string query = String.Format("SELECT {5} FROM {0} WHERE {1} = {2} AND {3} = {4}", table, field1, value1, field2, value2);
+            string query = String.Format("SELECT {5} FROM {0} WHERE {1} = {2} AND {3} = {4}", table, field1, value1, field2, value2, field3);
             List<string[]> list = Select(query);
             return list[0][0];
         }
