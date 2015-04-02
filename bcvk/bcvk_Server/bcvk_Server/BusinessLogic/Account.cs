@@ -32,6 +32,9 @@ namespace Bu
 
             // Execute the query.
             Mysql.Query(query);
+
+            int accountId = GetAccountId(username);
+            Logger.SetLog(accountId, Logger.Activity.CreateMainAccount);
         }
 
         /// <summary>
@@ -66,7 +69,7 @@ namespace Bu
             int recipientId = GetAccountId(recipient);
 
             // Prepare the SQL statement.
-            string query = String.Format("INSERT INTO contacts (account_id, contact_id, time_added) VALUES ('{0}', '{1}', '{2}')", senderId, recipientId, GetTimestamp());
+            string query = String.Format("INSERT INTO contacts (account_id, contact_id) VALUES ('{0}', '{1}')", senderId, recipientId);
 
             // Execute the query.
             Mysql.Query(query);
@@ -131,7 +134,7 @@ namespace Bu
             string jsonContacts = "";
             if (returnlist[1] != "0") // If not a parent
             {
-                string contacts = String.Format("SELECT * FROM contacts WHERE account_id = '{0}'", Mysql.MySQLEscape(output[0][0]));
+                string contacts = String.Format("SELECT id, account_id, contact_id, is_blocked, UNIX_TIMESTAMP(time_added) FROM contacts WHERE account_id = '{0}'", Mysql.MySQLEscape(output[0][0]));
                 List<string[]> contactList = Mysql.Select(contacts);
 
                 for (int i = 0; i < contactList.Count; i++)
@@ -235,15 +238,6 @@ namespace Bu
                 sb.Append(b.ToString("X2"));
 
             return sb.ToString();
-        }
-
-        /// <summary>
-        /// Returns the current UNIX timestamp.
-        /// </summary>
-        /// <returns></returns>
-        private static int GetTimestamp()
-        {
-            return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds;
         }
     }
 }
