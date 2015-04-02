@@ -83,8 +83,21 @@ namespace Bu
         {
             if (AccountData.Instance.ConnectionEstablishedStatus == "established")
             {
-                streamClient.SendStream(AccountData.Instance.Username, AccountData.Instance.Username,
+                streamClient.SendStream(AccountData.Instance.Username, "3",
                     videoBuffer, AccountData.Instance.Connection, false);
+            }
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// gets the buffer from the server
+        /// </summary>
+        /// <param name="videoBuffer"></param>
+        private void GetBuffer(List<byte[]> videoBuffer)
+        {
+            if (AccountData.Instance.ConnectionEstablishedStatus == "established")
+            {
+                streamClient.GetStream("3", AccountData.Instance.AccountId, AccountData.Instance.Connection, false);
             }
         }
 
