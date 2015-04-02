@@ -50,8 +50,8 @@ namespace Bu
         public string Children { get; set; }
 
         public string Contacts { get; set; } 
-        #endregion
 
         public string ConnectionStatus { get; set; }
+        #endregion
     }
 }
