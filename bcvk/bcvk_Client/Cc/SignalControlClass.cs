@@ -17,6 +17,10 @@ namespace Cc
         public string Username
         { get { return AccountData.Instance.Username; } }
 
+
+        public string ConnectionId 
+        { get { return AccountData.Instance.Connection; } }
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -133,7 +137,7 @@ namespace Cc
             if (oldContacts != acc.Contacts)
                 initContacts(acc.Contacts);
 
-            if (AccountData.Instance.Connection == "")//"connecting") 
+            if (AccountData.Instance.Connection == "connecting") 
             {
                 beingCalled("Je wordt gebeld");
             }

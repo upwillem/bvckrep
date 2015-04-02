@@ -77,8 +77,8 @@ namespace Bu
         /// </summary>
         /// <param name="videoBuffer"></param>
         private void sendBuffer(List<byte[]> videoBuffer)
-        {
-            streamClient.SendStream(AccountData.Instance.Username, "je moeder", videoBuffer, AccountData.Instance.Connection, false);
+        {   
+            streamClient.SendStream(AccountData.Instance.Username, AccountData.Instance.Username, videoBuffer, AccountData.Instance.Connection, false);
         }
 
         /// <summary>

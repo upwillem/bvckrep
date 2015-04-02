@@ -65,11 +65,12 @@ namespace bcvk_Client
             if (MessageBox.Show(message, "Je wordt gebeld", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) 
             {
                 //TODO: accept call
+                signalControlClass.AnswerCall(signalControlClass.Username, signalControlClass.Username, signalControlClass.ConnectionId, "connected");
             }
             else
             {
-                signalControlClass.AnswerCall(signalControlClass.Username,);
                 //TODO: decline call
+                signalControlClass.AnswerCall(signalControlClass.Username, "", signalControlClass.ConnectionId, "disconnected");
             }
         }
 
@@ -79,7 +80,7 @@ namespace bcvk_Client
         /// <param name="bmp"></param>
         private void streamControlClass_frameReady(Bitmap bmp)
         {
-            pictureBoxVideoSend.BackgroundImage = bmp;
+            pictureBoxVideoSend.BackgroundImage = new Bitmap(bmp, pictureBoxVideoSend.Width, pictureBoxVideoSend.Height);
         }
 
         /// <summary>
