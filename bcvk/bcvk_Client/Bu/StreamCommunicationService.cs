@@ -9,6 +9,7 @@ using Thrift.Protocol;
 using Thrift.Transport;
 using bcvkStream;
 using System.Drawing;
+using System.Threading;
 #endregion
 
 namespace Bu
@@ -99,8 +100,15 @@ namespace Bu
             {
                 if (AccountData.Instance.ConnectionEstablishedStatus == "established")
                 {
-                    streamClient.GetStream("3", AccountData.Instance.AccountId, AccountData.Instance.Connection, false);
+                    List<byte[]>stream = new List<byte[]>();
+                    stream   = streamClient.GetStream("3", AccountData.Instance.AccountId, AccountData.Instance.Connection, false);
+                    if(stream.Count >0)
+                    { 
+                    
+                    }
                 }
+                Thread.Sleep(1000);
+
             }
         }
 
