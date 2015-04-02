@@ -45,6 +45,18 @@ namespace bcvk_Client
             streamControlClass = new StreamControlClass();
             streamControlClass.frameReady += streamControlClass_frameReady;
 
+            streamControlClass.bufferReceived += streamControlClass_bufferReceived;
+        }
+
+        private void streamControlClass_bufferReceived(List<byte[]> obj)
+        {
+            Bitmap bmp = new Bitmap(pictureBoxVideoReceived.Width, pictureBoxVideoReceived.Height);
+            ImageConverter imgC = new ImageConverter();
+            foreach (byte[] bA in obj)
+            {
+                bmp = (Bitmap)imgC.ConvertFrom(bA);
+                pictureBoxVideoReceived.BackgroundImage = bmp;
+            }
         }
 
         /// <summary>

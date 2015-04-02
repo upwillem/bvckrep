@@ -83,7 +83,6 @@ namespace Bu
         /// <param name="eventArgs"></param>
         private void videoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
-            
             frameReady((Bitmap)eventArgs.Frame.Clone());
             byteArrayReady(converter.ToByteArray((Image)eventArgs.Frame.Clone()));
         } 
@@ -93,7 +92,7 @@ namespace Bu
         /// start the camera
         /// </summary>
         public void StartCamera()
-        { 
+        {
             videoSource.Start( );
         }
 

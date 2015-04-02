@@ -13,7 +13,7 @@ namespace Cc
     {
         public event Action<Bitmap> frameReady;
         private StreamCommunicationService streamCommunicationService;
-
+        public event Action<List<byte[]>> bufferReceived;
         /// <summary>
         /// Constructor
         /// </summary>
@@ -37,9 +37,15 @@ namespace Cc
         /// </summary>
         public void StartCamera()
         {
+            streamCommunicationService.bufferReceived += streamCommunicationService_bufferReceived;
             streamCommunicationService.StartCamera();
             Thread pollGetBuffer = new Thread(() => streamCommunicationService.GetBuffer());
             pollGetBuffer.Start();
+        }
+
+        private void streamCommunicationService_bufferReceived(List<byte[]> obj)
+        {
+            bufferReceived(obj);
         }
 
         /// <summary>

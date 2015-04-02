@@ -17,6 +17,7 @@ namespace Bu
     public class StreamCommunicationService
     {
         public event Action<Bitmap> frameReady;
+        public event Action<List<byte[]>> bufferReceived;
 
         private Webcam webcam;
         private List<byte[]> videoBuffer;
@@ -68,7 +69,7 @@ namespace Bu
         private void webcam_byteArrayReady(byte[] bA)
         {
             videoBuffer.Add(bA);
-            if (videoBuffer.Count == 15)
+            if (videoBuffer.Count == 50)
             {
                 sendBuffer(videoBuffer);
                 videoBuffer.Clear();
@@ -103,11 +104,11 @@ namespace Bu
                     List<byte[]>stream = new List<byte[]>();
                     stream   = streamClient.GetStream("3", AccountData.Instance.AccountId, AccountData.Instance.Connection, false);
                     if(stream.Count >0)
-                    { 
-                    
+                    {
+                        bufferReceived(stream);
                     }
                 }
-                Thread.Sleep(1000);
+                Thread.Sleep(100);
 
             }
         }
