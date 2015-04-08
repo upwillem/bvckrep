@@ -106,6 +106,7 @@ namespace bcvk_Server
     #region stream
         public void SendStream(string sender, string recipient, List<byte[]> stream, string connectId, bool audio)
         {
+            Console.WriteLine(sender + " sends a stream");
             CommunicationHandler.SetStream(connectId, stream, audio);
         }
 
@@ -116,6 +117,7 @@ namespace bcvk_Server
 
         public List<byte[]> GetStream(string sender, string recipient, string connectId, bool audio)
         {
+            Console.WriteLine(recipient + " gets a stream");
             List<byte[]> list = new List<byte[]>();
             list = CommunicationHandler.GetStream(connectId, audio);
             return list;

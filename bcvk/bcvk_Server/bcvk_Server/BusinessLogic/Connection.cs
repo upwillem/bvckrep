@@ -34,6 +34,7 @@ namespace Bu
         private List<byte[]> videoStream;
         private List<byte[]> audioStream;
 
+
         /// <summary>
         /// Current state of the connection
         /// </summary>
