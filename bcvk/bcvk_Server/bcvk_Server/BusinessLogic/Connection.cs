@@ -31,9 +31,8 @@ namespace Bu
         //initial maker of the connection;
         private string owner;
 
-        private List<byte[]> videoStream;
-        private List<byte[]> audioStream;
-
+        private ConcurrentDictionary<string, List<byte[]>> audiostreams;
+        private ConcurrentDictionary<string, List<byte[]>> videostreams;
 
         /// <summary>
         /// Current state of the connection
@@ -62,8 +61,8 @@ namespace Bu
                 addConnectionToAccount(sender);
                 ConnectionState = "establishing";
             }
-            audioStream = new List<byte[]>();
-            videoStream = new List<byte[]>();
+            audiostreams = new ConcurrentDictionary<string, List<byte[]>>();
+            videostreams = new ConcurrentDictionary<string, List<byte[]>>();
             Logger.SetLog(Convert.ToInt32(owner), Logger.Activity.ConnectionMade);
         }             
         
@@ -154,39 +153,72 @@ namespace Bu
         }
 
         /// <summary>
-        /// this methode sets a stream in the connection 
+        /// 
         /// </summary>
-        /// <param name="video">stream</param>
-        /// <param name="audio">audio in dicator</param>
-        public void SetStream(List<byte[]> stream, bool audio)
+        /// <param name="sender"></param>
+        /// <param name="recipient"></param>
+        /// <param name="stream"></param>
+        /// <param name="connectId"></param>
+        /// <param name="audio"></param>
+        public void SetStream(string sender, string recipient, List<byte[]> stream, string connectId, bool audio)
         {
+            //check if connection id is same as current conenction id (security check)
+            if (connectId != this.Id)
+            {
+                return;
+            }
+
             if (audio)
             {
-                audioStream.Clear();
-                audioStream = new List<byte[]>();
-                audioStream = stream;
+                List<byte[]> memberstream;               
+                audiostreams.TryRemove(sender, out memberstream);                
+                memberstream = stream;
+                audiostreams.TryAdd(sender,memberstream);
             }
             else
             {
-                videoStream.Clear();
-                videoStream = new List<byte[]>();
-                videoStream = stream;
+                List<byte[]> memberstream;
+                videostreams.TryRemove(sender, out memberstream);                
+                memberstream = stream;
+                videostreams.TryAdd(sender, memberstream);
             }
         }
 
-        public List<byte[]> GetStream(bool audio)
+        /// <summary>
+        /// gets a specific stream
+        /// </summary>
+        /// <param name="sender">who sends the stream</param>
+        /// <param name="recipient">stream recipient</param>
+        /// <param name="connectionId"></param>
+        /// <param name="audio"></param>
+        /// <returns></returns>
+        public List<byte[]> GetStream(string sender, string recipient, string connectionId, bool audio)
         {
-            List<byte[]> stream = new List<byte[]>();
+            List<byte[]> memberstream;
+            
+            //check if connection id is same as current conenction id (security check)
+            if (connectionId != this.Id)
+            {
+                memberstream = new List<byte[]>();
+                return memberstream;
+            }
+
+        
             if (audio)
             {
-                stream = audioStream;
+                if (!audiostreams.TryRemove(recipient, out memberstream))
+                {
+                    memberstream = new List<byte[]>();
+                }
             }
             else
             {
-                stream = videoStream;
+                if (!videostreams.TryRemove(recipient, out memberstream))
+                {
+                    memberstream = new List<byte[]>();
+                }
             }
-            return stream;
-
+            return memberstream;
         }
     }
 }

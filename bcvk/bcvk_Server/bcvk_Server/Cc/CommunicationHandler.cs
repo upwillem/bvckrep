@@ -91,39 +91,28 @@ namespace Cc
             Connections.Remove(connection);           
             
         }
+             
 
-        /// <summary>
-        /// sets a stream
-        /// </summary>
-        /// <param name="connectionId">connection identificatino token</param>
-        /// <param name="video">stream to set</param>
-        /// <param name="audio">audio identifier</param>
-        public static void SetStream(string connectionId, List<byte[]>video, bool audio)
+        public static List<byte[]> GetStream(string connectionId, string recipient, string sender, bool audio)
         {
-            Connection connection = Connections.Single(x => x.Id == connectionId);
-            if (connection != null)
-            {
-                connection.SetStream(video, audio);
-            }
+            var connection = Connections.Single(X => X.Id == connectionId);
+            return connection.GetStream(sender, recipient, connectionId, audio);
         }
 
-        /// <summary>
-        /// gets a specific stream
-        /// </summary>
-        /// <param name="connectionId">connection Identificatino token</param>
-        /// <param name="audio">audio idientifier</param>
-        /// <returns></returns>
-        public static List<byte[]> GetStream(string connectionId, bool audio)
+        public static void SetStream(string sender, string recipient, List<byte[]> stream, string connectId, bool audio)
         {
-            List<byte[]> stream = new List<byte[]>();
-            Connection connection = Connections.Single(x => x.Id == connectionId);
-            if (connection != null)
-            {
-                stream = connection.GetStream(audio);
-            }
-            return stream;
+            var connection = Connections.Single(X => X.Id == connectId);
+            connection.SetStream(sender, recipient, stream, connectId, audio);
         }
 
+        public static void SetVideo(string sender, string recipient, List<byte[]> video, string connectId, bool audio)
+        {
+           
+        }
 
+        public static List<byte[]> getVideo(string sender, string recipient, string connectId, bool audio)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
