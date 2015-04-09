@@ -15,9 +15,7 @@ namespace Bu
     public class Connection
     {
 
-        //TODO MUTEX IMPLEMENTEREN
-
-        /*Connection state for specific users
+        /*Connection state for specific participant in a connection
          * -connected       in current connection
          * -disconnected    left or refused to join a connection
          * -connecting      invited to join a connection
@@ -28,6 +26,8 @@ namespace Bu
          * -established     able to send and receive data
          * -connectionended connection ended
          */ 
+
+
         //initial maker of the connection;
         private string owner;
 
@@ -146,20 +146,23 @@ namespace Bu
             }          
         }
 
-
+        /// <summary>
+        /// add connection to account in DAL
+        /// </summary>
+        /// <param name="participant">particiapant to add to connection</param>
         private void addConnectionToAccount(string participant)
         {
             Mysql.Query("INSERT INTO connections_users(connection_id,user_id) VALUES('" + Mysql.MySQLEscape(Id) + "','"+ Mysql.MySQLEscape(participant) +"')");
         }
 
         /// <summary>
-        /// 
+        /// this method sets a stream
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="recipient"></param>
-        /// <param name="stream"></param>
-        /// <param name="connectId"></param>
-        /// <param name="audio"></param>
+        /// <param name="sender">sender who is setting the stream</param>
+        /// <param name="recipient">recepient of the stream</param>
+        /// <param name="stream">stream to set</param>
+        /// <param name="connectId">current connectionId</param>
+        /// <param name="audio">audio identification</param>
         public void SetStream(string sender, string recipient, List<byte[]> stream, string connectId, bool audio)
         {
             //check if connection id is same as current conenction id (security check)
@@ -187,11 +190,11 @@ namespace Bu
         /// <summary>
         /// gets a specific stream
         /// </summary>
-        /// <param name="sender">who sends the stream</param>
-        /// <param name="recipient">stream recipient</param>
-        /// <param name="connectionId"></param>
-        /// <param name="audio"></param>
-        /// <returns></returns>
+        /// <param name="sender">who whants to get the stream</param>
+        /// <param name="recipient">stream owner (who's stream to return)</param>
+        /// <param name="connectionId">curren connection id</param>
+        /// <param name="audio">audio identification</param>
+        /// <returns>stream</returns>
         public List<byte[]> GetStream(string sender, string recipient, string connectionId, bool audio)
         {
             List<byte[]> memberstream;
@@ -219,6 +222,17 @@ namespace Bu
                 }
             }
             return memberstream;
+        }
+
+
+        public static void SetVideo(string sender, string recipient, List<byte[]> video, string connectId, bool audio)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static List<byte[]> GetVideo(string sender, string recipient, string connectId, bool audio)
+        {
+            throw new NotImplementedException();
         }
     }
 }
