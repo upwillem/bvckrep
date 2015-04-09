@@ -43,7 +43,7 @@ namespace Bu
 
         public string Photo { get; set; }
 
-        public string Connection { get; set; }
+        public string ConnectionId { get; set; }
 
         public string Log { get; set; }
 

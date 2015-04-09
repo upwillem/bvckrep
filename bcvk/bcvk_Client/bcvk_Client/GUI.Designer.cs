@@ -131,7 +131,7 @@
             this.Name = "bcvk";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Communiceren voor kinderen";
-            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.bcvk_FormClosed);
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.bcvk_FormClosing);
             this.Resize += new System.EventHandler(this.bcvk_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideoSend)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideoReceived)).EndInit();

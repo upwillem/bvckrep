@@ -17,9 +17,10 @@ namespace Bu
     public class StreamCommunicationService
     {
         public event Action<Bitmap> frameReady;
-        public event Action<List<byte[]>> bufferReceived;
+        public event Action<List<Bitmap>, List<byte[]>> participantBufferReady;
 
         private Webcam webcam;
+        private Converter converter;
         private List<byte[]> videoBuffer;
         private List<byte[]> audioBuffer;
 
@@ -35,7 +36,8 @@ namespace Bu
         {
             webcam = new Webcam();
             webcam.frameReady += webcam_frameReady;
-            webcam.byteArrayReady += webcam_byteArrayReady;
+
+            converter = new Converter();
 
             #region Declaration Thrift classes and open transport
             try
@@ -60,18 +62,62 @@ namespace Bu
 
             videoBuffer = new List<byte[]>();
             audioBuffer = new List<byte[]>();
+
+            SignalCommunicationService.connectionEstablished += SignalCommunicationService_connectionEstablished;
         }
 
         /// <summary>
-        /// New frame is ready (bitmap format)
+        /// Luc Schnabel 1207776, Aron Huntjens 1209361
+        /// manage the buffering
         /// </summary>
-        /// <param name="bAFrame"></param>
-        private void webcam_byteArrayReady(byte[] bA)
+        /// <param name="state"></param>
+        private void SignalCommunicationService_connectionEstablished(string state)
         {
-            videoBuffer.Add(bA);
-            if (videoBuffer.Count == 65)
+            Thread pollGetParticipantVideoBuffer = new Thread(() => GetParticipantVideoBuffer());
+            if (state == "established")
             {
-                sendBuffer(videoBuffer);
+                pollGetParticipantVideoBuffer.Start();
+            }
+            else if (state == "connectionended")
+            {
+                pollGetParticipantVideoBuffer.Abort();
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private void GetParticipantVideoBuffer()
+        {
+            //while (true)
+            //{
+            //    if (AccountData.Instance.ConnectionEstablishedStatus == "established")
+            //    {
+            //        List<byte[]> video = new List<byte[]>();
+            //        video = streamClient.GetStream("3", AccountData.Instance.AccountId, AccountData.Instance.ConnectionId, false);
+            //        if (stream.Count > 0)
+            //        {
+            //            //TODO: join this event (streamcontrolclass)
+            //            participantBufferReady(video);
+            //        }
+            //    }
+            //    Thread.Sleep(5);
+
+            //}
+        }
+
+        /// <summary>
+        /// New frame is ready (thread)
+        /// </summary>
+        /// <param name="bmp">bitmap of the frame</param>
+        private void webcam_frameReady(Bitmap bmp)
+        {
+            frameReady(bmp);
+
+            videoBuffer.Add(converter.ToByteArray((Image)bmp));
+            if (videoBuffer.Count == 100)
+            {
+                sendVideoBuffer(videoBuffer);
                 videoBuffer.Clear();
             }
         }
@@ -81,62 +127,31 @@ namespace Bu
         /// sends the buffer to the server
         /// </summary>
         /// <param name="videoBuffer"></param>
-        private void sendBuffer(List<byte[]> videoBuffer)
+        private void sendVideoBuffer(List<byte[]> videoBuffer)
         {
             if (AccountData.Instance.ConnectionEstablishedStatus == "established")
             {
-                streamClient.SendStream(AccountData.Instance.Username, "3",
-                    videoBuffer, AccountData.Instance.Connection, false);
+                streamClient.SendStream(AccountData.Instance.Username, ""/*OPTIONAL*/,
+                    videoBuffer, AccountData.Instance.ConnectionId, false);
             }
         }
 
         /// <summary>
-        /// Luc Schnabel 1207776,
-        /// gets the buffer from the server
+        /// Start the webcam and microphone
         /// </summary>
-        /// <param name="videoBuffer"></param>
-        public void GetBuffer()
-        {
-            while (true)
-            {
-                if (AccountData.Instance.ConnectionEstablishedStatus == "established")
-                {
-                    List<byte[]>stream = new List<byte[]>();
-                    stream   = streamClient.GetStream("3", AccountData.Instance.AccountId, AccountData.Instance.Connection, false);
-                    if(stream.Count > 0)
-                    {
-                        bufferReceived(stream);
-                    }
-                }
-                Thread.Sleep(750);
-
-            }
-        }
-
-        /// <summary>
-        /// New frame is ready (byte[] format)
-        /// </summary>
-        /// <param name="bmp">bitmap of the frame</param>
-        private void webcam_frameReady(Bitmap bmp)
-        {
-            frameReady(bmp);
-        }
-
-        #region Webcam functions
-        /// <summary>
-        /// Start the webcam
-        /// </summary>
-        public void StartCamera()
+        public void StartCapture()
         {
             webcam.StartCamera();
+            //TODO: start microphone
         }
 
         /// <summary>
-        /// Stop the webcam
+        /// Stop the webcam and microphone
         /// </summary>
-        public void StopCamera()
+        public void StopCapture()
         {
             webcam.StopCamera();
+            //TODO: stop micophone
         }
 
         /// <summary>
@@ -145,7 +160,22 @@ namespace Bu
         public void On_Application_Ended()
         {
             webcam.On_Application_End();
+            //TODO: stop microphone
         } 
-        #endregion
+
+        public void SetVideoMessage(string recipient) 
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetVideoMessage(string videoMessageId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GetStreamAsParent(string recipient, string connectionId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

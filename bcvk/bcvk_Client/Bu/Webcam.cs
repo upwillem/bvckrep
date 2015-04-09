@@ -14,9 +14,7 @@ namespace Bu
 {
     public class Webcam
     {
-        private Converter converter;
         private VideoCaptureDevice videoSource;
-        public event Action<Byte[]> byteArrayReady;
         public event Action<Bitmap> frameReady;
 
         /// <summary>
@@ -24,7 +22,6 @@ namespace Bu
         /// </summary>
         public Webcam()
         { 
-            converter = new Converter();
             videoSource = new VideoCaptureDevice();
             SetResolution();
         }
@@ -84,7 +81,6 @@ namespace Bu
         private void videoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             frameReady((Bitmap)eventArgs.Frame.Clone());
-            byteArrayReady(converter.ToByteArray((Image)eventArgs.Frame.Clone()));
         } 
 
         /// <summary>

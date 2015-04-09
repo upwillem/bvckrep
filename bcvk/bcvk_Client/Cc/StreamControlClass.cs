@@ -11,9 +11,11 @@ namespace Cc
 {
     public class StreamControlClass
     {
-        public event Action<Bitmap> frameReady;
         private StreamCommunicationService streamCommunicationService;
-        public event Action<List<byte[]>> bufferReceived;
+        public event Action<Bitmap> frameReady;
+        public event Action<List<byte[]>> participantBufferReady;
+        private Thread sendStream;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -26,7 +28,7 @@ namespace Cc
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="obj"></param>
+        /// <param name="bmp"></param>
         private void streamCommunicationService_frameReady(Bitmap bmp)
         {
             frameReady(bmp);
@@ -35,17 +37,9 @@ namespace Cc
         /// <summary>
         /// 
         /// </summary>
-        public void StartCamera()
+        public void StartCapture()
         {
-            streamCommunicationService.bufferReceived += streamCommunicationService_bufferReceived;
-            streamCommunicationService.StartCamera();
-            Thread pollGetBuffer = new Thread(() => streamCommunicationService.GetBuffer());
-            pollGetBuffer.Start();
-        }
-
-        private void streamCommunicationService_bufferReceived(List<byte[]> obj)
-        {
-            bufferReceived(obj);
+            streamCommunicationService.StartCapture();
         }
 
         /// <summary>
@@ -53,7 +47,8 @@ namespace Cc
         /// </summary>
         public void StopCamera()
         {
-            streamCommunicationService.StopCamera();
+            sendStream.Abort();
+            streamCommunicationService.StopCapture();
         }
 
         /// <summary>

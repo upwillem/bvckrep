@@ -10,7 +10,7 @@ namespace Bu
     public class Converter
     {
         private ImageConverter converter;
-        
+
         //constructor
         public Converter()
         {
