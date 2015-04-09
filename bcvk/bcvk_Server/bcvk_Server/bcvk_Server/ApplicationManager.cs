@@ -107,26 +107,28 @@ namespace bcvk_Server
         public void SendStream(string sender, string recipient, List<byte[]> stream, string connectId, bool audio)
         {
             Console.WriteLine(sender + " sends a stream");
-            CommunicationHandler.SetStream(connectId, stream, audio);
+            CommunicationHandler.SetStream(sender, recipient, stream, connectId, audio);
         }
 
         public void SendVideo(string sender, string recipient, List<byte[]> video, string connectId, bool audio)
         {
-            throw new NotImplementedException();
+            CommunicationHandler.SetVideo(sender, recipient, video, connectId, audio);
         }
 
         public List<byte[]> GetStream(string sender, string recipient, string connectId, bool audio)
         {
             Console.WriteLine(recipient + " gets a stream");
             List<byte[]> list = new List<byte[]>();
-            list = CommunicationHandler.GetStream(connectId, audio);
+            list = CommunicationHandler.GetStream(connectionId, recipient, sender, audio);
             return list;
         }
 
         public List<byte[]> GetVideo(string sender, string recipient, string connectId, bool audio)
         {
-            throw new NotImplementedException();
+            return CommunicationHandler.getVideo(sender, recipient, connectId, audio);
         }
         #endregion 
+    
+        public string connectionId { get; set; }
     }
 }

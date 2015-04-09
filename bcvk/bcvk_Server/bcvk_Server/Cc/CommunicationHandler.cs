@@ -9,7 +9,8 @@ using Bu;
 namespace Cc
 {
     /// <summary>
-    /// Aron Huntjens 1209361
+    /// OWNER: Aron Huntjens 1209361
+    /// This class instanctiate a connection. A connection is a class maintain all participants in a connection to send and receive data from and to eachother.
     /// </summary>
     public class CommunicationHandler
     {
@@ -59,8 +60,7 @@ namespace Cc
                 status=con.GetConnectionState(participant);
             }
             return status;
-        }
-       
+        }       
         /// <summary>
         /// Giv a respond to a connection 
         /// </summary>
@@ -90,40 +90,56 @@ namespace Cc
             connection.EndConnection();
             Connections.Remove(connection);           
             
-        }
-
+        }             
         /// <summary>
-        /// sets a stream
+        /// this methode gets a stream
         /// </summary>
-        /// <param name="connectionId">connection identificatino token</param>
-        /// <param name="video">stream to set</param>
-        /// <param name="audio">audio identifier</param>
-        public static void SetStream(string connectionId, List<byte[]>video, bool audio)
-        {
-            Connection connection = Connections.Single(x => x.Id == connectionId);
-            if (connection != null)
-            {
-                connection.SetStream(video, audio);
-            }
-        }
-
-        /// <summary>
-        /// gets a specific stream
-        /// </summary>
-        /// <param name="connectionId">connection Identificatino token</param>
-        /// <param name="audio">audio idientifier</param>
+        /// <param name="connectionId">identifies a connection</param>
+        /// <param name="recipient">who's stream</param>
+        /// <param name="sender">who wants to get a stream</param>
+        /// <param name="audio">audio identification</param>
         /// <returns></returns>
-        public static List<byte[]> GetStream(string connectionId, bool audio)
+        public static List<byte[]> GetStream(string connectionId, string recipient, string sender, bool audio)
         {
-            List<byte[]> stream = new List<byte[]>();
-            Connection connection = Connections.Single(x => x.Id == connectionId);
-            if (connection != null)
-            {
-                stream = connection.GetStream(audio);
-            }
-            return stream;
+            var connection = Connections.Single(X => X.Id == connectionId);
+            return connection.GetStream(sender, recipient, connectionId, audio);
         }
-
-
+       /// <summary>
+       /// this methode sets a stream
+       /// </summary>
+       /// <param name="sender">who wants to set a stream (stream owner)</param>
+       /// <param name="recipient">stream recipient</param>
+       /// <param name="stream">stream to set</param>
+       /// <param name="connectId">connection identification</param>
+       /// <param name="audio">audio identification</param>
+        public static void SetStream(string sender, string recipient, List<byte[]> stream, string connectId, bool audio)
+        {
+            var connection = Connections.Single(X => X.Id == connectId);
+            connection.SetStream(sender, recipient, stream, connectId, audio);
+        }
+        /// <summary>
+        /// this methode sets a videomessage
+        /// </summary>
+        /// <param name="sender">who is sending the message</param>
+        /// <param name="recipient">who is receiving the message</param>
+        /// <param name="video">video to send</param>
+        /// <param name="connectId">sets a video in a connection (optional)</param>
+        /// <param name="audio">audio identification</param>
+        public static void SetVideo(string sender, string recipient, List<byte[]> video, string connectId, bool audio)
+        {
+            Connection.SetVideo(sender, recipient, video, connectId, audio);
+        }
+        /// <summary>
+        /// this methode gets a videomessage
+        /// </summary>
+        /// <param name="sender">who wants to get a videomessage</param>
+        /// <param name="recipient">who's videomessage</param>
+        /// <param name="connectId">gets a video of connection (optiona)</param>
+        /// <param name="audio">audio identification</param>
+        /// <returns></returns>
+        public static List<byte[]> getVideo(string sender, string recipient, string connectId, bool audio)
+        {
+            return Connection.GetVideo(sender, recipient, connectId, audio);
+        }
     }
 }
