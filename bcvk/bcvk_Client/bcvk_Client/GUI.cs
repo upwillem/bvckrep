@@ -36,7 +36,8 @@ namespace bcvk_Client
             InitializeComponent();
             SettingsCallState(CallState.CALL);
 
-            signalControlClass = new SignalControlClass("pietje"/*testusername (subaccount)*/);
+            signalControlClass = new SignalControlClass();
+            
             //Start the thread of polling
             signalControlClass.StartPoll();
             signalControlClass.beingCalled += signalControlClass_beingCalled;
@@ -44,20 +45,6 @@ namespace bcvk_Client
 
             streamControlClass = new StreamControlClass();
             streamControlClass.frameReady += streamControlClass_frameReady;
-
-            streamControlClass.bufferReceived += streamControlClass_bufferReceived;
-        }
-
-        private void streamControlClass_bufferReceived(List<byte[]> obj)
-        {
-            //Bitmap bmp = new Bitmap(pictureBoxVideoReceived.Width, pictureBoxVideoReceived.Height);
-            ImageConverter imgC = new ImageConverter();
-            foreach (byte[] bA in obj)
-            {
-                //bmp = (Bitmap)imgC.ConvertFrom(bA);
-                pictureBoxVideoReceived.BackgroundImage = new Bitmap((Bitmap)imgC.ConvertFrom(bA), pictureBoxVideoReceived.Width, pictureBoxVideoReceived.Height);
-                Thread.Sleep(50);
-            }
         }
 
         /// <summary>
@@ -78,12 +65,10 @@ namespace bcvk_Client
             if (MessageBox.Show(message, "Je wordt gebeld", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) 
             {
                 //TODO: accept call
-                signalControlClass.AnswerCall(signalControlClass.Username, signalControlClass.Username, signalControlClass.ConnectionId, "connected");
             }
             else
             {
                 //TODO: decline call
-                signalControlClass.AnswerCall(signalControlClass.Username, "", signalControlClass.ConnectionId, "disconnected");
             }
         }
 
@@ -121,7 +106,7 @@ namespace bcvk_Client
         {
             SettingsCallState(CallState.IS_CALLING);
             signalControlClass.DoCall("3");//listContacts.SelectedValue.ToString());
-            streamControlClass.StartCamera();
+            streamControlClass.StartCapture();
         }
 
         /// <summary>
@@ -133,6 +118,7 @@ namespace bcvk_Client
         private void btnEndCall_Click(object sender, EventArgs e)
         {
             SettingsCallState(CallState.CALL);
+            signalControlClass.EndCall();
             streamControlClass.StopCamera();
         }
 
@@ -160,18 +146,6 @@ namespace bcvk_Client
             //    btnCallContact.Visible = false; 
             //    btnEndCall.Visible = true;
             //}
-        }
-
-        /// <summary>
-        /// Luc Schnabel 1207776,
-        /// stops and free objects if application is closing
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void bcvk_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            signalControlClass.PollThread.Abort();
-            streamControlClass.On_Application_Ended();
         }
 
         /// <summary>
@@ -208,7 +182,20 @@ namespace bcvk_Client
         /// </summary>
         private void listContacts_SelectedIndexChanged(object sender, EventArgs e)
         {
-            signalControlClass.DoCall(listContacts.SelectedValue.ToString());
+            //TODO: signalControlClass.DoCall(listContacts.SelectedValue.ToString());
+        }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// stops and free objects if application is closing
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void bcvk_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            streamControlClass.On_Application_Ended();
+            if (!signalControlClass.StopPoll())
+                e.Cancel = true;
         }
     }
 }
