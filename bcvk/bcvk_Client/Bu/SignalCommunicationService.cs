@@ -66,11 +66,14 @@ namespace Bu
         /// <param name="connectionId">id of the connection</param>
         /// <param name="answer">answer</param>
         public void AnswerCall(string sender, string recipient, string connectionId, string answer)
-        {            
+        {
+            if (signalMutex.WaitOne())
+            {
                 AccountData acc = AccountData.Instance;
                 //dummycode
                 signalClient.AnswerCall("2", ""/*optional*/, acc.ConnectionId, answer);
-                         
+                signalMutex.ReleaseMutex();
+            }
         }
 
         /// <summary>
@@ -80,9 +83,13 @@ namespace Bu
         /// <param name="contact">contact to call</param>
         public void DoCall(string contact)
         {
-            AccountData acc = AccountData.Instance;
-            string connectionId = signalClient.DoCall(acc.AccountId, contact);
-            acc.ConnectionId = connectionId;
+            if (signalMutex.WaitOne())
+            {
+                AccountData acc = AccountData.Instance;
+                string connectionId = signalClient.DoCall(acc.AccountId, contact);
+                acc.ConnectionId = connectionId;
+                signalMutex.ReleaseMutex();
+            }
         }
 
         /// <summary>
@@ -91,7 +98,12 @@ namespace Bu
         /// </summary>
         public void EndCall()
         {
-            signalClient.EndCall(AccountData.Instance.Username, ""/*not necessary*/,AccountData.Instance.ConnectionId);
+            if (signalMutex.WaitOne())
+            {
+                signalClient.EndCall(AccountData.Instance.Username, ""/*not necessary*/, AccountData.Instance.ConnectionId);
+                signalMutex.ReleaseMutex();
+            }
+
         }
 
         /// <summary>
@@ -121,7 +133,13 @@ namespace Bu
         /// <returns>succes or failure</returns>
         public bool AddContact(string recipient)
         {
-            return signalClient.AddContact(AccountData.Instance.Username, recipient);
+            if (signalMutex.WaitOne())
+            {
+                bool done = signalClient.AddContact(AccountData.Instance.Username, recipient);
+                signalMutex.ReleaseMutex();
+                return done;              
+            }
+            return false;
         }
 
         /// <summary>
@@ -132,7 +150,12 @@ namespace Bu
         /// <returns>succes or failure</returns>
         public bool AcceptContact(string recipient)
         {
-            return signalClient.AcceptContact(AccountData.Instance.Username, recipient);
+            if (signalMutex.WaitOne())
+            {
+                bool done =signalClient.AcceptContact(AccountData.Instance.Username, recipient);
+                signalMutex.ReleaseMutex();
+            }
+            return false;
         }
 
         /// <summary>
@@ -143,7 +166,13 @@ namespace Bu
         /// <returns>succes or failure</returns>
         public bool DeleteContact(string recipient)
         {
-            return signalClient.DeleteContact(AccountData.Instance.Username, recipient);
+            if (signalMutex.WaitOne())
+            {
+                bool done = signalClient.DeleteContact(AccountData.Instance.Username, recipient);
+                signalMutex.ReleaseMutex();
+                return done;
+            }
+            return false;
         }
 
         /// <summary>
@@ -154,7 +183,12 @@ namespace Bu
         /// <returns></returns>
         public bool ToggleBlock(string recipient)
         {
-            return signalClient.ToggleBlock(AccountData.Instance.Username, recipient);
+            if (signalMutex.WaitOne())
+            { 
+                bool done =signalClient.ToggleBlock(AccountData.Instance.Username, recipient);
+                signalMutex.ReleaseMutex();
+            }
+            return false; 
         }
 
         /// <summary>
