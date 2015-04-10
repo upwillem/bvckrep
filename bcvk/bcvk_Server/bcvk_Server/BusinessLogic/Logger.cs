@@ -7,6 +7,10 @@ using Dal;
 
 namespace Bu
 {
+    /// <summary>
+    /// OWNER: Ralph Lazarus 1227319
+    /// Logs certain activities to the database
+    /// </summary>
     public class Logger
     {
         public enum Activity

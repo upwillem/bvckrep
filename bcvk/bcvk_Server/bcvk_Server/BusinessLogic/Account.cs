@@ -10,7 +10,7 @@ using System.Web.Script.Serialization;
 namespace Bu
 {
     /// <summary>
-    /// OWNER: Roel Larik 1236830 & Ralph
+    /// OWNER: Roel Larik 1236830 & Ralph Lazarus 1227319
     /// Allows interraction with the accounts.
     /// </summary>
     public class Account

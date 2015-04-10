@@ -12,7 +12,7 @@ using System.Web.Script.Serialization;
 namespace Dal
 {
     /// <summary>
-    /// OWNER: Roel Larik 1236830 & Ralph
+    /// OWNER: Roel Larik 1236830 & Ralph Lazarus 1227319
     /// This class creates an instance of a MySQL connection.
     /// </summary>
     public class Mysql
