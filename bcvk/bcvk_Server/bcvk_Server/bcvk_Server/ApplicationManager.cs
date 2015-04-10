@@ -124,7 +124,7 @@ namespace bcvk_Server
         {
             Console.WriteLine("account: "+sender + " gets a stream");
             List<byte[]> list = new List<byte[]>();
-            list = CommunicationHandler.GetStream(connectionId, recipient, sender, audio);
+            list = CommunicationHandler.GetStream(connectId, recipient, sender, audio);
             return list;
         }
 
