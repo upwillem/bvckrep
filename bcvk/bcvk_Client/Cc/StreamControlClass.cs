@@ -55,7 +55,7 @@ namespace Cc
         /// </summary>
         public void StopCamera()
         {
-            sendStream.Abort(); //why is this ?
+            //sendStream.Abort(); //why is this ?
             streamCommunicationService.StopCapture();
         }
 

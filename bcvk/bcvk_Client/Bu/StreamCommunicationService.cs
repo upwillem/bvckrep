@@ -120,7 +120,7 @@ namespace Bu
                     }
                     streamMutex.ReleaseMutex();
                 }
-                Thread.Sleep(4000);
+                Thread.Sleep(500);
             }
 
 
@@ -140,7 +140,7 @@ namespace Bu
 
             //}
         }
-
+        int counter = 0;
         /// <summary>
         /// New frame is ready (thread)
         /// </summary>
@@ -148,8 +148,13 @@ namespace Bu
         private void webcam_frameReady(Bitmap bmp)
         {
             frameReady(bmp);
-            videoBuffer.Add(converter.ToByteArray((Image)bmp));
-            if (videoBuffer.Count == 150)
+            if ((counter % 2) == 0)
+            {
+                videoBuffer.Add(converter.ToByteArray((Image)bmp));
+                
+            }
+            counter++;
+            if (videoBuffer.Count == 50)
             {
                 sendVideoBuffer(videoBuffer);
                 videoBuffer.Clear();

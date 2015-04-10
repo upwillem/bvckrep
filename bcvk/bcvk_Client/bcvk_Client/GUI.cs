@@ -54,18 +54,55 @@ namespace bcvk_Client
 
         }
 
+        private List<Bitmap>[] bufferArray = new List<Bitmap>[40000];
+        private int readPointer = 0;
+        private int addPointer = 0;
+        private Thread drawThread;
+
         //participant buffer is ready to draq
         private void streamControlClass_participantBufferReady(List<Bitmap> videostream, List<byte[]> audio)
         {
-            if (videostream != null)
+            if(addPointer >= bufferArray.Length - 1)
             {
-                foreach (Bitmap frame in videostream)
+                addPointer = 0;
+            }
+            bufferArray[addPointer] = videostream;
+            addPointer++;
+            
+            if(drawThread == null)
+            {
+                drawThread = new Thread(() => DrawParticipanBuffer());
+                drawThread.Start();
+            }
+            
+        }
+
+        private void DrawParticipanBuffer()
+        {
+            while (true)
+            {
+                if (readPointer >= bufferArray.Length - 1)
                 {
-                    //TODO : buffer reading ratio + endless buffer
-                    pictureBoxVideoReceived.BackgroundImage = frame;
-                    Thread.Sleep(65);
+                    readPointer = 0;
                 }
-            }   
+                else if(readPointer < addPointer && readPointer < bufferArray.Length)
+                {
+                    foreach (Bitmap frame in bufferArray[readPointer])
+                    {
+                        pictureBoxVideoReceived.BackgroundImage = frame;
+                        Thread.Sleep(115);
+                    }
+                    bufferArray[readPointer] = null;
+                    readPointer++; 
+                }
+            }
+
+            //foreach (Bitmap frame in videostream)
+            //{
+            //    //TODO : buffer reading ratio + endless buffer
+            //    pictureBoxVideoReceived.BackgroundImage = frame;
+            //    Thread.Sleep(100);
+            //}
         }
 
         /// <summary>
