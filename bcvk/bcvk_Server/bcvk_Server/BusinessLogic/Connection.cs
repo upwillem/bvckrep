@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 using Dal;
 
 namespace Bu
@@ -33,6 +34,8 @@ namespace Bu
 
         private ConcurrentDictionary<string, List<byte[]>> audiostreams;
         private ConcurrentDictionary<string, List<byte[]>> videostreams;
+
+        private System.Timers.Timer aTimer;
 
         /// <summary>
         /// Current state of the connection
@@ -64,7 +67,41 @@ namespace Bu
             audiostreams = new ConcurrentDictionary<string, List<byte[]>>();
             videostreams = new ConcurrentDictionary<string, List<byte[]>>();
             Logger.SetLog(Convert.ToInt32(owner), Logger.Activity.ConnectionMade);
-        }             
+
+            //Start timer
+            StartConnectionTimeout();
+        }
+
+        /// <summary>
+        /// Ralph Lazarus 1227319
+        /// </summary>
+        private void StartConnectionTimeout()
+        {
+            aTimer = new System.Timers.Timer();
+            aTimer.Elapsed += ConnectionTimeout;
+            aTimer.Interval = 60000;
+            aTimer.Enabled = true;
+        }
+
+        /// <summary>
+        /// Ralph Lazarus 1227319
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="e"></param>
+        private void ConnectionTimeout(Object source, ElapsedEventArgs e)
+        {
+            Console.WriteLine("It is time to check the connection of {0} (60 seconds have passed)", Id);
+            Console.WriteLine("Status: {0}", ConnectionState);
+
+            if (ConnectionState != "established")
+            {
+                ConnectionState = "connectionended";
+            }
+
+            Console.WriteLine("New status: {0}", ConnectionState);
+
+            aTimer.Stop();
+        }
         
         
         /// <summary>
