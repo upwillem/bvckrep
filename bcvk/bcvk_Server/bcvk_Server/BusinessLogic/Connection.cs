@@ -191,12 +191,24 @@ namespace Bu
         /// gets a specific stream
         /// </summary>
         /// <param name="sender">who whants to get the stream</param>
-        /// <param name="recipient">stream owner (who's stream to return)</param>
+        /// <param name="recipient">stream owner (optional who's stream to return )</param>
         /// <param name="connectionId">curren connection id</param>
         /// <param name="audio">audio identification</param>
         /// <returns>stream</returns>
         public List<byte[]> GetStream(string sender, string recipient, string connectionId, bool audio)
         {
+            string otherPersonsId = "-1";
+            //recipient is optional, default returns stream from first person who not is sender.
+            if (recipient == "" || String.IsNullOrEmpty(recipient) || String.IsNullOrWhiteSpace(recipient))
+            {
+                 otherPersonsId = Participants.Keys.First(key => key != sender);
+            }
+            else
+            {
+                otherPersonsId = recipient;
+            }
+
+
             List<byte[]> memberstream;
             
             //check if connection id is same as current conenction id (security check)
@@ -209,14 +221,14 @@ namespace Bu
         
             if (audio)
             {
-                if (!audiostreams.TryRemove(recipient, out memberstream))
+                if (!audiostreams.TryRemove(otherPersonsId, out memberstream))
                 {
                     memberstream = new List<byte[]>();
                 }
             }
             else
             {
-                if (!videostreams.TryRemove(recipient, out memberstream))
+                if (!videostreams.TryRemove(otherPersonsId, out memberstream))
                 {
                     memberstream = new List<byte[]>();
                 }
