@@ -105,18 +105,22 @@ namespace Bu
                     {
                         //get video (no audio)
                         AccountData acc = AccountData.Instance;
-                        List<byte[]> video = streamClient.GetStream(acc.AccountId, "", acc.ConnectionId, false);
+                        //dummycode
+                        List<byte[]> video = streamClient.GetStream("2", "", acc.ConnectionId, false);
 
                         List<Bitmap> bitmaps = new List<Bitmap>();
                         foreach (byte[] fragment in video)
                         {
-                            bitmaps.Add(converter.ToBitmap(fragment, 480, 840));
+                            bitmaps.Add(converter.ToBitmap(fragment, 532, 399));
                         }
-                        participantBufferReady(bitmaps, null);
+                        if (bitmaps.Count != 0)
+                        {
+                            participantBufferReady(bitmaps, null);
+                        }
                     }
                     streamMutex.ReleaseMutex();
                 }
-                Thread.Sleep(5);
+                Thread.Sleep(4000);
             }
 
 
@@ -145,7 +149,7 @@ namespace Bu
         {
             frameReady(bmp);
             videoBuffer.Add(converter.ToByteArray((Image)bmp));
-            if (videoBuffer.Count == 100)
+            if (videoBuffer.Count == 150)
             {
                 sendVideoBuffer(videoBuffer);
                 videoBuffer.Clear();
@@ -163,7 +167,7 @@ namespace Bu
             {
                 if (AccountData.Instance.ConnectionEstablishedStatus == "established")
                 {
-                    streamClient.SendStream(AccountData.Instance.Username, ""/*OPTIONAL*/,
+                    streamClient.SendStream(AccountData.Instance.AccountId, ""/*OPTIONAL*/,
                         videoBuffer, AccountData.Instance.ConnectionId, false);
                 }
                 streamMutex.ReleaseMutex();

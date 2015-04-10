@@ -63,6 +63,7 @@ namespace bcvk_Client
                 {
                     //TODO : buffer reading ratio + endless buffer
                     pictureBoxVideoReceived.BackgroundImage = frame;
+                    Thread.Sleep(65);
                 }
             }   
         }

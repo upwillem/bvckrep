@@ -28,9 +28,9 @@ namespace Cc
         }
 
         //rethrow event
-        private void streamCommunicationService_participantBufferReady(List<Bitmap> arg1, List<byte[]> arg2)
+        private void streamCommunicationService_participantBufferReady(List<Bitmap> bitmaps, List<byte[]> audio)
         {
-            participantBufferReady(arg1, arg2);
+            participantBufferReady(bitmaps, audio);
         }
 
         /// <summary>
