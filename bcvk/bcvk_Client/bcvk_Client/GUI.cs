@@ -39,12 +39,32 @@ namespace bcvk_Client
             signalControlClass = new SignalControlClass();
             
             //Start the thread of polling
-            signalControlClass.StartPoll();
+            
             signalControlClass.beingCalled += signalControlClass_beingCalled;
             signalControlClass.initContacts += signalControlClass_initContacts;
+            
 
             streamControlClass = new StreamControlClass();
             streamControlClass.frameReady += streamControlClass_frameReady;
+            streamControlClass.participantBufferReady += streamControlClass_participantBufferReady;
+
+            //start poll as last service so events have time to subcribe.
+            signalControlClass.StartPoll();
+
+
+        }
+
+        //participant buffer is ready to draq
+        private void streamControlClass_participantBufferReady(List<Bitmap> videostream, List<byte[]> audio)
+        {
+            if (videostream != null)
+            {
+                foreach (Bitmap frame in videostream)
+                {
+                    //TODO : buffer reading ratio + endless buffer
+                    pictureBoxVideoReceived.BackgroundImage = frame;
+                }
+            }   
         }
 
         /// <summary>
@@ -64,7 +84,8 @@ namespace bcvk_Client
         {
             if (MessageBox.Show(message, "Je wordt gebeld", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes) 
             {
-                //TODO: accept call
+                //TODO: accept call, redo this.
+                signalControlClass.AnswerCall(null, null, null, "connected");
             }
             else
             {
@@ -105,7 +126,7 @@ namespace bcvk_Client
         private void btnTestCall_Click(object sender, EventArgs e)
         {
             SettingsCallState(CallState.IS_CALLING);
-            signalControlClass.DoCall("3");//listContacts.SelectedValue.ToString());
+            signalControlClass.DoCall("2");//listContacts.SelectedValue.ToString());
             streamControlClass.StartCapture();
         }
 

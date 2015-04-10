@@ -64,7 +64,8 @@ namespace Bu
         /// <param name="answer">answer</param>
         public void AnswerCall(string sender, string recipient, string connectionId, string answer)
         {
-            signalClient.AnswerCall(sender, recipient, connectionId, answer);
+            AccountData acc = AccountData.Instance;
+            signalClient.AnswerCall(acc.AccountId, ""/*optional*/, acc.ConnectionId, answer);
         }
 
         /// <summary>
@@ -76,9 +77,7 @@ namespace Bu
         {
             AccountData acc = AccountData.Instance;
             string connectionId = signalClient.DoCall(acc.AccountId, contact);
-            acc.ConnectionId = connectionId;
-
-            signalClient.DoCall(acc.Username, contact);
+            acc.ConnectionId = connectionId;            
         }
 
         /// <summary>
@@ -97,13 +96,15 @@ namespace Bu
         /// <param name="username"></param>
         public void StartPoll(string username)
         {
-            pollAccountDataThread = new Thread(() => PollAccountData(username));
+            AccountData account = AccountData.Instance;
+
+            pollAccountDataThread = new Thread(() => PollAccountData(account.Username));
             pollAccountDataThread.Start();
 
-            pollConnectionThread = new Thread(() => PollConnection(username));
+            pollConnectionThread = new Thread(() => PollConnection());
             pollConnectionThread.Start();
 
-            pollUserConnectionStateThread = new Thread(() => PollUserConnectionState(username));
+            pollUserConnectionStateThread = new Thread(() => PollUserConnectionState());
             pollUserConnectionStateThread.Start();
         }
 
@@ -234,14 +235,12 @@ namespace Bu
         {
             while (true)
             {
-                List<string> listAccountData = new List<string>();
-                listAccountData = signalClient.GetAccountData(username);
-
+                List<string> listAccountData = listAccountData = signalClient.GetAccountData(username);
                 if ((listAccountData != null) && (listAccountData.Count != 0))
                 {
                     accountDataReady(listAccountData);
                 }
-                Thread.Sleep(5);
+                Thread.Sleep(2000);
             }
         }
 
@@ -250,16 +249,17 @@ namespace Bu
         /// </summary>
         /// <param name="connectionId">connection identification token</param>
         /// <param name="username">specific user</param>
-        private void PollUserConnectionState(string connectionId)
+        private void PollUserConnectionState()
         {
             while (true)
             {
-                if (!string.IsNullOrEmpty(connectionId))
+                AccountData acc = AccountData.Instance;
+                if (!string.IsNullOrEmpty(acc.ConnectionId))
                 {
-                    string state = signalClient.GetParticipantCallStatus(connectionId, AccountData.Instance.Username);
+                    string state = signalClient.GetParticipantCallStatus(acc.ConnectionId, acc.AccountId);
                     participantConnectionStateReady(state);
                 }
-                Thread.Sleep(5);
+                Thread.Sleep(1000);
             }
         }
 
@@ -268,18 +268,19 @@ namespace Bu
         /// Polling stops automatically when a connection is ended.
         /// </summary>
         /// <param name="connectionId">connection identification token</param>
-        private void PollConnection(string connectionId)
+        private void PollConnection()
         {
             string oldState = "";
             bool keepPolling = true;
             AccountData acc = AccountData.Instance;
             while (keepPolling)
             {
-                if (!string.IsNullOrEmpty(connectionId))
+                string connectionId = acc.ConnectionId;
+                if (connectionId != null && connectionId.Trim().Length != 0)
                 {
                     string state = signalClient.GetCallStatus(connectionId);
                     acc.ConnectionEstablishedStatus = state;
-                    if ((state == "established") && (state != oldState))
+                    if (state != null && state == "established" && state != oldState)
                     {
                         AccountData.Instance.ConnectionEstablishedStatus = "established";
                         connectionEstablished("established");
@@ -293,7 +294,7 @@ namespace Bu
                     }
                     oldState = state;
                 }
-                Thread.Sleep(5);
+                Thread.Sleep(100000);
             }
         }
     }

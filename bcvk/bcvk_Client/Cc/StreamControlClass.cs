@@ -13,8 +13,8 @@ namespace Cc
     {
         private StreamCommunicationService streamCommunicationService;
         public event Action<Bitmap> frameReady;
-        public event Action<List<byte[]>> participantBufferReady;
-        private Thread sendStream;
+        public event Action<List<Bitmap>,List<byte[]>> participantBufferReady;
+        private Thread sendStream; //why is this ?
 
         /// <summary>
         /// Constructor
@@ -23,6 +23,14 @@ namespace Cc
         {
             streamCommunicationService = new StreamCommunicationService();
             streamCommunicationService.frameReady += streamCommunicationService_frameReady;
+            streamCommunicationService.participantBufferReady += streamCommunicationService_participantBufferReady;
+         
+        }
+
+        //rethrow event
+        private void streamCommunicationService_participantBufferReady(List<Bitmap> arg1, List<byte[]> arg2)
+        {
+            participantBufferReady(arg1, arg2);
         }
 
         /// <summary>
@@ -47,7 +55,7 @@ namespace Cc
         /// </summary>
         public void StopCamera()
         {
-            sendStream.Abort();
+            sendStream.Abort(); //why is this ?
             streamCommunicationService.StopCapture();
         }
 

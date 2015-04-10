@@ -85,10 +85,29 @@ namespace Bu
         }
 
         /// <summary>
-        /// 
+        /// Aron Huntjens 1209361
         /// </summary>
         private void GetParticipantVideoBuffer()
         {
+            while (true)
+            {
+                if (AccountData.Instance.ConnectionEstablishedStatus == "established")
+                {
+                    //get video (no audio)
+                    AccountData acc = AccountData.Instance;
+                    List<byte[]> video = streamClient.GetStream(acc.AccountId, acc.AccountId, acc.ConnectionId, false);
+
+                    List<Bitmap> bitmaps = new List<Bitmap>();
+                    foreach (byte[] fragment in video)
+                    {
+                        bitmaps.Add(converter.ToBitmap(fragment,480,840));
+                    }
+                    participantBufferReady(bitmaps, null);
+                }
+                Thread.Sleep(5);
+            }
+
+
             //while (true)
             //{
             //    if (AccountData.Instance.ConnectionEstablishedStatus == "established")
@@ -113,7 +132,6 @@ namespace Bu
         private void webcam_frameReady(Bitmap bmp)
         {
             frameReady(bmp);
-
             videoBuffer.Add(converter.ToByteArray((Image)bmp));
             if (videoBuffer.Count == 100)
             {
@@ -167,12 +185,10 @@ namespace Bu
         {
             throw new NotImplementedException();
         }
-
         public void GetVideoMessage(string videoMessageId)
         {
             throw new NotImplementedException();
         }
-
         public void GetStreamAsParent(string recipient, string connectionId)
         {
             throw new NotImplementedException();

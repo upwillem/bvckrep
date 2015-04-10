@@ -57,7 +57,7 @@ namespace Cc
                         acc.Photo = data.Split(';')[1];
                         break;
                     case "connection":
-                        acc.ConnectionId = data.Split(';')[1];
+                        //acc.ConnectionId = data.Split(';')[1];
                         break;
                     case "log":
                         acc.Log = data.Split(';')[1];
@@ -77,7 +77,7 @@ namespace Cc
             if (oldContacts != acc.Contacts)
                 initContacts(acc.Contacts);
 
-            if (AccountData.Instance.ConnectionId == "connecting")
+            if (AccountData.Instance.ConnectionStatus == "connecting")
             {
                 beingCalled("Je wordt gebeld");
             }

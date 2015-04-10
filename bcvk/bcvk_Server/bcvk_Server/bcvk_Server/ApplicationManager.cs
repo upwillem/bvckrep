@@ -37,7 +37,9 @@ namespace bcvk_Server
 
         public List<string> GetAccountData(string username)
         {
+            Console.WriteLine(username + " requests for account data"); 
             return AccountHandler.GetAccountData(username);
+            
         }
 
         public bool ToggleBlock(string sender, string recipient)
@@ -68,7 +70,10 @@ namespace bcvk_Server
         /// <returns>connectionId</returns>
         public string DoCall(string sender, string recipient)
         {
-            return CommunicationHandler.DoConnect(sender, recipient);
+            Console.WriteLine(sender + " tries to connect with " + recipient);
+            string connectionId=CommunicationHandler.DoConnect(sender, recipient);
+            Console.WriteLine("connectionId= "+connectionId);
+            return connectionId;
         }
 
         /// <summary>
@@ -89,7 +94,8 @@ namespace bcvk_Server
         /// <returns></returns>
         public string GetCallStatus(string connectionId)
         {
-            return CommunicationHandler.GetConnectionState(connectionId);
+            return null;
+            //return CommunicationHandler.GetConnectionState(connectionId);
         }
 
         public string GetParticipantCallStatus(string connectionId, string participant)
@@ -106,7 +112,7 @@ namespace bcvk_Server
     #region stream
         public void SendStream(string sender, string recipient, List<byte[]> stream, string connectId, bool audio)
         {
-            Console.WriteLine(sender + " sends a stream");
+            Console.WriteLine("account: "+ sender + " sends a stream");
             CommunicationHandler.SetStream(sender, recipient, stream, connectId, audio);
         }
 
@@ -117,7 +123,7 @@ namespace bcvk_Server
 
         public List<byte[]> GetStream(string sender, string recipient, string connectId, bool audio)
         {
-            Console.WriteLine(recipient + " gets a stream");
+            Console.WriteLine("account: "+sender + " gets a stream");
             List<byte[]> list = new List<byte[]>();
             list = CommunicationHandler.GetStream(connectionId, recipient, sender, audio);
             return list;

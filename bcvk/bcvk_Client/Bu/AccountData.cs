@@ -29,7 +29,13 @@ namespace Bu
         /// All received values of the account
         /// </summary>
         #region Properties values of accountdata
-        public string Username { get; set; }
+        private string username;
+
+        public string Username
+        {
+            get { return "Hansje"; }
+            set { username = value; }
+        }
 
         public string AccountId { get; set; }
 
@@ -43,7 +49,7 @@ namespace Bu
 
         public string Photo { get; set; }
 
-        public string ConnectionId { get; set; }
+        public string ConnectionId;
 
         public string Log { get; set; }
 
