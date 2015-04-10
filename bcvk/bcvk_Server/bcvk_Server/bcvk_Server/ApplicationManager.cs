@@ -94,8 +94,7 @@ namespace bcvk_Server
         /// <returns></returns>
         public string GetCallStatus(string connectionId)
         {
-            return null;
-            //return CommunicationHandler.GetConnectionState(connectionId);
+            return CommunicationHandler.GetConnectionState(connectionId);
         }
 
         public string GetParticipantCallStatus(string connectionId, string participant)

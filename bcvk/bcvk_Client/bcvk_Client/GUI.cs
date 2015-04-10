@@ -128,6 +128,7 @@ namespace bcvk_Client
             SettingsCallState(CallState.IS_CALLING);
             signalControlClass.DoCall("2");//listContacts.SelectedValue.ToString());
             streamControlClass.StartCapture();
+            signalControlClass.AnswerCall(null, null, null, "connected");
         }
 
         /// <summary>

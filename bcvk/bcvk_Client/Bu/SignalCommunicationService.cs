@@ -32,8 +32,11 @@ namespace Bu
         private Thread pollConnectionThread;
         private Thread pollUserConnectionStateThread;
 
+        private static Mutex signalMutex;
+
         public SignalCommunicationService()
         {
+            signalMutex = new Mutex();
             try
             {
                 //Signal settings
@@ -63,9 +66,11 @@ namespace Bu
         /// <param name="connectionId">id of the connection</param>
         /// <param name="answer">answer</param>
         public void AnswerCall(string sender, string recipient, string connectionId, string answer)
-        {
-            AccountData acc = AccountData.Instance;
-            signalClient.AnswerCall(acc.AccountId, ""/*optional*/, acc.ConnectionId, answer);
+        {            
+                AccountData acc = AccountData.Instance;
+                //dummycode
+                signalClient.AnswerCall("2", ""/*optional*/, acc.ConnectionId, answer);
+                         
         }
 
         /// <summary>
@@ -77,7 +82,7 @@ namespace Bu
         {
             AccountData acc = AccountData.Instance;
             string connectionId = signalClient.DoCall(acc.AccountId, contact);
-            acc.ConnectionId = connectionId;            
+            acc.ConnectionId = connectionId;
         }
 
         /// <summary>
@@ -235,10 +240,14 @@ namespace Bu
         {
             while (true)
             {
-                List<string> listAccountData = listAccountData = signalClient.GetAccountData(username);
-                if ((listAccountData != null) && (listAccountData.Count != 0))
+                if (signalMutex.WaitOne())
                 {
-                    accountDataReady(listAccountData);
+                    List<string> listAccountData = listAccountData = signalClient.GetAccountData(username);
+                    if ((listAccountData != null) && (listAccountData.Count != 0))
+                    {
+                        accountDataReady(listAccountData);
+                    }
+                    signalMutex.ReleaseMutex();
                 }
                 Thread.Sleep(2000);
             }
@@ -253,11 +262,18 @@ namespace Bu
         {
             while (true)
             {
-                AccountData acc = AccountData.Instance;
-                if (!string.IsNullOrEmpty(acc.ConnectionId))
+                if (signalMutex.WaitOne())
                 {
-                    string state = signalClient.GetParticipantCallStatus(acc.ConnectionId, acc.AccountId);
-                    participantConnectionStateReady(state);
+                    AccountData acc = AccountData.Instance;
+                    if (!string.IsNullOrEmpty(acc.ConnectionId))
+                    {
+                        string state = signalClient.GetParticipantCallStatus(acc.ConnectionId, acc.AccountId);
+                        if (state == "connecting")
+                        {
+                            participantConnectionStateReady(state);
+                        }                        
+                    }
+                    signalMutex.ReleaseMutex();
                 }
                 Thread.Sleep(1000);
             }
@@ -275,26 +291,30 @@ namespace Bu
             AccountData acc = AccountData.Instance;
             while (keepPolling)
             {
-                string connectionId = acc.ConnectionId;
-                if (connectionId != null && connectionId.Trim().Length != 0)
+                if (signalMutex.WaitOne())
                 {
-                    string state = signalClient.GetCallStatus(connectionId);
-                    acc.ConnectionEstablishedStatus = state;
-                    if (state != null && state == "established" && state != oldState)
+                    string connectionId = acc.ConnectionId;
+                    if (connectionId != null && connectionId.Trim().Length != 0)
                     {
-                        AccountData.Instance.ConnectionEstablishedStatus = "established";
-                        connectionEstablished("established");
+                        string state = signalClient.GetCallStatus(connectionId);
+                        acc.ConnectionEstablishedStatus = state;
+                        if (state != null && state == "established" && state != oldState)
+                        {
+                            AccountData.Instance.ConnectionEstablishedStatus = "established";
+                            connectionEstablished("established");
+                        }
+                        else if ((state == "connectionended") && (state != oldState))
+                        {
+                            keepPolling = false;
+                            connectionEstablished("connectionended");
+                            //TODO: REVISE RESETABORT()
+                            Thread.ResetAbort();
+                        }
+                        oldState = state;
                     }
-                    else if ((state == "connectionended") && (state != oldState))
-                    {
-                        keepPolling = false;
-                        connectionEstablished("connectionended");
-                        //TODO: REVISE RESETABORT()
-                        Thread.ResetAbort();
-                    }
-                    oldState = state;
+                    signalMutex.ReleaseMutex();
                 }
-                Thread.Sleep(100000);
+                Thread.Sleep(1000);
             }
         }
     }
