@@ -28,6 +28,11 @@ namespace bcvk_Client
         private StreamControlClass streamControlClass;
         private SignalControlClass signalControlClass;
 
+        private List<Bitmap>[] videoBufferArray = new List<Bitmap>[40000];
+        private int readVideoBufferPointer = 0;
+        private int addVideoBufferPointer = 0;
+        private Thread drawThread;
+
         /// <summary>
         /// Constructor
         /// </summary>
@@ -54,20 +59,15 @@ namespace bcvk_Client
 
         }
 
-        private List<Bitmap>[] bufferArray = new List<Bitmap>[40000];
-        private int readPointer = 0;
-        private int addPointer = 0;
-        private Thread drawThread;
-
         //participant buffer is ready to draq
         private void streamControlClass_participantBufferReady(List<Bitmap> videostream, List<byte[]> audio)
         {
-            if(addPointer >= bufferArray.Length - 1)
+            if(addVideoBufferPointer >= videoBufferArray.Length - 1)
             {
-                addPointer = 0;
+                addVideoBufferPointer = 0;
             }
-            bufferArray[addPointer] = videostream;
-            addPointer++;
+            videoBufferArray[addVideoBufferPointer] = videostream;
+            addVideoBufferPointer++;
             
             if(drawThread == null)
             {
@@ -81,19 +81,19 @@ namespace bcvk_Client
         {
             while (true)
             {
-                if (readPointer >= bufferArray.Length - 1)
+                if (readVideoBufferPointer >= videoBufferArray.Length - 1)
                 {
-                    readPointer = 0;
+                    readVideoBufferPointer = 0;
                 }
-                else if(readPointer < addPointer && readPointer < bufferArray.Length)
+                else if(readVideoBufferPointer < addVideoBufferPointer && readVideoBufferPointer < videoBufferArray.Length)
                 {
-                    foreach (Bitmap frame in bufferArray[readPointer])
+                    foreach (Bitmap frame in videoBufferArray[readVideoBufferPointer])
                     {
                         pictureBoxVideoReceived.BackgroundImage = frame;
                         Thread.Sleep(115);
                     }
-                    bufferArray[readPointer] = null;
-                    readPointer++; 
+                    videoBufferArray[readVideoBufferPointer] = null;
+                    readVideoBufferPointer++; 
                 }
             }
 
@@ -177,8 +177,8 @@ namespace bcvk_Client
         /// <param name="e"></param>
         private void btnEndCall_Click(object sender, EventArgs e)
         {
-            SettingsCallState(CallState.CALL);
-            signalControlClass.EndCall();
+            //SettingsCallState(CallState.CALL);
+            //signalControlClass.EndCall();
             streamControlClass.StopCamera();
         }
 
