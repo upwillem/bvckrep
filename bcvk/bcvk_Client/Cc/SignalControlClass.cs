@@ -14,6 +14,10 @@ namespace Cc
         public event Action<string> initContacts;
         public event Action<string> beingCalled;
 
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// constructor
+        /// </summary>
         public SignalControlClass() 
         {
             //AccountData.Instance.Username = username;
@@ -23,7 +27,7 @@ namespace Cc
 
         /// <summary>
         /// Luc Schnabel 1207776,
-        /// sets all values of 'AccountData'.
+        /// sets all values of the account to the class 'AccountData'.
         /// </summary>
         /// <param name="accountDataList">list of all accountdata</param>
         private void signalCommunicationService_accountDataReady(List<string> accountDataList)

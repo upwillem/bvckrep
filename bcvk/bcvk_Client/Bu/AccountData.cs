@@ -6,12 +6,17 @@ using System.Threading.Tasks;
 
 namespace Bu
 {
+    /// <summary>
+    /// Owners: Aron Huntjens 1209361, Luc Schnabel 1207776
+    /// </summary>
     public class AccountData
     {
         private static AccountData instance;
 
+        //constructor
         private AccountData() { }
 
+        //public access to the instance of this class
         public static AccountData Instance
         {
             get
@@ -25,7 +30,7 @@ namespace Bu
         }
 
         /// <summary>
-        /// Aron Huntjens 1209361, Luc Schnabel 1207776
+        /// Aron Huntjens 1209361, Luc Schnabel 1207776,
         /// All received values of the account
         /// </summary>
         #region Properties values of accountdata

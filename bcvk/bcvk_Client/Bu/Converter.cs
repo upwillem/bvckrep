@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Bu
 {
+    /// <summary>
+    /// Owner: Luc Schnabel, 1207776
+    /// </summary>
     public class Converter
     {
         private ImageConverter converter;

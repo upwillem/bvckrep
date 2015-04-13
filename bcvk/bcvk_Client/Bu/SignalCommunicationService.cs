@@ -34,6 +34,10 @@ namespace Bu
 
         private static Mutex signalMutex;
 
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// Constructor
+        /// </summary>
         public SignalCommunicationService()
         {
             signalMutex = new Mutex();
@@ -110,7 +114,7 @@ namespace Bu
         /// Luc Schnabel 1207776,
         /// start all the pollthreads
         /// </summary>
-        /// <param name="username"></param>
+        /// <param name="username">username</param>
         public void StartPoll(string username)
         {
             AccountData account = AccountData.Instance;
@@ -193,7 +197,7 @@ namespace Bu
 
         /// <summary>
         /// Luc Schnabel 1207776
-        /// create a main account. This accoutn can edit the subaccount
+        /// create a main account. This account can edit the subaccount
         /// </summary>
         /// <param name="username">username</param>
         /// <param name="password1">password</param>
@@ -201,7 +205,7 @@ namespace Bu
         /// <param name="email">email address</param>
         /// <param name="name">displayname</param>
         /// <param name="phoneNumber">phone number</param>
-        /// <returns></returns>
+        /// <returns>success or error message</returns>
         public List<string> CreateMainAccount(string username, string password1, string password2, string email, string name, string phoneNumber)
         {
             return signalClient.CreateMainAccount(username, password1, password2, email, name, phoneNumber);
@@ -217,7 +221,7 @@ namespace Bu
         /// <param name="password2">password repeat</param>
         /// <param name="name">displayname</param>
         /// <param name="profileImage">image for the profile</param>
-        /// <returns></returns>
+        /// <returns>success or error message</returns>
         public List<string> CreateSubAccount(int parentId, string username, string password1, string password2, string name, byte[] profileImage)
         {
             return signalClient.CreateSubAccount(parentId, username, password1, password2, name, profileImage);
@@ -227,9 +231,9 @@ namespace Bu
         /// Luc Schnabel 1207776,
         /// login to server
         /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
+        /// <param name="username">username</param>
+        /// <param name="password">password</param>
+        /// <returns>success or error message</returns>
         public List<string> Login(string username, string password)
         {
             AccountData.Instance.Username = username;
@@ -240,7 +244,7 @@ namespace Bu
         /// Luc Schnabel 1207776,
         /// logout from server
         /// </summary>
-        /// <param name="username"></param>
+        /// <param name="username">usernmae</param>
         public void LogOut(string username)
         {
             signalClient.LogOut(username);
@@ -250,7 +254,7 @@ namespace Bu
         /// Luc Schnabel 1207776,
         /// aborts the threads
         /// </summary>
-        /// <returns></returns>
+        /// <returns>success or failure</returns>
         public bool AbortsThreads() 
         {
             if(pollAccountDataThread.IsAlive)

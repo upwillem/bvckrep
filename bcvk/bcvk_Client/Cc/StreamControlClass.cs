@@ -32,8 +32,8 @@ namespace Cc
         /// <summary>
         ///re-throw event
         /// </summary>
-        /// <param name="bitmaps"></param>
-        /// <param name="audio"></param>
+        /// <param name="bitmaps">buffer of bitmaps</param>
+        /// <param name="audio">byte[] of the audio</param>
         private void streamCommunicationService_participantBufferReady(List<Bitmap> bitmaps, List<byte[]> audio)
         {
             participantBufferReady(bitmaps, audio);
