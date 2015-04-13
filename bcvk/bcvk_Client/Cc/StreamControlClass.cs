@@ -53,7 +53,7 @@ namespace Cc
         /// <summary>
         /// 
         /// </summary>
-        public void StopCamera()
+        public void StopCapture()
         {
             //sendStream.Abort(); //why is this ?
             streamCommunicationService.StopCapture();
@@ -65,6 +65,15 @@ namespace Cc
         public void On_Application_Ended()
         {
             streamCommunicationService.On_Application_Ended();
+        }
+
+        public void SetVideoMessage(string recipient)
+        {
+            streamCommunicationService.SetVideoMessage(recipient);
+        }
+        public void GetVideoMessage(string videoMessageId)
+        {
+            streamCommunicationService.GetVideoMessage(videoMessageId);
         }
     }
 }
