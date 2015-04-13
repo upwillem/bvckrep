@@ -28,7 +28,7 @@ namespace bcvk_Client
         private StreamControlClass streamControlClass;
         private SignalControlClass signalControlClass;
 
-        private List<Bitmap>[] videoBufferArray = new List<Bitmap>[500];//this array can contain 500 elements of videobuffers
+        private List<Bitmap>[] videoBufferArray = new List<Bitmap>[15];//this array can contain  elements of videobuffers
         private int readVideoBufferPointer = 0;
         private int addVideoBufferPointer = 0;
         private Thread drawThread;
