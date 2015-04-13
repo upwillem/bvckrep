@@ -126,7 +126,7 @@ namespace Bu
                     }
                     streamMutex.ReleaseMutex();
                 }
-                Thread.Sleep(500);
+                Thread.Sleep(2000);
             }
         }
 
@@ -141,10 +141,10 @@ namespace Bu
             if ((counter % 2) == 0)
             {
                 videoBuffer.Add(converter.ToByteArray((Image)bmp));
-                
             }
             counter++;
-            if (videoBuffer.Count == 50)
+
+            if (videoBuffer.Count == 25)
             {
                 sendVideoBuffer(videoBuffer);
                 videoBuffer.Clear();
