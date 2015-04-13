@@ -59,7 +59,11 @@ namespace bcvk_Client
 
         }
 
-        //participant buffer is ready to draq
+        /// <summary>
+        /// participant buffer is ready to draq
+        /// </summary>
+        /// <param name="videostream"></param>
+        /// <param name="audio"></param>
         private void streamControlClass_participantBufferReady(List<Bitmap> videostream, List<byte[]> audio)
         {
             if(addVideoBufferPointer >= videoBufferArray.Length - 1)
