@@ -90,7 +90,7 @@ namespace bcvk_Client
                     foreach (Bitmap frame in videoBufferArray[readVideoBufferPointer])
                     {
                         pictureBoxVideoReceived.BackgroundImage = frame;
-                        Thread.Sleep(110);
+                        Thread.Sleep(120);
                     }
                     videoBufferArray[readVideoBufferPointer] = null;
                     readVideoBufferPointer++; 
