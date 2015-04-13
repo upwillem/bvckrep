@@ -14,6 +14,9 @@ namespace Cc
     /// </summary>
     public class CommunicationHandler
     {
+        /// <summary>
+        /// connection memory
+        /// </summary>
         public static List<Connection> Connections = new List<Connection>();
 
         /// <summary>
@@ -49,7 +52,7 @@ namespace Cc
         /// this method gives the connectionstate of a specific user in a connection
         /// </summary>
         /// <param name="connectionId">connection identificationcode</param>
-        /// <param name="who">indentification token to get the state of</param>
+        /// <param name="participant">indentification token to get the state of</param>
         /// <returns>connection state of a specific user </returns>
         public static string GetConnectionState(string connectionId, string participant)
         {
@@ -65,7 +68,7 @@ namespace Cc
         /// Giv a respond to a connection 
         /// </summary>
         /// <param name="sender">sender id</param>
-        /// <param name="callId">connection identification token</param>
+        /// <param name="connectionId">connection identification token</param>
         /// <param name="answer">anwser</param>
         public static void AnwserConnection(string sender, string connectionId, string answer)
         {
@@ -79,7 +82,7 @@ namespace Cc
         /// <summary>
         /// end a specific call
         /// </summary>
-        /// <param name="callId">call to end</param>
+        /// <param name="connectionId">call to end</param>
         public static void EndConnection(string connectionId)
         {
             Connection connection = Connections.Single(x => x.Id == connectionId);

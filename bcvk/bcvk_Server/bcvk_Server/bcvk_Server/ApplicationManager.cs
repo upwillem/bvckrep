@@ -96,12 +96,22 @@ namespace bcvk_Server
         {
             return CommunicationHandler.GetConnectionState(connectionId);
         }
-
+        /// <summary>
+        /// Get the status from a specific participant in a specific caal
+        /// </summary>
+        /// <param name="connectionId">connection identificatino token</param>
+        /// <param name="participant">participant to get status from</param>
+        /// <returns></returns>
         public string GetParticipantCallStatus(string connectionId, string participant)
         {
             return CommunicationHandler.GetConnectionState(connectionId,participant);
         } 
-
+        /// <summary>
+        /// end a call
+        /// </summary>
+        /// <param name="sender">who ants to end the call</param>
+        /// <param name="recipient">who to end in the call</param>
+        /// <param name="connectionId">connection identification token, to identify a connection to end</param>
         public void EndCall(string sender, string recipient, string connectionId)
         {  
             CommunicationHandler.EndConnection(connectionId);
@@ -109,17 +119,40 @@ namespace bcvk_Server
         #endregion
 
     #region stream
+        /// <summary>
+        /// This methode is used to send a stream
+        /// </summary>
+        /// <param name="sender">who is sending the stream</param>
+        /// <param name="recipient">who is receiving the stream</param>
+        /// <param name="stream">stream to send</param>
+        /// <param name="connectId">connection identification token</param>
+        /// <param name="audio">audio identification</param>
         public void SendStream(string sender, string recipient, List<byte[]> stream, string connectId, bool audio)
         {
             Console.WriteLine("account: "+ sender + " sends a stream");
             CommunicationHandler.SetStream(sender, recipient, stream, connectId, audio);
         }
-
+        /// <summary>
+        /// this methode is used to send a video
+        /// </summary>
+        /// <param name="sender">who is sending</param>
+        /// <param name="recipient">who is receiving</param>
+        /// <param name="video">video to send</param>
+        /// <param name="connectId">connection identification token (optional)</param>
+        /// <param name="audio">audio identification</param>
         public void SendVideo(string sender, string recipient, List<byte[]> video, string connectId, bool audio)
         {
             CommunicationHandler.SetVideo(sender, recipient, video, connectId, audio);
         }
 
+        /// <summary>
+        /// method used to get a stream
+        /// </summary>
+        /// <param name="sender">who wants to get a stream</param>
+        /// <param name="recipient">who's stream to receive </param>
+        /// <param name="connectId">stream from wich connection</param>
+        /// <param name="audio">audio identification</param>
+        /// <returns></returns>
         public List<byte[]> GetStream(string sender, string recipient, string connectId, bool audio)
         {
             Console.WriteLine("account: "+sender + " gets a stream");
@@ -127,13 +160,19 @@ namespace bcvk_Server
             list = CommunicationHandler.GetStream(connectId, recipient, sender, audio);
             return list;
         }
-
+        /// <summary>
+        /// this methode is used to get a specific videomessage
+        /// </summary>
+        /// <param name="sender">who wants to get a video</param>
+        /// <param name="recipient">get the video from</param>
+        /// <param name="connectId">specific videomessage identification token</param>
+        /// <param name="audio">audio identification</param>
+        /// <returns></returns>
         public List<byte[]> GetVideo(string sender, string recipient, string connectId, bool audio)
         {
             return CommunicationHandler.getVideo(sender, recipient, connectId, audio);
         }
         #endregion 
-    
-        public string connectionId { get; set; }
+
     }
 }
