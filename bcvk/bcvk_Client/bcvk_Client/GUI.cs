@@ -28,7 +28,7 @@ namespace bcvk_Client
         private StreamControlClass streamControlClass;
         private SignalControlClass signalControlClass;
 
-        private List<Bitmap>[] videoBufferArray = new List<Bitmap>[15];//this array can contain  elements of videobuffers
+        private List<Bitmap>[] videoBufferArray = new List<Bitmap>[50];//this array can contain  elements of videobuffers
         private int readVideoBufferPointer = 0;
         private int addVideoBufferPointer = 0;
         private Thread drawThread;
@@ -66,7 +66,7 @@ namespace bcvk_Client
         /// <param name="audio">byte[] of the audio</param>
         private void streamControlClass_participantBufferReady(List<Bitmap> videostream, List<byte[]> audio)
         {
-            if(addVideoBufferPointer >= videoBufferArray.Length - 1)
+            if(addVideoBufferPointer >= videoBufferArray.Length)
             {
                 addVideoBufferPointer = 0;
             }
@@ -92,16 +92,23 @@ namespace bcvk_Client
                 {
                     readVideoBufferPointer = 0;
                 }
-                else if(readVideoBufferPointer < addVideoBufferPointer && readVideoBufferPointer < videoBufferArray.Length)
+                else if(readVideoBufferPointer < videoBufferArray.Length)
                 {
-                    foreach (Bitmap frame in videoBufferArray[readVideoBufferPointer])
+                    if (readVideoBufferPointer >= addVideoBufferPointer)
                     {
-                        pictureBoxVideoReceived.BackgroundImage = frame;
-                        Thread.Sleep(120);
+                        Thread.Sleep(117);
                     }
-                    videoBufferArray[readVideoBufferPointer] = null;
-                    GC.Collect();
-                    readVideoBufferPointer++; 
+                    else
+                    {
+                        foreach (Bitmap frame in videoBufferArray[readVideoBufferPointer])
+                        {
+                            pictureBoxVideoReceived.BackgroundImage = frame;
+                            Thread.Sleep(117);
+                        }
+                        videoBufferArray[readVideoBufferPointer] = null;
+                        GC.Collect();
+                        readVideoBufferPointer++; 
+                    }
                 }
             }
         }
