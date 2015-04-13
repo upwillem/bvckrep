@@ -28,10 +28,11 @@ namespace bcvk_Client
         private StreamControlClass streamControlClass;
         private SignalControlClass signalControlClass;
 
-        private List<Bitmap>[] videoBufferArray = new List<Bitmap>[50];//this array can contain  elements of videobuffers
+        private List<Bitmap>[] videoBufferArray = new List<Bitmap>[10];//this array can contain  elements of videobuffers
         private int readVideoBufferPointer = 0;
         private int addVideoBufferPointer = 0;
         private Thread drawThread;
+        private bool readFromBegin;
 
         /// <summary>
         /// Constructor
@@ -69,6 +70,7 @@ namespace bcvk_Client
             if(addVideoBufferPointer >= videoBufferArray.Length)
             {
                 addVideoBufferPointer = 0;
+                readFromBegin = true;
             }
             videoBufferArray[addVideoBufferPointer] = videostream;
             addVideoBufferPointer++;
@@ -96,7 +98,14 @@ namespace bcvk_Client
                 {
                     if (readVideoBufferPointer >= addVideoBufferPointer)
                     {
-                        Thread.Sleep(117);
+                        if (readFromBegin)
+                        {
+                            readVideoBufferPointer = 0;
+                        }
+                        else
+                        {
+                            Thread.Sleep(117);
+                        }
                     }
                     else
                     {
