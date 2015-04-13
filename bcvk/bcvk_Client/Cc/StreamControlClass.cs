@@ -29,7 +29,11 @@ namespace Cc
          
         }
 
-        //rethrow event
+        /// <summary>
+        ///re-throw event
+        /// </summary>
+        /// <param name="bitmaps"></param>
+        /// <param name="audio"></param>
         private void streamCommunicationService_participantBufferReady(List<Bitmap> bitmaps, List<byte[]> audio)
         {
             participantBufferReady(bitmaps, audio);
@@ -57,7 +61,6 @@ namespace Cc
         /// </summary>
         public void StopCapture()
         {
-
             streamCommunicationService.StopCapture();
         }
 
@@ -69,10 +72,18 @@ namespace Cc
             streamCommunicationService.On_Application_Ended();
         }
 
+        /// <summary>
+        /// set the videomessage
+        /// </summary>
+        /// <param name="recipient">id of the recipient of the videomessage</param>
         public void SetVideoMessage(string recipient)
         {
             streamCommunicationService.SetVideoMessage(recipient);
         }
+        /// <summary>
+        /// get the videomessage form a specific recipient
+        /// </summary>
+        /// <param name="videoMessageId">id of the message to get</param>
         public void GetVideoMessage(string videoMessageId)
         {
             streamCommunicationService.GetVideoMessage(videoMessageId);

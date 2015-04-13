@@ -28,7 +28,7 @@ namespace bcvk_Client
         private StreamControlClass streamControlClass;
         private SignalControlClass signalControlClass;
 
-        private List<Bitmap>[] videoBufferArray = new List<Bitmap>[40000];
+        private List<Bitmap>[] videoBufferArray = new List<Bitmap>[500];//this array can contain 500 elements of videobuffers
         private int readVideoBufferPointer = 0;
         private int addVideoBufferPointer = 0;
         private Thread drawThread;
@@ -60,10 +60,10 @@ namespace bcvk_Client
         }
 
         /// <summary>
-        /// participant buffer is ready to draq
+        /// participant buffer is ready to draw
         /// </summary>
-        /// <param name="videostream"></param>
-        /// <param name="audio"></param>
+        /// <param name="videostream">buffer of the videoframes</param>
+        /// <param name="audio">byte[] of the audio</param>
         private void streamControlClass_participantBufferReady(List<Bitmap> videostream, List<byte[]> audio)
         {
             if(addVideoBufferPointer >= videoBufferArray.Length - 1)
@@ -82,7 +82,7 @@ namespace bcvk_Client
         }
 
         /// <summary>
-        /// 
+        /// Draws the videobufferarray on the screen
         /// </summary>
         private void DrawParticipanBuffer()
         {
@@ -100,6 +100,7 @@ namespace bcvk_Client
                         Thread.Sleep(120);
                     }
                     videoBufferArray[readVideoBufferPointer] = null;
+                    GC.Collect();
                     readVideoBufferPointer++; 
                 }
             }
@@ -135,7 +136,7 @@ namespace bcvk_Client
         /// Aron Huntjens 1209361, Luc Schnabel 1207776,
         /// event which is triggered when a new frame is ready
         /// </summary>
-        /// <param name="bmp"></param>
+        /// <param name="bmp">Bitmap of the frame</param>
         private void streamControlClass_frameReady(Bitmap bmp)
         {
             pictureBoxVideoSend.BackgroundImage = new Bitmap(bmp, pictureBoxVideoSend.Width, pictureBoxVideoSend.Height);
@@ -160,8 +161,6 @@ namespace bcvk_Client
         /// call the selected contact
         /// DISCLAIMER: (TODO:) THIS CODE BELONGS IN THE SELECT EVENT OF THE CONTACTLIST
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void btnTestCall_Click(object sender, EventArgs e)
         {
             SettingsCallState(CallState.IS_CALLING);
@@ -174,8 +173,6 @@ namespace bcvk_Client
         /// Luc Schnabel 1207776
         /// End the extising call
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void btnEndCall_Click(object sender, EventArgs e)
         {
             //SettingsCallState(CallState.CALL);
