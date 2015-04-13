@@ -6,6 +6,11 @@ using Dal;
 
 namespace AccountTest
 {
+    /// <summary>
+    /// OWNER: Roel Larik 1236830 & Ralph Lazarus 1227319
+    /// Containts manipulations of accounts which are being tested.
+    /// The method names indicate what the method actually does.
+    /// </summary>
     [TestClass]
     public class AccountManipulationTest
     {

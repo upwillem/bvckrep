@@ -13,50 +13,113 @@ namespace bcvk_Server
     public class ApplicationManager: Signal.Iface, Stream.Iface
     {
     #region account
+        /// <summary>
+        /// Create a new main account.
+        /// </summary>
+        /// <param name="username">The username of the new main account</param>
+        /// <param name="password1">The password of the new main account</param>
+        /// <param name="password2">The validated password of the new main account</param>
+        /// <param name="email">The e-mail address of the new main account</param>
+        /// <param name="name">The display name of the new main account</param>
+        /// <param name="phoneNumber">The phone number of the new main account</param>
+        /// <returns>Error or success messages</returns>
         public List<string> CreateMainAccount(string username, string password1, string password2, string email, string name, string phoneNumber)
         {
-            //throw new NotImplementedException();
-            AccountHandler.CreateMainAccount(username, password1, password2, email, name, phoneNumber);
-            return new List<string>();
+            return AccountHandler.CreateMainAccount(username, password1, password2, email, name, phoneNumber);
         }
 
+        /// <summary>
+        /// Create a new sub-account.
+        /// </summary>
+        /// <param name="parentId">The id of the parent main account</param>
+        /// <param name="username">The username of the new sub-account</param>
+        /// <param name="password1">The password of the new sub-account</param>
+        /// <param name="password2">The validated password of the new sub-account</param>
+        /// <param name="name">The display name of the new sub-account</param>
+        /// <param name="profileImage">The profile image of the new sub-account</param>
+        /// <returns>Error or success messages</returns>
         public List<string> CreateSubAccount(int parentId, string username, string password1, string password2, string name, byte[] profileImage)
         {
             return AccountHandler.CreateSubAccount(parentId, username, password1, password2, name, profileImage);
         }
 
+        /// <summary>
+        /// Login a user
+        /// Not implemented yet
+        /// </summary>
+        /// <param name="username">The username of the account</param>
+        /// <param name="password">The password of the account</param>
+        /// <returns></returns>
         public List<string> Login(string username, string password)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Logout a user
+        /// Not implemented yet
+        /// </summary>
+        /// <param name="username">The username of the account</param>
         public void LogOut(string username)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Gets all account data of a user.
+        /// </summary>
+        /// <param name="username">The username of the account</param>
+        /// <returns>A list of data, which is prepended by a key and a seperator</returns>
         public List<string> GetAccountData(string username)
         {
             Console.WriteLine(username + " requests for account data"); 
             return AccountHandler.GetAccountData(username);
-            
         }
 
+        /// <summary>
+        /// Toggles a block between a specific relation of contacts.
+        /// If a contact is blocked, it will now be unblocked.
+        /// If a contact is unblocked, it will now be blocked.
+        /// </summary>
+        /// <param name="sender">The username of the account</param>
+        /// <param name="recipient">The username of the contact to toggle the block on</param>
+        /// <returns>True if toggled, false if not</returns>
         public bool ToggleBlock(string sender, string recipient)
         {
-            throw new NotImplementedException();
+            return AccountHandler.ToggleBlock(sender, recipient);
         }
+
+        /// <summary>
+        /// An account accepts a contact
+        /// </summary>
+        /// <param name="sender">The username of the account</param>
+        /// <param name="recipient">The username of the contact</param>
+        /// <returns>True if contact is accepted, false if not</returns>
         public bool AcceptContact(string sender, string recipient)
         {
-            return false;
+            return AccountHandler.AcceptContact(sender, recipient);
         }
+
+        /// <summary>
+        /// Deletes a contact from the contactlist
+        /// </summary>
+        /// <param name="sender">The username of the account</param>
+        /// <param name="recipient">The username of the contact to be deleted</param>
+        /// <returns>True if contact is deleted, false if not</returns>
         public bool DeleteContact(string sender, string recipient)
         {
-            return false;
+            return AccountHandler.DeleteContact(sender, recipient);
         }
+
+        /// <summary>
+        /// Adds a new contact to an account
+        /// </summary>
+        /// <param name="sender">The username of the account</param>
+        /// <param name="recipient">The username of the new contact</param>
+        /// <returns>True if contact is added, false if not</returns>
         public bool AddContact(string sender, string recipient)
         {
-            return false;
+            return AccountHandler.AddContact(sender, recipient);
         }
     #endregion
 

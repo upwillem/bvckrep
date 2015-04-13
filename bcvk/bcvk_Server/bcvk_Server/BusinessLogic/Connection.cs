@@ -73,7 +73,7 @@ namespace Bu
         }
 
         /// <summary>
-        /// Ralph Lazarus 1227319
+        /// OWNER: Ralph Lazarus 1227319
         /// </summary>
         private void StartConnectionTimeout()
         {
@@ -84,7 +84,7 @@ namespace Bu
         }
 
         /// <summary>
-        /// Ralph Lazarus 1227319
+        /// OWNER: Ralph Lazarus 1227319
         /// </summary>
         /// <param name="source">timer objectsource</param>
         /// <param name="e">eventarguments</param>
