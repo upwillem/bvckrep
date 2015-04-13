@@ -12,6 +12,9 @@ using System.Drawing;
 
 namespace Bu
 {
+    /// <summary>
+    /// Owner: Luc Schnabel 1207776
+    /// </summary>
     public class Webcam
     {
         private VideoCaptureDevice videoSource;
@@ -94,11 +97,11 @@ namespace Bu
 
         /// <summary>
         /// Luc Schnabel 1207776,
-        /// stop the camera
+        /// stop the camera.
+        /// Signal to stop when you no longer need capturing
         /// </summary>
         public void Stop()
         {
-            // signal to stop when you no longer need capturing
             videoSource.SignalToStop();
         }
 

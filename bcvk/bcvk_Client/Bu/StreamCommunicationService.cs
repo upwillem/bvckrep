@@ -25,6 +25,7 @@ namespace Bu
         private List<byte[]> audioBuffer;
 
         private static Mutex streamMutex;
+        private int counter = 0;
 
         #region Thrift classes
         //Thrift classes
@@ -34,6 +35,10 @@ namespace Bu
         private int streamPort = 8080;
         #endregion
 
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// constructor
+        /// </summary>
         public StreamCommunicationService()
         {
             streamMutex = new Mutex();
@@ -74,7 +79,7 @@ namespace Bu
         /// Luc Schnabel 1207776, Aron Huntjens 1209361
         /// manage the buffering
         /// </summary>
-        /// <param name="state"></param>
+        /// <param name="state">state of the connection</param>
         private void SignalCommunicationService_connectionEstablished(string state)
         {
             if (streamMutex.WaitOne())
@@ -93,7 +98,8 @@ namespace Bu
         }
 
         /// <summary>
-        /// Aron Huntjens 1209361
+        /// Aron Huntjens 1209361,
+        /// get the videobuffer of the participant in the call
         /// </summary>
         private void GetParticipantVideoBuffer()
         {
@@ -122,26 +128,10 @@ namespace Bu
                 }
                 Thread.Sleep(500);
             }
-
-
-            //while (true)
-            //{
-            //    if (AccountData.Instance.ConnectionEstablishedStatus == "established")
-            //    {
-            //        List<byte[]> video = new List<byte[]>();
-            //        video = streamClient.GetStream("3", AccountData.Instance.AccountId, AccountData.Instance.ConnectionId, false);
-            //        if (stream.Count > 0)
-            //        {
-            //            //TODO: join this event (streamcontrolclass)
-            //            participantBufferReady(video);
-            //        }
-            //    }
-            //    Thread.Sleep(5);
-
-            //}
         }
-        int counter = 0;
+
         /// <summary>
+        /// Luc Schnabel 1207776,
         /// New frame is ready (thread)
         /// </summary>
         /// <param name="bmp">bitmap of the frame</param>
@@ -180,7 +170,8 @@ namespace Bu
         }
 
         /// <summary>
-        /// Start the webcam and microphone
+        /// Luc Schnabel 1207776,
+        /// start the webcam and microphone
         /// </summary>
         public void StartCapture()
         {
@@ -189,6 +180,7 @@ namespace Bu
         }
 
         /// <summary>
+        /// Luc Schnabel 1207776,
         /// Stop the webcam and microphone
         /// </summary>
         public void StopCapture()
@@ -198,6 +190,7 @@ namespace Bu
         }
 
         /// <summary>
+        /// Luc Schnabel 1207776,
         /// Stop the webcam and free it when application closes
         /// </summary>
         public void On_Application_Ended()
@@ -206,15 +199,33 @@ namespace Bu
             //TODO: stop microphone
         } 
 
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// set the videomessage to the given recipient
+        /// </summary>
+        /// <param name="recipient">id of the recipient</param>
         public void SetVideoMessage(string recipient) 
         {
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// get the videomessage
+        /// </summary>
+        /// <param name="videoMessageId">id of the message</param>
         public void GetVideoMessage(string videoMessageId)
         {
             //TODO: throw event
             throw new NotImplementedException();
         }
+
+        /// <summary>
+        /// Luc Schnabel 1207776,
+        /// get the stream of the child and the stream of who the child is chatting with
+        /// </summary>
+        /// <param name="recipient">recipient</param>
+        /// <param name="connectionId">id of the connection</param>
         public void GetStreamAsParent(string recipient, string connectionId)
         {
             throw new NotImplementedException();
