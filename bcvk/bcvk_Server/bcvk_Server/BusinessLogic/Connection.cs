@@ -86,8 +86,8 @@ namespace Bu
         /// <summary>
         /// Ralph Lazarus 1227319
         /// </summary>
-        /// <param name="source"></param>
-        /// <param name="e"></param>
+        /// <param name="source">timer objectsource</param>
+        /// <param name="e">eventarguments</param>
         private void ConnectionTimeout(Object source, ElapsedEventArgs e)
         {
             Console.WriteLine("It is time to check the connection of {0} (60 seconds have passed)", Id);
@@ -273,12 +273,27 @@ namespace Bu
             return memberstream;
         }
 
-
+        /// <summary>
+        /// This mehtod is used to set a video message.
+        /// </summary>
+        /// <param name="sender">who is setting the message</param>
+        /// <param name="recipient">who is receiving the message</param>
+        /// <param name="video">videomessage to set</param>
+        /// <param name="connectId">optional connectionId for future purpose</param>
+        /// <param name="audio">audio identification</param>
         public static void SetVideo(string sender, string recipient, List<byte[]> video, string connectId, bool audio)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// this method is used to get a specific videoMessage      
+        /// </summary>
+        /// <param name="sender">sender who wants to get the stream</param>
+        /// <param name="recipient">original recipient from the videoMessage</param>
+        /// <param name="connectId">connectId from the specific videoMessage to get</param>
+        /// <param name="audio">audio identification</param>
+        /// <returns></returns>
         public static List<byte[]> GetVideo(string sender, string recipient, string connectId, bool audio)
         {
             throw new NotImplementedException();

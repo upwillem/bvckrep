@@ -184,7 +184,7 @@ namespace Bu
         /// </summary>
         public void StartCapture()
         {
-            webcam.StartCamera();
+            webcam.Start();
             //TODO: start microphone
         }
 
@@ -193,7 +193,7 @@ namespace Bu
         /// </summary>
         public void StopCapture()
         {
-            webcam.StopCamera();
+            webcam.Stop();
             //TODO: stop micophone
         }
 
@@ -212,6 +212,7 @@ namespace Bu
         }
         public void GetVideoMessage(string videoMessageId)
         {
+            //TODO: throw event
             throw new NotImplementedException();
         }
         public void GetStreamAsParent(string recipient, string connectionId)

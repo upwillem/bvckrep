@@ -183,7 +183,7 @@ namespace bcvk_Client
         {
             //SettingsCallState(CallState.CALL);
             //signalControlClass.EndCall();
-            streamControlClass.StopCamera();
+            streamControlClass.StopCapture();
         }
 
         /// <summary>

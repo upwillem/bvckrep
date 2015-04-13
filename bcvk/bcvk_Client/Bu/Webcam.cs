@@ -87,7 +87,7 @@ namespace Bu
         /// Luc Schnabel 1207776, 
         /// start the camera
         /// </summary>
-        public void StartCamera()
+        public void Start()
         {
             videoSource.Start( );
         }
@@ -96,7 +96,7 @@ namespace Bu
         /// Luc Schnabel 1207776,
         /// stop the camera
         /// </summary>
-        public void StopCamera()
+        public void Stop()
         {
             // signal to stop when you no longer need capturing
             videoSource.SignalToStop();

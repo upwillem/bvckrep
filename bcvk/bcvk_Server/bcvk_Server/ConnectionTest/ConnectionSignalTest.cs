@@ -5,6 +5,10 @@ using Bu;
 
 namespace ConnectionTest
 {
+    /*Owner: Aron Huntjens 1209361
+     *this class tests the signaling method required before streaming      
+     */
+      
     [TestClass]
     public class ConnectionSignalTest
     {
