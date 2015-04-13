@@ -52,7 +52,7 @@ namespace bcvk_Server
             var signalServerPort = 9090;
             TServerTransport signalServerTransport = new TServerSocket(signalServerPort);
             TServer signalServer = new TSimpleServer(signalProcessor, signalServerTransport);
-            Console.WriteLine("signalserver listning on port: " + signalServerPort);
+            Console.WriteLine("signalserver listening on port: " + signalServerPort);
             signalServer.Serve();
         }
 
@@ -67,7 +67,7 @@ namespace bcvk_Server
             var streamServerPort = 8080;
             TServerTransport streamServerTransport = new TServerSocket(streamServerPort);
             TServer streamSever = new TSimpleServer(streamProcessor, streamServerTransport);
-            Console.WriteLine("streamserver listning on port: " + streamServerPort);
+            Console.WriteLine("streamserver listening on port: " + streamServerPort);
             streamSever.Serve();
         }
     }

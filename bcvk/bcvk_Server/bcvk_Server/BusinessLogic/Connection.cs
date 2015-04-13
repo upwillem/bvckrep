@@ -11,7 +11,7 @@ namespace Bu
 {
     /// <summary>
     /// OWNER: Aron Huntjens 1209361
-    /// This class instanctiate a connection. A connection is a class maintain all participants in a connection to send and receive data from and to eachother.
+    /// This class instantiates a connection. A connection is a class, maintaining all participants in a connection to send and receive data from and to eachother.
     /// </summary>
     public class Connection
     {
