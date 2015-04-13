@@ -59,7 +59,11 @@ namespace bcvk_Client
 
         }
 
-        //participant buffer is ready to draq
+        /// <summary>
+        /// participant buffer is ready to draq
+        /// </summary>
+        /// <param name="videostream"></param>
+        /// <param name="audio"></param>
         private void streamControlClass_participantBufferReady(List<Bitmap> videostream, List<byte[]> audio)
         {
             if(addVideoBufferPointer >= videoBufferArray.Length - 1)
@@ -77,6 +81,9 @@ namespace bcvk_Client
             
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         private void DrawParticipanBuffer()
         {
             while (true)
@@ -96,13 +103,6 @@ namespace bcvk_Client
                     readVideoBufferPointer++; 
                 }
             }
-
-            //foreach (Bitmap frame in videostream)
-            //{
-            //    //TODO : buffer reading ratio + endless buffer
-            //    pictureBoxVideoReceived.BackgroundImage = frame;
-            //    Thread.Sleep(100);
-            //}
         }
 
         /// <summary>
@@ -132,7 +132,8 @@ namespace bcvk_Client
         }
 
         /// <summary>
-        /// Event which is triggered when a new frame is ready
+        /// Aron Huntjens 1209361, Luc Schnabel 1207776,
+        /// event which is triggered when a new frame is ready
         /// </summary>
         /// <param name="bmp"></param>
         private void streamControlClass_frameReady(Bitmap bmp)
@@ -238,7 +239,8 @@ namespace bcvk_Client
         }
 
         /// <summary>
-        /// Call the selected contact
+        /// Aron Huntjens 1209361,
+        /// call the selected contact
         /// </summary>
         private void listContacts_SelectedIndexChanged(object sender, EventArgs e)
         {
