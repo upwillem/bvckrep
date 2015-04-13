@@ -9,12 +9,14 @@ using System.Threading.Tasks;
 
 namespace Cc
 {
+    /// <summary>
+    /// Owner: Luc Schnabel 1207776
+    /// </summary>
     public class StreamControlClass
     {
         private StreamCommunicationService streamCommunicationService;
         public event Action<Bitmap> frameReady;
         public event Action<List<Bitmap>,List<byte[]>> participantBufferReady;
-        private Thread sendStream; //why is this ?
 
         /// <summary>
         /// Constructor
@@ -34,16 +36,16 @@ namespace Cc
         }
 
         /// <summary>
-        /// 
+        /// throw event when frame is ready
         /// </summary>
-        /// <param name="bmp"></param>
+        /// <param name="bmp">bitmap</param>
         private void streamCommunicationService_frameReady(Bitmap bmp)
         {
             frameReady(bmp);
         }
 
         /// <summary>
-        /// 
+        /// start capturing devices
         /// </summary>
         public void StartCapture()
         {
@@ -51,16 +53,16 @@ namespace Cc
         }
 
         /// <summary>
-        /// 
+        /// stop capturing devices
         /// </summary>
         public void StopCapture()
         {
-            //sendStream.Abort(); //why is this ?
+
             streamCommunicationService.StopCapture();
         }
 
         /// <summary>
-        /// 
+        /// when application ended
         /// </summary>
         public void On_Application_Ended()
         {
