@@ -109,13 +109,16 @@ namespace bcvk_Client
                     }
                     else
                     {
-                        foreach (Bitmap frame in videoBufferArray[readVideoBufferPointer])
+                        if (videoBufferArray[readVideoBufferPointer] != null)
                         {
-                            pictureBoxVideoReceived.BackgroundImage = frame;
-                            Thread.Sleep(117);
+                            foreach (Bitmap frame in videoBufferArray[readVideoBufferPointer])
+                            {
+                                pictureBoxVideoReceived.BackgroundImage = frame;
+                                Thread.Sleep(116);
+                            }
+                            videoBufferArray[readVideoBufferPointer] = null;
+                            GC.Collect();
                         }
-                        videoBufferArray[readVideoBufferPointer] = null;
-                        GC.Collect();
                         readVideoBufferPointer++; 
                     }
                 }
