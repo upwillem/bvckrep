@@ -194,6 +194,7 @@ namespace bcvk_Client
             //SettingsCallState(CallState.CALL);
             //signalControlClass.EndCall();
             streamControlClass.StopCapture();
+            drawThread.Abort();
         }
 
         /// <summary>

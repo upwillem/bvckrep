@@ -28,47 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBoxVideoSend = new System.Windows.Forms.PictureBox();
-            this.btnTestCall = new System.Windows.Forms.Button();
-            this.btnEndCall = new System.Windows.Forms.Button();
             this.cbShowYourVideo = new System.Windows.Forms.CheckBox();
-            this.pictureBoxVideoReceived = new System.Windows.Forms.PictureBox();
             this.listContacts = new System.Windows.Forms.ListBox();
             this.labelContacten = new System.Windows.Forms.Label();
+            this.btnTestCall = new System.Windows.Forms.Button();
+            this.pictureBoxVideoSend = new System.Windows.Forms.PictureBox();
+            this.pictureBoxVideoReceived = new System.Windows.Forms.PictureBox();
+            this.btnEndCall = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideoSend)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxVideoReceived)).BeginInit();
             this.SuspendLayout();
-            // 
-            // pictureBoxVideoSend
-            // 
-            this.pictureBoxVideoSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBoxVideoSend.Location = new System.Drawing.Point(513, 291);
-            this.pictureBoxVideoSend.Name = "pictureBoxVideoSend";
-            this.pictureBoxVideoSend.Size = new System.Drawing.Size(160, 120);
-            this.pictureBoxVideoSend.TabIndex = 0;
-            this.pictureBoxVideoSend.TabStop = false;
-            // 
-            // btnTestCall
-            // 
-            this.btnTestCall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnTestCall.Location = new System.Drawing.Point(12, 325);
-            this.btnTestCall.Name = "btnTestCall";
-            this.btnTestCall.Size = new System.Drawing.Size(123, 23);
-            this.btnTestCall.TabIndex = 1;
-            this.btnTestCall.Text = "Test bel";
-            this.btnTestCall.UseVisualStyleBackColor = true;
-            this.btnTestCall.Click += new System.EventHandler(this.btnTestCall_Click);
-            // 
-            // btnEndCall
-            // 
-            this.btnEndCall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnEndCall.Location = new System.Drawing.Point(12, 354);
-            this.btnEndCall.Name = "btnEndCall";
-            this.btnEndCall.Size = new System.Drawing.Size(123, 23);
-            this.btnEndCall.TabIndex = 2;
-            this.btnEndCall.Text = "Stop gesprek";
-            this.btnEndCall.UseVisualStyleBackColor = true;
-            this.btnEndCall.Click += new System.EventHandler(this.btnEndCall_Click);
             // 
             // cbShowYourVideo
             // 
@@ -84,6 +53,46 @@
             this.cbShowYourVideo.UseVisualStyleBackColor = true;
             this.cbShowYourVideo.CheckedChanged += new System.EventHandler(this.cbShowYourVideo_CheckedChanged);
             // 
+            // listContacts
+            // 
+            this.listContacts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
+            this.listContacts.FormattingEnabled = true;
+            this.listContacts.Location = new System.Drawing.Point(12, 33);
+            this.listContacts.Name = "listContacts";
+            this.listContacts.Size = new System.Drawing.Size(123, 290);
+            this.listContacts.TabIndex = 5;
+            this.listContacts.SelectedIndexChanged += new System.EventHandler(this.listContacts_SelectedIndexChanged);
+            // 
+            // labelContacten
+            // 
+            this.labelContacten.AutoSize = true;
+            this.labelContacten.Location = new System.Drawing.Point(13, 17);
+            this.labelContacten.Name = "labelContacten";
+            this.labelContacten.Size = new System.Drawing.Size(63, 13);
+            this.labelContacten.TabIndex = 6;
+            this.labelContacten.Text = "Vriendenlijst";
+            // 
+            // btnTestCall
+            // 
+            this.btnTestCall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnTestCall.Image = global::bcvk_Client.Properties.Resources.callIconSmall1;
+            this.btnTestCall.Location = new System.Drawing.Point(12, 338);
+            this.btnTestCall.Name = "btnTestCall";
+            this.btnTestCall.Size = new System.Drawing.Size(50, 50);
+            this.btnTestCall.TabIndex = 1;
+            this.btnTestCall.UseVisualStyleBackColor = true;
+            this.btnTestCall.Click += new System.EventHandler(this.btnTestCall_Click);
+            // 
+            // pictureBoxVideoSend
+            // 
+            this.pictureBoxVideoSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxVideoSend.Location = new System.Drawing.Point(513, 291);
+            this.pictureBoxVideoSend.Name = "pictureBoxVideoSend";
+            this.pictureBoxVideoSend.Size = new System.Drawing.Size(160, 120);
+            this.pictureBoxVideoSend.TabIndex = 0;
+            this.pictureBoxVideoSend.TabStop = false;
+            // 
             // pictureBoxVideoReceived
             // 
             this.pictureBoxVideoReceived.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -96,25 +105,16 @@
             this.pictureBoxVideoReceived.TabIndex = 4;
             this.pictureBoxVideoReceived.TabStop = false;
             // 
-            // listContacts
+            // btnEndCall
             // 
-            this.listContacts.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left)));
-            this.listContacts.FormattingEnabled = true;
-            this.listContacts.Location = new System.Drawing.Point(12, 38);
-            this.listContacts.Name = "listContacts";
-            this.listContacts.Size = new System.Drawing.Size(123, 277);
-            this.listContacts.TabIndex = 5;
-            this.listContacts.SelectedIndexChanged += new System.EventHandler(this.listContacts_SelectedIndexChanged);
-            // 
-            // labelContacten
-            // 
-            this.labelContacten.AutoSize = true;
-            this.labelContacten.Location = new System.Drawing.Point(13, 17);
-            this.labelContacten.Name = "labelContacten";
-            this.labelContacten.Size = new System.Drawing.Size(63, 13);
-            this.labelContacten.TabIndex = 6;
-            this.labelContacten.Text = "Vriendenlijst";
+            this.btnEndCall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnEndCall.Image = global::bcvk_Client.Properties.Resources.endCallcon;
+            this.btnEndCall.Location = new System.Drawing.Point(68, 338);
+            this.btnEndCall.Name = "btnEndCall";
+            this.btnEndCall.Size = new System.Drawing.Size(50, 50);
+            this.btnEndCall.TabIndex = 2;
+            this.btnEndCall.UseVisualStyleBackColor = true;
+            this.btnEndCall.Click += new System.EventHandler(this.btnEndCall_Click);
             // 
             // bcvk
             // 
