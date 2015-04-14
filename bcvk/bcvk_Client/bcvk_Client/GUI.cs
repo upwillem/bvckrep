@@ -268,9 +268,11 @@ namespace bcvk_Client
         /// <param name="e"></param>
         private void bcvk_FormClosing(object sender, FormClosingEventArgs e)
         {
-            streamControlClass.On_Application_Ended();
-            if (!signalControlClass.StopPoll())
-                e.Cancel = true;
+            Environment.Exit(0);
+            //streamControlClass.On_Application_Ended();
+            //drawThread.Abort();
+            //if (!signalControlClass.StopPoll())
+            //    e.Cancel = true;
         }
     }
 }
