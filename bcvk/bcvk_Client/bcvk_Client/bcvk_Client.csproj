@@ -88,9 +88,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\callIconSmall.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\callIconSmall1.png" />
   </ItemGroup>
   <ItemGroup>

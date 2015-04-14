@@ -76,13 +76,21 @@
             // btnTestCall
             // 
             this.btnTestCall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnTestCall.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.btnTestCall.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnTestCall.FlatAppearance.BorderColor = System.Drawing.SystemColors.Control;
+            this.btnTestCall.FlatAppearance.BorderSize = 0;
+            this.btnTestCall.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.btnTestCall.ForeColor = System.Drawing.SystemColors.Control;
             this.btnTestCall.Image = global::bcvk_Client.Properties.Resources.callIconSmall1;
-            this.btnTestCall.Location = new System.Drawing.Point(12, 338);
+            this.btnTestCall.Location = new System.Drawing.Point(19, 334);
             this.btnTestCall.Name = "btnTestCall";
             this.btnTestCall.Size = new System.Drawing.Size(50, 50);
             this.btnTestCall.TabIndex = 1;
+            this.btnTestCall.Tag = "";
             this.btnTestCall.UseVisualStyleBackColor = true;
             this.btnTestCall.Click += new System.EventHandler(this.btnTestCall_Click);
+            this.btnTestCall.MouseHover += new System.EventHandler(this.btnTestCall_MouseHover);
             // 
             // pictureBoxVideoSend
             // 
@@ -108,13 +116,15 @@
             // btnEndCall
             // 
             this.btnEndCall.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnEndCall.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.btnEndCall.Image = global::bcvk_Client.Properties.Resources.endCallcon;
-            this.btnEndCall.Location = new System.Drawing.Point(68, 338);
+            this.btnEndCall.Location = new System.Drawing.Point(75, 334);
             this.btnEndCall.Name = "btnEndCall";
             this.btnEndCall.Size = new System.Drawing.Size(50, 50);
             this.btnEndCall.TabIndex = 2;
             this.btnEndCall.UseVisualStyleBackColor = true;
             this.btnEndCall.Click += new System.EventHandler(this.btnEndCall_Click);
+            this.btnEndCall.MouseHover += new System.EventHandler(this.btnEndCall_MouseHover);
             // 
             // bcvk
             // 

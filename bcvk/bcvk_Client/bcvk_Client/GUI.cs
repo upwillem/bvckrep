@@ -273,5 +273,19 @@ namespace bcvk_Client
             signalControlClass.StopPoll();
             Environment.Exit(0);
         }
+
+        private void btnTestCall_MouseHover(object sender, EventArgs e)
+        {
+            ToolTip tp = new ToolTip();
+            tp.ShowAlways = true;
+            tp.SetToolTip(btnTestCall, "Bel vriend/vriendin");
+        }
+
+        private void btnEndCall_MouseHover(object sender, EventArgs e)
+        {
+            ToolTip tp = new ToolTip();
+            tp.ShowAlways = true;
+            tp.SetToolTip(btnEndCall, "Stop gesprek");
+        }
     }
 }
